@@ -5,7 +5,9 @@ export default function Header() {
   return (
     <div className={style.headerContainer}>
       <div className={style.headerContent}>
-        <img src={logo} alt="Logo" className={style.logo} />
+        <div className={style.logoContainer}>
+          <img src={logo} alt="Logo" className={style.logo} />
+        </div>
         <ul>
           <li>
             <a href="/">홈</a>
