@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import GlobalLayout from "./layout/GlobalLayout";
+import Index from "./page/Index";
 
 function App() {
   useEffect(() => {
@@ -15,7 +17,13 @@ function App() {
     return () => window.removeEventListener("resize", setVh);
   }, []);
 
-  return <></>;
+  return (
+    <Routes>
+      <Route path="/" element={<GlobalLayout />}>
+        <Route index element={<Index />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;
