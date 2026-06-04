@@ -1,0 +1,33 @@
+.headerContainer {
+  height: 70px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.headerContainer .logo {
+  height: 70px;
+  transform: scale(2);
+  transform-origin: left center;
+}
+.headerContent {
+  max-width: 75%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.headerContent ul {
+  display: flex;
+  gap: 50px;
+  font-weight: 600;
+}
+.myPage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+.profileImg {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: black;
+}
