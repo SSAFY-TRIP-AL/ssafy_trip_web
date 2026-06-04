@@ -1,5 +1,5 @@
-import logo from "../assets/logo_lf.svg";
-import style from "../css/components/header.module.css";
+import logo from "../../assets/logo_lf.svg";
+import style from "./header.module.css";
 
 export default function Header() {
   return (
