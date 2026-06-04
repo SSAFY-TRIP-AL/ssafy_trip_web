@@ -6,9 +6,7 @@ export default function DesktopLayout() {
   return (
     <>
       <Header />
-      <div className="layoutContainer">
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 }

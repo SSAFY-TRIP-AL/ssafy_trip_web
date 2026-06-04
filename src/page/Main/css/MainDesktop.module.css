@@ -1,0 +1,84 @@
+@import "src/style.css";
+
+.hero {
+  position: relative;
+  height: 600px;
+  overflow: hidden;
+}
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.heroText {
+  position: absolute;
+  left: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  /* color: white; */
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.heroTitle {
+  display: flex;
+  flex-direction: column;
+}
+
+.heroTitle span {
+  font-size: 60px;
+  font-weight: 700;
+  color: var(--color-pure-white);
+}
+.heroText > span {
+  font-size: 24px;
+  /* color: rgba(255, 255, 255, 0.8); */
+  color: var(--color-gray-300);
+}
+.gradientText {
+  background: linear-gradient(
+    120deg,
+    #6fa0ff 0%,
+    #2563ff 35%,
+    #1e4fd8 50%,
+    #2563ff 65%,
+    #6fa0ff 100%
+  );
+  background-size: 250% 100%; /* ← 이 줄이 핵심. 배경을 박스보다 크게 */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(10, 27, 61, 0.55));
+  animation: wave-flow 8s linear infinite;
+}
+@keyframes wave-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 250% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradientText {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+.heroBtn {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  color: var(--color-pure-white);
+  background-color: var(--color-electric-blue);
+  width: fit-content;
+  padding: 16px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
