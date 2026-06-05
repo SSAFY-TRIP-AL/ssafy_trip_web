@@ -1,11 +1,13 @@
-import logo from "../assets/logo_lf.svg";
-import style from "../css/components/header.module.css";
+import logo from "../../assets/logo_lf.svg";
+import style from "./header.module.css";
 
 export default function Header() {
   return (
     <div className={style.headerContainer}>
       <div className={style.headerContent}>
-        <img src={logo} alt="Logo" className={style.logo} />
+        <div className={style.logoContainer}>
+          <img src={logo} alt="Logo" className={style.logo} />
+        </div>
         <ul>
           <li>
             <a href="/">홈</a>

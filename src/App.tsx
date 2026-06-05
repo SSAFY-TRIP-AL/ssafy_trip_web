@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import GlobalLayout from "./layout/GlobalLayout";
-import Index from "./page/Index";
+import GlobalLayout from "./layout/DesktopLayout";
+import Index from "./page/Main/Main";
 
 function App() {
   useEffect(() => {

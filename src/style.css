@@ -1,0 +1,104 @@
+@import url("https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css");
+html {
+  font-family: var(--font-base);
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  margin: auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+#root {
+  height: 100%;
+  background-color: var(--color-pure-white);
+}
+li,
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+.container {
+  max-width: 75%;
+  margin: auto;
+  margin-bottom: 200px;
+}
+
+/* style.css — 컬러 토큰 정의 */
+:root {
+  /* 브랜드 핵심 */
+  --color-midnight-indigo: #0a1b3d;
+  --color-electric-blue: #2340fa;
+  --color-pure-white: #ffffff;
+  --color-light-gray: #f4f6f8;
+
+  /* 그레이 스케일 */
+  --color-gray-900: #111827;
+  --color-gray-700: #374151;
+  --color-gray-500: #6b7280;
+  --color-gray-300: #d1d5db;
+  --color-gray-100: #f3f4f6;
+  --color-gray-50: #f9fafb;
+
+  /* 폰트 패밀리 */
+  --font-base:
+    "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
+    system-ui, "Segoe UI", sans-serif;
+
+  /* weight (Pretendard 매핑) */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* 타이포 스케일: size / line-height */
+  --fs-h1: 36px;
+  --lh-h1: 1.4;
+  --fs-h2: 24px;
+  --lh-h2: 1.4;
+  --fs-h3: 24px;
+  --lh-h3: 1.4;
+  --fs-body1: 16px;
+  --lh-body: 1.6;
+  --fs-body2: 12px;
+  --fs-caption: 14px;
+
+  /* 기타 */
+  --border-radius-20: 20px;
+  --border-radius-10: 10px;
+  --box-shadow-default: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.trip-h1 {
+  font-size: var(--fs-h1);
+  /* line-height: var(--lh-h1); */
+  font-weight: var(--fw-semibold);
+}
+.trip-h2 {
+  font-size: var(--fs-h2);
+  /* line-height: var(--lh-h2); */
+  font-weight: var(--fw-semibold);
+}
+.trip-h3 {
+  font-size: var(--fs-h3);
+  /* line-height: var(--lh-h3); */
+  font-weight: var(--fw-medium);
+}
+.trip-body1 {
+  font-size: var(--fs-body1);
+  /* line-height: var(--lh-body); */
+  font-weight: var(--fw-regular);
+}
+.trip-body2 {
+  font-size: var(--fs-body2);
+  /* line-height: var(--lh-body); */
+  font-weight: var(--fw-regular);
+}
+.trip-caption {
+  font-size: var(--fs-caption);
+  /* line-height: var(--lh-body); */
+  font-weight: var(--fw-regular);
+}
