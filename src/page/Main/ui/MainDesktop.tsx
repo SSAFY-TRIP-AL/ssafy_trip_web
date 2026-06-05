@@ -1,8 +1,8 @@
 import desktopStyle from "../css/MainDesktop.module.css";
 import "../../../style.css";
-import mainImg from "../../../assets/main/main_img.svg";
+// import mainImg from "../../../assets/main/main_img.svg";
 // import mainImg from "../../../assets/main/main_img2.svg";
-// import mainImg from "../../../assets/main/main_img3.svg";
+import mainImg from "../../../assets/main/main_img3.svg";
 import infoMapImg from "../../../assets/main/info_map.svg";
 export default function MainDesktop() {
   return (
@@ -17,7 +17,7 @@ export default function MainDesktop() {
           </div>
           <span className="trip-h3">AI가 설계하는 당신만의 릴레이 여행</span>
           <div className={desktopStyle.heroBtn}>
-            <span className="trip-body2">릴레이 참여하기</span>
+            <span className="trip-body1">릴레이 참여하기</span>
             {/* <span>아이콘</span> */}
           </div>
         </div>
@@ -38,7 +38,7 @@ export default function MainDesktop() {
               </span>
             </div>
             <div className={desktopStyle.infoBtn}>
-              <span className="trip-body2">지도에서 보기</span>
+              <span className="trip-body1">지도에서 보기</span>
               {/* <span>아이콘</span> */}
             </div>
           </div>
@@ -63,6 +63,79 @@ export default function MainDesktop() {
                   <span className="trip-h1">1,234개</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div className={desktopStyle.relayContainer}>
+          <div className={desktopStyle.relayTitle}>
+            <span className="trip-h1">
+              {/* <span>아이콘</span> */}
+              현재 진행 중인 릴레이
+            </span>
+            <span className="trip-body1">
+              전체 보기
+              {/* <span>아이콘</span> */}
+            </span>
+          </div>
+          <div className={desktopStyle.relayList}>
+            <div className={desktopStyle.relayCard}>
+              <div className={desktopStyle.relayImg}></div>
+              <div className={desktopStyle.relayInfo}>
+                <span className="trip-h3">제주도 오름 한바퀴</span>
+                <span className="trip-body1">5번째 여행자 진행중</span>
+              </div>
+            </div>
+            <div className={desktopStyle.relayCard}>
+              <div className={desktopStyle.relayImg}></div>
+              <div className={desktopStyle.relayInfo}>
+                <span className="trip-h3">제주도 오름 한바퀴</span>
+                <span className="trip-body1">5번째 여행자 진행중</span>
+              </div>
+            </div>
+            <div className={desktopStyle.relayCard}>
+              <div className={desktopStyle.relayImg}></div>
+              <div className={desktopStyle.relayInfo}>
+                <span className="trip-h3">제주도 오름 한바퀴</span>
+                <span className="trip-body1">5번째 여행자 진행중</span>
+              </div>
+            </div>
+            <div className={desktopStyle.relayCard}>
+              <div className={desktopStyle.relayImg}></div>
+              <div className={desktopStyle.relayInfo}>
+                <span className="trip-h3">제주도 오름 한바퀴</span>
+                <span className="trip-body1">5번째 여행자 진행중</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={desktopStyle.rankingContainer}>
+          <div className={desktopStyle.rankingTitle}>
+            <span className="trip-h1">명예의 전당</span>
+            <span className="trip-body1">
+              릴레이를 가장 활발하게 이어가고 있는 Top3 유저입니다.
+            </span>
+          </div>
+          <div className={desktopStyle.rankingList}>
+            <div
+              className={`${desktopStyle.rankingItem} ${desktopStyle.rankingSecond}`}
+            >
+              <div className={desktopStyle.profileImg}></div>
+              <span className="trip-h3">김싸피</span>
+              <span className="trip-body1">릴레이 15회 참여</span>
+            </div>
+            <div
+              className={`${desktopStyle.rankingItem} ${desktopStyle.rankingFirst}`}
+            >
+              <div className={desktopStyle.profileImg}></div>
+              <span className="trip-h3">김싸피</span>
+              <span className="trip-body1">릴레이 15회 참여</span>
+            </div>
+            <div
+              className={`${desktopStyle.rankingItem} ${desktopStyle.rankingThird}`}
+            >
+              <div className={desktopStyle.profileImg}></div>
+              <span className="trip-h3">김싸피</span>
+              <span className="trip-body1">릴레이 15회 참여</span>
             </div>
           </div>
         </div>

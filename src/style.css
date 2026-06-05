@@ -25,6 +25,7 @@ a {
 .container {
   max-width: 75%;
   margin: auto;
+  margin-bottom: 200px;
 }
 
 /* style.css — 컬러 토큰 정의 */
@@ -63,12 +64,13 @@ a {
   --lh-h3: 1.4;
   --fs-body1: 16px;
   --lh-body: 1.6;
-  --fs-body2: 16px;
+  --fs-body2: 12px;
   --fs-caption: 14px;
 
   /* 기타 */
   --border-radius-20: 20px;
   --border-radius-10: 10px;
+  --box-shadow-default: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 .trip-h1 {
   font-size: var(--fs-h1);
