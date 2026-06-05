@@ -3,7 +3,7 @@ import style from "./header.module.css";
 
 export default function Header() {
   return (
-    <div className={style.headerContainer}>
+    <header className={style.headerContainer}>
       <div className={style.headerContent}>
         <div className={style.logoContainer}>
           <img src={logo} alt="Logo" className={style.logo} />
@@ -27,6 +27,6 @@ export default function Header() {
           <span>김싸피</span>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
