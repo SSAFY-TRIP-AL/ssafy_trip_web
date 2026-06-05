@@ -15,7 +15,6 @@
   left: 14%;
   top: 50%;
   transform: translateY(-50%);
-  /* color: white; */
   z-index: 2;
 
   display: flex;
@@ -45,7 +44,7 @@
     #2563ff 65%,
     #6fa0ff 100%
   );
-  background-size: 250% 100%; /* ← 이 줄이 핵심. 배경을 박스보다 크게 */
+  background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -70,15 +69,25 @@
 }
 .heroBtn {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
   color: var(--color-pure-white);
   background-color: var(--color-electric-blue);
   width: fit-content;
   padding: 16px 20px;
-  /* font-size: 16px; */
   border-radius: var(--border-radius-10);
   margin-top: 20px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.heroBtn:hover {
+  opacity: 0.88;
+}
+
+.memberCount {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.01em;
 }
 /* hero 끝 */
 
@@ -101,7 +110,10 @@
   flex-direction: column;
   gap: 20px;
 }
-.infoText > span:first-child {
+.infoLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--color-electric-blue);
 }
 .infoText > span:nth-child(2) {
@@ -123,8 +135,17 @@
   padding: 12px 20px;
   display: flex;
   align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.infoBtn:hover {
+  background-color: rgba(35, 64, 250, 0.05);
 }
 .infoBtn > span {
+  color: var(--color-electric-blue);
+}
+.infoBtn svg {
   color: var(--color-electric-blue);
 }
 .infoMap {
@@ -146,8 +167,11 @@
   flex-direction: column;
   gap: 8px;
 }
-.infoSummaryItem > span:first-child {
+.infoSummaryItem > span:first-of-type {
   color: var(--color-gray-500);
+}
+.summaryIcon {
+  color: var(--color-electric-blue);
 }
 /* info 끝*/
 
@@ -164,9 +188,20 @@
 }
 .relayTitle > span:first-child {
   color: var(--color-midnight-indigo);
+  display: flex;
+  align-items: center;
 }
 .relayTitle > span:last-child {
   color: var(--color-electric-blue);
+}
+.sectionIcon {
+  margin-right: 10px;
+}
+.relayViewAll {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
 }
 .relayList {
   display: flex;
@@ -179,6 +214,12 @@
   border-radius: var(--border-radius-20);
   box-shadow: var(--box-shadow-default);
   width: 25%;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.relayCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 .relayImg {
   width: 100%;
@@ -210,6 +251,11 @@
   flex-direction: column;
   gap: 10px;
 }
+.rankingTitle > span:first-child {
+  display: flex;
+  align-items: center;
+  color: var(--color-midnight-indigo);
+}
 .rankingTitle > span:last-child {
   color: var(--color-gray-500);
 }
@@ -234,21 +280,20 @@
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  /* background-color: black; */
   background-color: var(--color-gray-300);
 }
 .rankingFirst .profileImg {
   width: 150px;
   height: 150px;
 }
-.rankingItem > span:nth-child(2) {
+.rankingItem > span:nth-child(3) {
   margin-top: 30px;
 }
 .rankingItem > span:last-child {
   margin-top: 20px;
   color: var(--color-gray-500);
 }
-.rankingFirst > span:nth-child(2) {
+.rankingFirst > span:nth-child(3) {
   margin-top: 30px;
   font-size: 30px;
 }
@@ -260,16 +305,29 @@
 .rankingFirst {
   height: 370px;
   border: 2px solid #f0e4b5;
-  /* background: linear-gradient(135deg, #fffdf3 0%, #f8e9a1 50%, #e6cf7a 100%); */
   box-shadow: var(--box-shadow-default);
 }
-
 .rankingSecond {
   border: 1px solid #e5e5e5;
-  /* background: linear-gradient(135deg, #ffffff 0%, #f1f3f5 50%, #d8dde3 100%); */
 }
 .rankingThird {
   border: 1px solid #e6b88a;
-  /* background: linear-gradient(135deg, #f8f1ec 0%, #e8cdb6 50%, #d4ab88 100%); */
+}
+.rankBadge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-500);
+  margin-bottom: 4px;
+}
+.trophyIcon {
+  color: #c9a227;
+  margin-bottom: 4px;
 }
 /* 명예의 전당 끝 */

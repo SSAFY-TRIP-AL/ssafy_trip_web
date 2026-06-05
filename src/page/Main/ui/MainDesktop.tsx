@@ -1,9 +1,19 @@
 import desktopStyle from "../css/MainDesktop.module.css";
 import "../../../style.css";
-// import mainImg from "../../../assets/main/main_img.svg";
-// import mainImg from "../../../assets/main/main_img2.svg";
 import mainImg from "../../../assets/main/main_img3.svg";
 import infoMapImg from "../../../assets/main/info_map.svg";
+import {
+  ArrowRight,
+  ChevronRight,
+  Compass,
+  Map,
+  Users,
+  Route,
+  Globe,
+  Trophy,
+  Crown,
+} from "lucide-react";
+
 export default function MainDesktop() {
   return (
     <>
@@ -18,16 +28,21 @@ export default function MainDesktop() {
           <span className="trip-h3">AI가 설계하는 당신만의 릴레이 여행</span>
           <div className={desktopStyle.heroBtn}>
             <span className="trip-body1">릴레이 참여하기</span>
-            {/* <span>아이콘</span> */}
+            <ArrowRight size={18} strokeWidth={2.5} />
           </div>
+          <span className={desktopStyle.memberCount}>
+            현재 3,847명이 함께하고 있어요
+          </span>
         </div>
       </section>
 
       <div className="container">
         <div className={desktopStyle.infoCard}>
           <div className={desktopStyle.infoText}>
-            {/* 아이콘 */}
-            <span>AI TRAVEL RELAY</span>
+            <div className={desktopStyle.infoLabel}>
+              <Compass size={16} strokeWidth={2} />
+              <span>AI TRAVEL RELAY</span>
+            </div>
             <span className="trip-h1">여정은 계속 이어집니다</span>
             <div className={desktopStyle.subTitle}>
               <span className="trip-body1">
@@ -38,43 +53,36 @@ export default function MainDesktop() {
               </span>
             </div>
             <div className={desktopStyle.infoBtn}>
+              <Map size={16} strokeWidth={1.75} />
               <span className="trip-body1">지도에서 보기</span>
-              {/* <span>아이콘</span> */}
             </div>
           </div>
           <div className={desktopStyle.infoMap}>
             <img src={infoMapImg} alt="지도 이미지" />
           </div>
           <div className={desktopStyle.infoSummary}>
-            <div>
-              <div>
-                {/* 아이콘 */}
-                <div className={desktopStyle.infoSummaryItem}>
-                  <span className="trip-body1">총 참여 인원</span>
-                  <span className="trip-h1">1,234명</span>
-                </div>
-              </div>
+            <div className={desktopStyle.infoSummaryItem}>
+              <Users size={20} strokeWidth={1.75} className={desktopStyle.summaryIcon} />
+              <span className="trip-body1">총 참여 인원</span>
+              <span className="trip-h1">1,234명</span>
             </div>
-            <div>
-              <div>
-                {/* 아이콘 */}
-                <div className={desktopStyle.infoSummaryItem}>
-                  <span className="trip-body1">총 릴레이 수</span>
-                  <span className="trip-h1">1,234개</span>
-                </div>
-              </div>
+            <div className={desktopStyle.infoSummaryItem}>
+              <Route size={20} strokeWidth={1.75} className={desktopStyle.summaryIcon} />
+              <span className="trip-body1">총 릴레이 수</span>
+              <span className="trip-h1">1,234개</span>
             </div>
           </div>
         </div>
+
         <div className={desktopStyle.relayContainer}>
           <div className={desktopStyle.relayTitle}>
             <span className="trip-h1">
-              {/* <span>아이콘</span> */}
+              <Globe size={28} strokeWidth={1.5} className={desktopStyle.sectionIcon} />
               현재 진행 중인 릴레이
             </span>
-            <span className="trip-body1">
+            <span className={`trip-body1 ${desktopStyle.relayViewAll}`}>
               전체 보기
-              {/* <span>아이콘</span> */}
+              <ChevronRight size={16} strokeWidth={2} />
             </span>
           </div>
           <div className={desktopStyle.relayList}>
@@ -108,9 +116,13 @@ export default function MainDesktop() {
             </div>
           </div>
         </div>
+
         <div className={desktopStyle.rankingContainer}>
           <div className={desktopStyle.rankingTitle}>
-            <span className="trip-h1">명예의 전당</span>
+            <span className="trip-h1">
+              <Trophy size={28} strokeWidth={1.5} className={desktopStyle.sectionIcon} />
+              명예의 전당
+            </span>
             <span className="trip-body1">
               릴레이를 가장 활발하게 이어가고 있는 Top3 유저입니다.
             </span>
@@ -119,6 +131,7 @@ export default function MainDesktop() {
             <div
               className={`${desktopStyle.rankingItem} ${desktopStyle.rankingSecond}`}
             >
+              <div className={desktopStyle.rankBadge}>2</div>
               <div className={desktopStyle.profileImg}></div>
               <span className="trip-h3">김싸피</span>
               <span className="trip-body1">릴레이 15회 참여</span>
@@ -126,6 +139,7 @@ export default function MainDesktop() {
             <div
               className={`${desktopStyle.rankingItem} ${desktopStyle.rankingFirst}`}
             >
+              <Crown size={32} strokeWidth={1.5} className={desktopStyle.trophyIcon} />
               <div className={desktopStyle.profileImg}></div>
               <span className="trip-h3">김싸피</span>
               <span className="trip-body1">릴레이 15회 참여</span>
@@ -133,6 +147,7 @@ export default function MainDesktop() {
             <div
               className={`${desktopStyle.rankingItem} ${desktopStyle.rankingThird}`}
             >
+              <div className={desktopStyle.rankBadge}>3</div>
               <div className={desktopStyle.profileImg}></div>
               <span className="trip-h3">김싸피</span>
               <span className="trip-body1">릴레이 15회 참여</span>
