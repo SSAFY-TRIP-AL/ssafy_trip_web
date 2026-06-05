@@ -71,6 +71,7 @@ a {
   --border-radius-20: 20px;
   --border-radius-10: 10px;
   --box-shadow-default: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --box-shadow-form: 0 10px 12px -10px rgba(0, 0, 0, 0.15);
 }
 .trip-h1 {
   font-size: var(--fs-h1);
