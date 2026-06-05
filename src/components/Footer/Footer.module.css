@@ -1,0 +1,111 @@
+@import "../../style.css";
+
+.footer {
+  background-color: var(--color-midnight-indigo);
+  padding: 56px 0 32px;
+}
+
+.inner {
+  max-width: 75%;
+  margin: 0 auto;
+}
+
+/* top: 브랜드 + 네비게이션 */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 44px;
+}
+
+/* 브랜드 영역 */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 240px;
+}
+
+.logo {
+  height: 28px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.brandDesc {
+  font-size: var(--fs-caption);
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* 네비게이션 */
+.navArea {
+  display: flex;
+  gap: 72px;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.navTitle {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.navList li a {
+  font-size: var(--fs-caption);
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.15s ease;
+}
+
+.navList li a:hover {
+  color: var(--color-pure-white);
+}
+
+/* 구분선 */
+.divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* bottom: 카피라이트 + 법적 링크 */
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 28px;
+}
+
+.copyright {
+  font-size: var(--fs-body2);
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.legal {
+  display: flex;
+  gap: 24px;
+}
+
+.legal a {
+  font-size: var(--fs-body2);
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 0.15s ease;
+}
+
+.legal a:hover {
+  color: rgba(255, 255, 255, 0.55);
+}
