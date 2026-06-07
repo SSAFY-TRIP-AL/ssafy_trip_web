@@ -50,6 +50,10 @@
 .signupInputBox:has(.signupEyeBtn) input {
   padding-right: 36px;
 }
+.signupInputBox input:focus {
+  outline: none;
+  border-color: var(--color-electric-blue);
+}
 .signupEyeBtn {
   position: absolute;
   right: 10px;
