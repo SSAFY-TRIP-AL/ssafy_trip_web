@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import DesktopLayout from "./layout/DesktopLayout";
 import Main from "./page/Main/Main";
 import SignUpDesktop from "./page/auth/SignUp/ui/SignUpDesktop";
+import LoginDesktop from "./page/auth/Login/ui/LoginDesktop";
 
 function App() {
   useEffect(() => {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/" element={<DesktopLayout />}>
         <Route index element={<Main />} />
         <Route path="/auth/signup" element={<SignUpDesktop />} />
+        <Route path="/auth/login" element={<LoginDesktop />} />
       </Route>
     </Routes>
   );
