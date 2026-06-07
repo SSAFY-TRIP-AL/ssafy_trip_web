@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import GlobalLayout from "./layout/DesktopLayout";
-import Index from "./page/Main/Main";
+import Main from "./page/Main/Main";
 import SignUpDesktop from "./page/auth/SignUp/ui/SignUpDesktop";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout />}>
-        <Route index element={<Index />} />
+        <Route index element={<Main />} />
         <Route path="/auth/signup" element={<SignUpDesktop />} />
       </Route>
     </Routes>
