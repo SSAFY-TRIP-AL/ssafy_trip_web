@@ -8,6 +8,7 @@
   height: 50px;
   width: auto;
   display: block;
+  cursor: pointer;
 }
 .headerContent {
   width: 75%;
@@ -16,20 +17,20 @@
   justify-content: space-between;
   align-items: center;
 }
-.logoContainer {
+/* .logoContainer {
   display: flex;
   align-items: center;
-}
+} */
 .headerContent ul {
   display: flex;
   gap: 50px;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 .myPage {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 .profileImg {
   width: 30px;

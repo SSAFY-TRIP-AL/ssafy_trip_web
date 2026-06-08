@@ -1,6 +1,6 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import signupStyle from "../css/SignUpDesktop.module.css";
+import desktopStyle from "../css/SignUpDesktop.module.css";
 import "../../../../style.css";
 import "../../auth.css";
 
@@ -54,11 +54,11 @@ export default function SignUpDesktop() {
     <div className="container">
       <div className="authContainer">
         <span className="trip-h1">회원가입</span>
-        <div className={signupStyle.signupText}>
+        <div className={desktopStyle.signupText}>
           <span className="trip-body1">Trip Baton에 가입하고 </span>
           <span className="trip-body1">나만의 여행을 시작해보세요. </span>
         </div>
-        <form className={`authForm ${signupStyle.signupForm}`}>
+        <form className={`authForm ${desktopStyle.signupForm}`}>
           {fields.map(({ id, label, type, placeholder }) => {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
@@ -66,12 +66,12 @@ export default function SignUpDesktop() {
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className={`authInputBox ${signupStyle.signupInputBox}`}>
+                <div className={`authInputBox ${desktopStyle.signupInputBox}`}>
                   <input id={id} type={inputType} placeholder={placeholder} />
                   {isPassword && (
                     <button
                       type="button"
-                      className={signupStyle.signupEyeBtn}
+                      className={desktopStyle.signupEyeBtn}
                       onClick={() => toggleVisible(id)}
                     >
                       {passwordVisible[id] ? (
