@@ -1,6 +1,6 @@
 import "../../../../style.css";
 import "../../auth.css";
-import loginStyle from "../css/LoginDesktop.module.css";
+import desktopStyle from "../css/LoginDesktop.module.css";
 
 function GoogleIcon() {
   return (
@@ -55,7 +55,7 @@ export default function LoginDesktop() {
     <div className="container">
       <div className="authContainer">
         <span className="trip-h1">로그인</span>
-        <span className={`trip-body1 ${loginStyle.loginText}`}>
+        <span className={`trip-body1 ${desktopStyle.loginText}`}>
           Trip Baton에 로그인하세요.
         </span>
         <form className="authForm">
@@ -72,20 +72,20 @@ export default function LoginDesktop() {
           <button type="submit" className="authBtn">
             로그인
           </button>
-          <div className={loginStyle.divider}>
+          <div className={desktopStyle.divider}>
             <span>또는</span>
           </div>
-          <div className={loginStyle.socialContainer}>
+          <div className={desktopStyle.socialContainer}>
             <button
               type="button"
-              className={`${loginStyle.socialBtn} ${loginStyle.googleBtn}`}
+              className={`${desktopStyle.socialBtn} ${desktopStyle.googleBtn}`}
             >
               <GoogleIcon />
               Google로 로그인
             </button>
             <button
               type="button"
-              className={`${loginStyle.socialBtn} ${loginStyle.kakaoBtn}`}
+              className={`${desktopStyle.socialBtn} ${desktopStyle.kakaoBtn}`}
             >
               <KakaoIcon />
               Kakao로 로그인
