@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import DesktopLayout from "./layout/DesktopLayout";
 import Main from "./page/Main/Main";
-import SignUpDesktop from "./page/auth/SignUp/ui/SignUpDesktop";
-import LoginDesktop from "./page/auth/Login/ui/LoginDesktop";
+import SignUp from "./page/auth/SignUp/SignUp";
+import Login from "./page/auth/Login/Login";
+import Map from "./page/Map/Map";
 
 function App() {
   useEffect(() => {
@@ -23,8 +24,9 @@ function App() {
     <Routes>
       <Route path="/" element={<DesktopLayout />}>
         <Route index element={<Main />} />
-        <Route path="/auth/signup" element={<SignUpDesktop />} />
-        <Route path="/auth/login" element={<LoginDesktop />} />
+        <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/map" element={<Map />} />
       </Route>
     </Routes>
   );
