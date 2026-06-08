@@ -45,10 +45,19 @@ export default function SignUpDesktop() {
     password: false,
     passwordConfirm: false,
   });
+  const [values, setValues] = useState<Record<string, string>>({});
 
   const toggleVisible = (id: string) => {
     setPasswordVisible((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  const handleChange = (id: string, value: string) => {
+    setValues((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const passwordMismatch =
+    Boolean(values.passwordConfirm) &&
+    values.password !== values.passwordConfirm;
 
   return (
     <div className="container">
@@ -67,7 +76,13 @@ export default function SignUpDesktop() {
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
                 <div className={`authInputBox ${desktopStyle.signupInputBox}`}>
-                  <input id={id} type={inputType} placeholder={placeholder} />
+                  <input
+                    id={id}
+                    type={inputType}
+                    placeholder={placeholder}
+                    value={values[id] ?? ""}
+                    onChange={(event) => handleChange(id, event.target.value)}
+                  />
                   {isPassword && (
                     <button
                       type="button"
@@ -82,6 +97,11 @@ export default function SignUpDesktop() {
                     </button>
                   )}
                 </div>
+                {id === "passwordConfirm" && passwordMismatch && (
+                  <span className={desktopStyle.signupFieldError}>
+                    비밀번호가 일치하지 않습니다.
+                  </span>
+                )}
               </div>
             );
           })}
