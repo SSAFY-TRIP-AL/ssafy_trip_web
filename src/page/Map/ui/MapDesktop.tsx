@@ -4,8 +4,6 @@ import {
   ChevronDown,
   LayoutGrid,
   X,
-  Clock,
-  Users,
   LocateFixed,
   Plus,
   Minus,
