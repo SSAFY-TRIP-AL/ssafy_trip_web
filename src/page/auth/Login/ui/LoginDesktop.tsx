@@ -1,5 +1,6 @@
 import "../../../../style.css";
 import "../../auth.css";
+import useLogin from "../../Hook/useLogin";
 import desktopStyle from "../css/LoginDesktop.module.css";
 
 function GoogleIcon() {
@@ -36,21 +37,34 @@ function KakaoIcon() {
   );
 }
 
+type LoginForm = {
+  userId: string;
+  password: string;
+};
+
+const fields: {
+  id: keyof LoginForm;
+  label: string;
+  type: string;
+  placeholder: string;
+}[] = [
+  {
+    id: "userId",
+    label: "아이디",
+    type: "text",
+    placeholder: "아이디를 입력하세요",
+  },
+  {
+    id: "password",
+    label: "비밀번호",
+    type: "password",
+    placeholder: "비밀번호를 입력하세요",
+  },
+];
+
 export default function LoginDesktop() {
-  const fields = [
-    {
-      id: "userId",
-      label: "아이디",
-      type: "text",
-      placeholder: "아이디를 입력하세요",
-    },
-    {
-      id: "password",
-      label: "비밀번호",
-      type: "password",
-      placeholder: "비밀번호를 입력하세요",
-    },
-  ];
+  const { values, handleChange, handleSubmit } = useLogin();
+
   return (
     <div className="container">
       <div className="authContainer">
@@ -58,13 +72,20 @@ export default function LoginDesktop() {
         <span className={`trip-body1 ${desktopStyle.loginText}`}>
           Trip Baton에 로그인하세요.
         </span>
-        <form className="authForm">
+        <form onSubmit={handleSubmit} className="authForm">
           {fields.map(({ id, label, type, placeholder }) => {
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
                 <div className="authInputBox">
-                  <input id={id} type={type} placeholder={placeholder} />
+                  <input
+                    id={id}
+                    type={type}
+                    placeholder={placeholder}
+                    value={values[id] ?? ""}
+                    onChange={(event) => handleChange(id, event.target.value)}
+                    required
+                  />
                 </div>
               </div>
             );
