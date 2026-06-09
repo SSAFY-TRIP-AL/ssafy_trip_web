@@ -1,9 +1,9 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useState, type SubmitEventHandler } from "react";
 import desktopStyle from "../css/SignUpDesktop.module.css";
 import "../../../../style.css";
 import "../../auth.css";
-import { useNavigate } from "react-router-dom";
+import { usePasswordVisibility } from "../Hook/usePasswordVisibility";
+import { useSignUp } from "../Hook/useSignUp";
 
 const fields = [
   {
@@ -40,67 +40,8 @@ const fields = [
 ];
 
 export default function SignUpDesktop() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const [passwordVisible, setPasswordVisible] = useState<
-    Record<string, boolean>
-  >({
-    password: false,
-    passwordConfirm: false,
-  });
-  const [values, setValues] = useState<Record<string, string>>({});
-  const navigate = useNavigate();
-
-  const toggleVisible = (id: string) => {
-    setPasswordVisible((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const handleChange = (id: string, value: string) => {
-    setValues((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const passwordMismatch =
-    Boolean(values.passwordConfirm) &&
-    values.password !== values.passwordConfirm;
-
-  const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-
-    if (passwordMismatch) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    const formData = {
-      id: values.userId,
-      name: values.name,
-      password: values.password,
-      email: values.email,
-      phoneNumber: values.phone,
-    };
-    console.log(formData);
-
-    try {
-      const response = await fetch(BASE_URL + "/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-        }),
-      });
-
-      if (response.ok) {
-        alert("회원가입이 완료되었습니다!");
-        navigate("/auth/login");
-      } else {
-        const error = await response.json();
-        alert(error.message);
-      }
-    } catch (error: any) {
-      alert(error.message);
-    }
-  };
+  const { values, handleChange, passwordMismatch, handleSubmit } = useSignUp();
+  const { passwordVisible, toggleVisible } = usePasswordVisibility();
 
   return (
     <div className="container">
