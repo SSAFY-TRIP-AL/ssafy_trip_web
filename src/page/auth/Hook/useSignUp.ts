@@ -1,18 +1,27 @@
-import { useState, type SubmitEventHandler } from "react";
+import { type SubmitEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "../../api/authApi";
+import { signUp } from "../api/authApi";
+import { useForm } from "./useForm";
+
+type SignUpForm = {
+  userId: string;
+  name: string;
+  password: string;
+  passwordConfirm: string;
+  email: string;
+  phone: string;
+};
 
 export const useSignUp = () => {
   const navigate = useNavigate();
-
-  const [values, setValues] = useState<Record<string, string>>({});
-
-  const handleChange = (id: string, value: string) => {
-    setValues((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
+  const { values, handleChange } = useForm<SignUpForm>({
+    userId: "",
+    name: "",
+    password: "",
+    passwordConfirm: "",
+    email: "",
+    phone: "",
+  });
 
   const passwordMismatch =
     Boolean(values.passwordConfirm) &&
@@ -26,6 +35,7 @@ export const useSignUp = () => {
         id: values.userId,
         name: values.name,
         password: values.password,
+        passwordConfirm: values.passwordConfirm,
         email: values.email,
         phoneNumber: values.phone,
       });

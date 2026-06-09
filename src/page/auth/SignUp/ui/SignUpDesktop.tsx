@@ -2,10 +2,24 @@ import { Eye, EyeOff } from "lucide-react";
 import desktopStyle from "../css/SignUpDesktop.module.css";
 import "../../../../style.css";
 import "../../auth.css";
-import { usePasswordVisibility } from "../Hook/usePasswordVisibility";
-import { useSignUp } from "../Hook/useSignUp";
+import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
+import { useSignUp } from "../../Hook/useSignUp";
 
-const fields = [
+type SignUpForm = {
+  userId: string;
+  name: string;
+  password: string;
+  passwordConfirm: string;
+  email: string;
+  phone: string;
+};
+
+const fields: {
+  id: keyof SignUpForm;
+  label: string;
+  type: string;
+  placeholder: string;
+}[] = [
   {
     id: "userId",
     label: "아이디",
@@ -69,6 +83,7 @@ export default function SignUpDesktop() {
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
+                    required
                   />
                   {isPassword && (
                     <button

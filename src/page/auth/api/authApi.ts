@@ -2,6 +2,7 @@ export interface SignUpRequest {
   id: string;
   name: string;
   password: string;
+  passwordConfirm: string;
   email: string;
   phoneNumber: string;
 }
