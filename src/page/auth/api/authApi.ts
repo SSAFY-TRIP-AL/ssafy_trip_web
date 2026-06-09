@@ -30,8 +30,8 @@ export const signUp = async (payload: SignUpRequest) => {
 
   return response.json();
 };
-export const login = async (payload: SignUpRequest) => {
-  const response = await fetch(`${BASE_URL}/auth/signup`, {
+export const login = async (payload: LoginRequest) => {
+  const response = await fetch(`${BASE_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
