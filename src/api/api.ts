@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { useStore } from "../store/store";
+import { useAuthStore } from "../store/authStore";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const api = axios.create({
@@ -10,7 +10,7 @@ const api = axios.create({
 // 요청 인터셉터
 api.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = useAuthStore.getState().accessToken;
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -32,13 +32,15 @@ api.interceptors.response.use(
       try {
         // 액세스 토큰 갱신 요청
         const res = await axios.post(
-          "/api/auth/refresh",
+          "/auth/reissue",
           {},
           { withCredentials: true },
         );
         if (res.status === 200) {
           const newAccessToken = res.data;
-          localStorage.setItem("accessToken", newAccessToken);
+          const { setAccessToken } = useAuthStore.getState();
+          setAccessToken(newAccessToken);
+
           // 새 액세스 토큰으로 원래 요청 다시 보내기
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axios(originalRequest);
@@ -46,11 +48,11 @@ api.interceptors.response.use(
           const error = res.data;
           console.error("토큰 갱신 실패");
           alert(error.message);
-          // logout();
         }
       } catch (refreshError) {
-        console.error("토큰 갱신 실패", refreshError);
-        // logout();
+        const { logout } = useAuthStore.getState();
+        logout();
+        window.location.href = "/auth/login";
       }
     }
 
