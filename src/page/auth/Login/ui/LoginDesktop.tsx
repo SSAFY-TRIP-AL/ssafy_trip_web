@@ -38,7 +38,7 @@ function KakaoIcon() {
 }
 
 type LoginForm = {
-  userId: string;
+  loginId: string;
   password: string;
 };
 
@@ -49,7 +49,7 @@ const fields: {
   placeholder: string;
 }[] = [
   {
-    id: "userId",
+    id: "loginId",
     label: "아이디",
     type: "text",
     placeholder: "아이디를 입력하세요",
