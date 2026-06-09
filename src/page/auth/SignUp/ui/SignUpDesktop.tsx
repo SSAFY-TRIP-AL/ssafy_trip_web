@@ -2,12 +2,26 @@ import { Eye, EyeOff } from "lucide-react";
 import desktopStyle from "../css/SignUpDesktop.module.css";
 import "../../../../style.css";
 import "../../auth.css";
-import { usePasswordVisibility } from "../Hook/usePasswordVisibility";
-import { useSignUp } from "../Hook/useSignUp";
+import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
+import { useSignUp } from "../../Hook/useSignUp";
 
-const fields = [
+type SignUpForm = {
+  loginId: string;
+  password: string;
+  passwordConfirm: string;
+  name: string;
+  email: string;
+  phone: string;
+};
+
+const fields: {
+  id: keyof SignUpForm;
+  label: string;
+  type: string;
+  placeholder: string;
+}[] = [
   {
-    id: "userId",
+    id: "loginId",
     label: "아이디",
     type: "text",
     placeholder: "아이디를 입력하세요",
@@ -69,6 +83,7 @@ export default function SignUpDesktop() {
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
+                    required
                   />
                   {isPassword && (
                     <button
@@ -96,7 +111,7 @@ export default function SignUpDesktop() {
             회원가입
           </button>
           <span>
-            이미 계정이 있으신가요?<a href="/login">로그인</a>
+            이미 계정이 있으신가요?<a href="/auth/login">로그인</a>
           </span>
         </form>
       </div>
