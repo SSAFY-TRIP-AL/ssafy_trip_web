@@ -1,20 +1,21 @@
 export interface SignUpRequest {
-  id: string;
-  name: string;
+  loginId: string;
   password: string;
   passwordConfirm: string;
+  name: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
 }
 
 export interface LoginRequest {
-  id: string;
+  loginId: string;
   password: string;
 }
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const signUp = async (payload: SignUpRequest) => {
+  console.log(payload);
   const response = await fetch(`${BASE_URL}/auth/signup`, {
     method: "POST",
     headers: {
@@ -25,7 +26,7 @@ export const signUp = async (payload: SignUpRequest) => {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message);
+    throw new Error(error.error);
   }
 
   return response.json();
@@ -41,7 +42,7 @@ export const login = async (payload: LoginRequest) => {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message);
+    throw new Error(error.error);
   }
 
   return response.json();

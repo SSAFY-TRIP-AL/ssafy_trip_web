@@ -4,10 +4,10 @@ import { signUp } from "../api/authApi";
 import { useForm } from "./useForm";
 
 type SignUpForm = {
-  userId: string;
-  name: string;
+  loginId: string;
   password: string;
   passwordConfirm: string;
+  name: string;
   email: string;
   phone: string;
 };
@@ -15,7 +15,7 @@ type SignUpForm = {
 export const useSignUp = () => {
   const navigate = useNavigate();
   const { values, handleChange } = useForm<SignUpForm>({
-    userId: "",
+    loginId: "",
     name: "",
     password: "",
     passwordConfirm: "",
@@ -32,12 +32,12 @@ export const useSignUp = () => {
 
     try {
       await signUp({
-        id: values.userId,
+        loginId: values.loginId,
         name: values.name,
         password: values.password,
         passwordConfirm: values.passwordConfirm,
         email: values.email,
-        phoneNumber: values.phone,
+        phone: values.phone,
       });
 
       alert("회원가입이 완료되었습니다.");

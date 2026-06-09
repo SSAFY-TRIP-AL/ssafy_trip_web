@@ -6,10 +6,10 @@ import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
 import { useSignUp } from "../../Hook/useSignUp";
 
 type SignUpForm = {
-  userId: string;
-  name: string;
+  loginId: string;
   password: string;
   passwordConfirm: string;
+  name: string;
   email: string;
   phone: string;
 };
@@ -21,7 +21,7 @@ const fields: {
   placeholder: string;
 }[] = [
   {
-    id: "userId",
+    id: "loginId",
     label: "아이디",
     type: "text",
     placeholder: "아이디를 입력하세요",
