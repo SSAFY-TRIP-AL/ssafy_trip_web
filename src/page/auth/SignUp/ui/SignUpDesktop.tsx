@@ -1,8 +1,9 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
 import desktopStyle from "../css/SignUpDesktop.module.css";
 import "../../../../style.css";
 import "../../auth.css";
+import { usePasswordVisibility } from "../Hook/usePasswordVisibility";
+import { useSignUp } from "../Hook/useSignUp";
 
 const fields = [
   {
@@ -39,16 +40,8 @@ const fields = [
 ];
 
 export default function SignUpDesktop() {
-  const [passwordVisible, setPasswordVisible] = useState<
-    Record<string, boolean>
-  >({
-    password: false,
-    passwordConfirm: false,
-  });
-
-  const toggleVisible = (id: string) => {
-    setPasswordVisible((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  const { values, handleChange, passwordMismatch, handleSubmit } = useSignUp();
+  const { passwordVisible, toggleVisible } = usePasswordVisibility();
 
   return (
     <div className="container">
@@ -58,7 +51,10 @@ export default function SignUpDesktop() {
           <span className="trip-body1">Trip Baton에 가입하고 </span>
           <span className="trip-body1">나만의 여행을 시작해보세요. </span>
         </div>
-        <form className={`authForm ${desktopStyle.signupForm}`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`authForm ${desktopStyle.signupForm}`}
+        >
           {fields.map(({ id, label, type, placeholder }) => {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
@@ -67,7 +63,13 @@ export default function SignUpDesktop() {
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
                 <div className={`authInputBox ${desktopStyle.signupInputBox}`}>
-                  <input id={id} type={inputType} placeholder={placeholder} />
+                  <input
+                    id={id}
+                    type={inputType}
+                    placeholder={placeholder}
+                    value={values[id] ?? ""}
+                    onChange={(event) => handleChange(id, event.target.value)}
+                  />
                   {isPassword && (
                     <button
                       type="button"
@@ -82,6 +84,11 @@ export default function SignUpDesktop() {
                     </button>
                   )}
                 </div>
+                {id === "passwordConfirm" && passwordMismatch && (
+                  <span className={desktopStyle.signupFieldError}>
+                    비밀번호가 일치하지 않습니다.
+                  </span>
+                )}
               </div>
             );
           })}
