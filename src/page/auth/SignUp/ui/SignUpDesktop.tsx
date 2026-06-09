@@ -1,8 +1,9 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useState, type SubmitEventHandler } from "react";
 import desktopStyle from "../css/SignUpDesktop.module.css";
 import "../../../../style.css";
 import "../../auth.css";
+import { useNavigate } from "react-router-dom";
 
 const fields = [
   {
@@ -39,6 +40,7 @@ const fields = [
 ];
 
 export default function SignUpDesktop() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [passwordVisible, setPasswordVisible] = useState<
     Record<string, boolean>
   >({
@@ -46,6 +48,7 @@ export default function SignUpDesktop() {
     passwordConfirm: false,
   });
   const [values, setValues] = useState<Record<string, string>>({});
+  const navigate = useNavigate();
 
   const toggleVisible = (id: string) => {
     setPasswordVisible((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -59,6 +62,46 @@ export default function SignUpDesktop() {
     Boolean(values.passwordConfirm) &&
     values.password !== values.passwordConfirm;
 
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+
+    if (passwordMismatch) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    const formData = {
+      id: values.userId,
+      name: values.name,
+      password: values.password,
+      email: values.email,
+      phoneNumber: values.phone,
+    };
+    console.log(formData);
+
+    try {
+      const response = await fetch(BASE_URL + "/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+        }),
+      });
+
+      if (response.ok) {
+        alert("회원가입이 완료되었습니다!");
+        navigate("/auth/login");
+      } else {
+        const error = await response.json();
+        alert(error.message);
+      }
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
   return (
     <div className="container">
       <div className="authContainer">
@@ -67,7 +110,10 @@ export default function SignUpDesktop() {
           <span className="trip-body1">Trip Baton에 가입하고 </span>
           <span className="trip-body1">나만의 여행을 시작해보세요. </span>
         </div>
-        <form className={`authForm ${desktopStyle.signupForm}`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`authForm ${desktopStyle.signupForm}`}
+        >
           {fields.map(({ id, label, type, placeholder }) => {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
