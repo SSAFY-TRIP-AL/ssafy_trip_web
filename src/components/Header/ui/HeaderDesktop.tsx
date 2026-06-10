@@ -2,12 +2,17 @@ import logo from "../../../assets/logo_lf.svg";
 import headerStyle from "../css/header.module.css";
 import "../../../style.css";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function HeaderDesktop() {
   const navigate = useNavigate();
+  const userName = useAuthStore((state) => state.userName);
   function goHome() {
     navigate("/");
   }
+  const accessToken = useAuthStore((state) => state.accessToken);
+
+  const isLogin = !!accessToken;
   return (
     <header className={headerStyle.headerContainer}>
       <div className={headerStyle.headerContent}>
@@ -24,7 +29,7 @@ export default function HeaderDesktop() {
             <a href="/">홈</a>
           </li>
           <li>
-            <a href="/">지도</a>
+            <a href="/map">지도</a>
           </li>
           <li>
             <a href="/">릴레이 리스트</a>
@@ -34,8 +39,19 @@ export default function HeaderDesktop() {
           </li>
         </ul>
         <div className={headerStyle.myPage}>
-          <div className={headerStyle.profileImg}></div>
-          <span>김싸피</span>
+          {isLogin ? (
+            <div className={headerStyle.myPage}>
+              <div className={headerStyle.profileImg}></div>
+              <span>{userName}</span>
+            </div>
+          ) : (
+            <span
+              className="trip-body1"
+              onClick={() => navigate("/auth/login")}
+            >
+              로그인
+            </span>
+          )}
         </div>
       </div>
     </header>
