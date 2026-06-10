@@ -32,6 +32,19 @@
   gap: 10px;
   /* font-weight: 600; */
 }
+.myPage span {
+  background-color: var(--color-electric-blue);
+  border: none;
+  color: var(--color-pure-white);
+  width: fit-content;
+  padding: 10px 18px;
+  border-radius: var(--border-radius-10);
+  cursor: pointer;
+}
+
+.myPage span:hover {
+  opacity: 0.88;
+}
 .profileImg {
   width: 30px;
   height: 30px;

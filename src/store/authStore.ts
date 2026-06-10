@@ -6,15 +6,14 @@ interface AuthStore {
   userName: string | null;
 
   login: (accessToken: string, userName: string) => void;
-
   logout: () => void;
-
   setAccessToken: (accessToken: string) => void;
+  isLogin: () => boolean;
 }
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       accessToken: null,
       userName: null,
 
@@ -29,7 +28,13 @@ export const useAuthStore = create<AuthStore>()(
           accessToken: null,
           userName: null,
         }),
-      setAccessToken: (accessToken) => set({ accessToken }),
+
+      setAccessToken: (accessToken) =>
+        set({
+          accessToken,
+        }),
+
+      isLogin: () => get().accessToken !== null,
     }),
     {
       name: "auth-storage",
