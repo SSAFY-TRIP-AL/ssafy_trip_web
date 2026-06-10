@@ -5,6 +5,7 @@ import Main from "./page/Main/Main";
 import SignUp from "./page/auth/SignUp/SignUp";
 import Login from "./page/auth/Login/Login";
 import Map from "./page/Map/Map";
+import RelayList from "./page/Relay/List/RelayList";
 
 function App() {
   useEffect(() => {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/auth/signup" element={<SignUp />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/map" element={<Map />} />
+        <Route path="/relaylist" element={<RelayList />} />
       </Route>
     </Routes>
   );
