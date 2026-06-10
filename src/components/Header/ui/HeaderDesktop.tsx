@@ -32,7 +32,7 @@ export default function HeaderDesktop() {
             <a href="/map">지도</a>
           </li>
           <li>
-            <a href="/">릴레이 리스트</a>
+            <a href="/relaylist">릴레이 리스트</a>
           </li>
           <li>
             <a href="/">릴레이 등록</a>
