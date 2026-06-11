@@ -6,7 +6,6 @@ import {
   ChevronRight,
   LayoutGrid,
   List as ListIcon,
-  MapPin,
 } from "lucide-react";
 import "../../../../style.css";
 import relayListStyle from "../css/RelayListDesktop.module.css";
