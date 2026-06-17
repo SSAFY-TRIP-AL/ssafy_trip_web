@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import desktopStyle from "../css/MapDesktop.module.css";
 import "../../../style.css";
+import { CATEGORIES, getCategory } from "../../../constants/categories";
 
 declare global {
   interface Window {
@@ -22,18 +23,6 @@ const KAKAO_JAVASCRIPT_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_API_KEY;
 const KOREA_CENTER = { lat: 36.5, lng: 127.8 };
 const KOREA_ZOOM_LEVEL = 12;
 const MY_LOCATION_ZOOM_LEVEL = 5;
-
-const categories = [
-  { id: "nature", label: "자연/경관", color: "#22c55e", tint: "#e8f9ee" },
-  { id: "culture", label: "문화/역사", color: "#2340fa", tint: "#e8ecfe" },
-  { id: "city", label: "도시/명소", color: "#a855f7", tint: "#f3e9fd" },
-  { id: "activity", label: "액티비티", color: "#f97316", tint: "#fef0e4" },
-  { id: "food", label: "맛집/미식", color: "#ef4444", tint: "#fde9e9" },
-];
-
-function getCategory(id: string) {
-  return categories.find((category) => category.id === id) ?? categories[0];
-}
 
 const markers = [
   {
@@ -375,7 +364,7 @@ export default function MapDesktop() {
                   전체
                 </button>
               </li>
-              {categories.map((category) => (
+              {CATEGORIES.map((category) => (
                 <li key={category.id}>
                   <button
                     type="button"
