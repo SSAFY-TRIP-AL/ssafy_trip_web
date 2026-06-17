@@ -11,6 +11,7 @@ import "../../../../style.css";
 import relayListStyle from "../css/RelayListDesktop.module.css";
 import { useRelayList } from "../Hook/useRelayList";
 import { RELAY_SORT_OPTIONS } from "../api/relayApi";
+import { getCategory } from "../../../../constants/categories";
 
 function getPageNumbers(current: number, total: number): (number | "...")[] {
   if (total <= 7) {
@@ -105,7 +106,15 @@ export default function RelayListDesktop() {
                 setIsSortOpen(false);
               }}
             >
-              <span>{category === "전체" ? "카테고리 전체" : category}</span>
+              <span className={relayListStyle.dropdownBtnContent}>
+                {category !== "전체" && (
+                  <span
+                    className={relayListStyle.categoryDot}
+                    style={{ backgroundColor: getCategory(category).color }}
+                  />
+                )}
+                {category === "전체" ? "카테고리 전체" : getCategory(category).label}
+              </span>
               <ChevronDown size={16} />
             </button>
             {isCategoryOpen && (
@@ -127,20 +136,24 @@ export default function RelayListDesktop() {
                   </button>
                 </li>
                 {categories.map((item) => (
-                  <li key={item}>
+                  <li key={item.id}>
                     <button
                       type="button"
                       className={`${relayListStyle.dropdownOption} ${
-                        category === item
+                        category === item.id
                           ? relayListStyle.dropdownOptionActive
                           : ""
                       }`}
                       onClick={() => {
-                        setCategory(item);
+                        setCategory(item.id);
                         setIsCategoryOpen(false);
                       }}
                     >
-                      {item}
+                      <span
+                        className={relayListStyle.categoryDot}
+                        style={{ backgroundColor: item.color }}
+                      />
+                      {item.label}
                     </button>
                   </li>
                 ))}
@@ -233,8 +246,14 @@ export default function RelayListDesktop() {
                 alt={relay.title}
                 className={relayListStyle.cardImage}
               />
-              <span className={relayListStyle.categoryBadge}>
-                {relay.category}
+              <span
+                className={relayListStyle.categoryBadge}
+                style={{
+                  backgroundColor: getCategory(relay.category).tint,
+                  color: getCategory(relay.category).color,
+                }}
+              >
+                {getCategory(relay.category).label}
               </span>
             </div>
             <div className={relayListStyle.cardBody}>

@@ -7,6 +7,7 @@ import Login from "./page/auth/Login/Login";
 import Map from "./page/Map/Map";
 import RelayList from "./page/Relay/List/RelayList";
 import RelayDetail from "./page/Relay/Detail/RelayDetail";
+import Register from "./page/Relay/Register/Register";
 
 function App() {
   useEffect(() => {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/map" element={<Map />} />
         <Route path="/relaylist" element={<RelayList />} />
         <Route path="/relaydetail" element={<RelayDetail />} />
+        <Route path="/relayregister" element={<Register />} />
       </Route>
     </Routes>
   );

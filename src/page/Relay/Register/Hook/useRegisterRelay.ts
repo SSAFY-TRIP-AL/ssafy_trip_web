@@ -1,0 +1,47 @@
+import { type SubmitEventHandler, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createRelay } from "../api/registerApi";
+
+export const useRegisterRelay = () => {
+  const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (file: File | null) => {
+    setImage(file);
+    setImagePreview(file ? URL.createObjectURL(file) : null);
+  };
+
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+
+    try {
+      await createRelay({ title, categoryId, location, description, image });
+
+      alert("릴레이가 등록되었습니다.");
+      navigate("/relaylist");
+    } catch (error) {
+      alert(
+        error instanceof Error ? error.message : "릴레이 등록에 실패했습니다.",
+      );
+    }
+  };
+
+  return {
+    title,
+    setTitle,
+    categoryId,
+    setCategoryId,
+    location,
+    setLocation,
+    description,
+    setDescription,
+    imagePreview,
+    handleImageChange,
+    handleSubmit,
+  };
+};

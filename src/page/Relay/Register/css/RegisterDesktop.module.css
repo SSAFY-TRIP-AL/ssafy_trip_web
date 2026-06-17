@@ -1,0 +1,241 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+.titleText {
+  color: var(--color-gray-500);
+}
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 640px;
+  padding: 30px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-form);
+}
+
+/* 라벨 + 글자수 */
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.charCount {
+  font-size: 12px;
+  color: var(--color-gray-500);
+}
+
+/* 카테고리 선택 */
+.categoryWrapper {
+  position: relative;
+}
+.categorySelect {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-gray-700);
+  cursor: pointer;
+}
+.categorySelect:focus {
+  outline: none;
+  border-color: var(--color-electric-blue);
+}
+.categorySelectValue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.categoryPlaceholder {
+  color: var(--color-gray-500);
+}
+.categoryChevron {
+  color: var(--color-gray-500);
+}
+.categoryDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.categoryMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background-color: var(--color-pure-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-default);
+  padding: 6px;
+  box-sizing: border-box;
+  z-index: 20;
+}
+.categoryOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: transparent;
+  color: var(--color-gray-700);
+  font-size: 14px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.categoryOption:hover {
+  background-color: var(--color-gray-100);
+}
+.categoryOptionActive {
+  background-color: var(--color-gray-100);
+  color: var(--color-electric-blue);
+  font-weight: 500;
+}
+
+/* 사진 업로드 */
+.uploadArea {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 160px;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px dashed var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-light-gray);
+  cursor: pointer;
+  overflow: hidden;
+}
+.uploadIcon {
+  color: var(--color-gray-500);
+}
+.uploadText {
+  font-size: 14px;
+  color: var(--color-gray-700);
+}
+.uploadHint {
+  font-size: 12px;
+  color: var(--color-gray-500);
+}
+.uploadInput {
+  display: none;
+}
+.uploadPreview {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--border-radius-10);
+}
+.uploadRemoveBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  box-shadow: var(--box-shadow-default);
+  cursor: pointer;
+}
+
+/* 위치 정보 */
+.locationRow {
+  display: flex;
+  gap: 10px;
+}
+.locationInputBox {
+  flex: 1;
+}
+.locationBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  white-space: nowrap;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 릴레이 설명 */
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  color: var(--color-gray-500);
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-electric-blue);
+}
+
+/* 취소 / 등록하기 */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+.cancelBtn {
+  flex: 1;
+  height: 44px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.submitBtn {
+  flex: 1;
+  height: 44px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-electric-blue);
+  color: var(--color-pure-white);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
