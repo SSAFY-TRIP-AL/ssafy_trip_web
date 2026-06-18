@@ -35,7 +35,7 @@ export default function HeaderDesktop() {
             <a href="/relaylist">릴레이 리스트</a>
           </li>
           <li>
-            <a href="/">릴레이 등록</a>
+            <a href="/relayregister">릴레이 등록</a>
           </li>
         </ul>
         <div className={headerStyle.myPage}>
