@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import desktopStyle from "../css/MapDesktop.module.css";
 import "../../../style.css";
-import { CATEGORIES, getCategory } from "../../../constants/categories";
+import { useCategories } from "../../../hooks/useCategories";
+import { getCategoryStyle } from "../../../constants/categoryPalette";
 
 declare global {
   interface Window {
@@ -28,7 +29,7 @@ const markers = [
   {
     id: 1,
     name: "서울 남산타워",
-    categoryId: "city",
+    categoryId: 3,
     lat: 37.5512,
     lng: 126.9882,
     image: "https://picsum.photos/seed/namsan/480/320",
@@ -40,7 +41,7 @@ const markers = [
   {
     id: 2,
     name: "서울 가로수길",
-    categoryId: "city",
+    categoryId: 3,
     lat: 37.5196,
     lng: 127.0227,
     image: "https://picsum.photos/seed/garosugil/480/320",
@@ -51,7 +52,7 @@ const markers = [
   {
     id: 3,
     name: "이태원 거리",
-    categoryId: "culture",
+    categoryId: 2,
     lat: 37.5345,
     lng: 126.9947,
     image: "https://picsum.photos/seed/itaewon/480/320",
@@ -62,7 +63,7 @@ const markers = [
   {
     id: 4,
     name: "부산 해운대",
-    categoryId: "activity",
+    categoryId: 4,
     lat: 35.1587,
     lng: 129.1604,
     image: "https://picsum.photos/seed/haeundae/480/320",
@@ -73,7 +74,7 @@ const markers = [
   {
     id: 5,
     name: "부산 광안리",
-    categoryId: "food",
+    categoryId: 5,
     lat: 35.1532,
     lng: 129.1186,
     image: "https://picsum.photos/seed/gwangalli/480/320",
@@ -140,13 +141,16 @@ function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
 
 export default function MapDesktop() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
+  const [activeCategoryId, setActiveCategoryId] = useState<number | null>(
+    null,
+  );
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const { categories } = useCategories();
   const categoryRef = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markerInstancesRef = useRef<
-    { id: number; categoryId: string; instance: any }[]
+    { id: number; categoryId: number; instance: any }[]
   >([]);
   const polylineInstancesRef = useRef<any[]>([]);
   const flowDotOverlaysRef = useRef<any[]>([]);
@@ -289,12 +293,13 @@ export default function MapDesktop() {
 
   useEffect(() => {
     markerInstancesRef.current.forEach(({ categoryId, instance }) => {
-      const visible = !activeCategoryId || categoryId === activeCategoryId;
+      const visible =
+        activeCategoryId == null || categoryId === activeCategoryId;
       instance.setMap(visible ? mapInstanceRef.current : null);
     });
   }, [activeCategoryId]);
 
-  function selectCategory(categoryId: string | null) {
+  function selectCategory(categoryId: number | null) {
     setActiveCategoryId(categoryId);
     setIsCategoryOpen(false);
     handleClosePanel();
@@ -343,8 +348,8 @@ export default function MapDesktop() {
           >
             <LayoutGrid size={16} />
             <span>
-              {activeCategoryId
-                ? getCategory(activeCategoryId).label
+              {activeCategoryId != null
+                ? categories.find((c) => c.id === activeCategoryId)?.name
                 : "카테고리"}
             </span>
             <ChevronDown size={16} />
@@ -364,7 +369,7 @@ export default function MapDesktop() {
                   전체
                 </button>
               </li>
-              {CATEGORIES.map((category) => (
+              {categories.map((category, index) => (
                 <li key={category.id}>
                   <button
                     type="button"
@@ -377,9 +382,11 @@ export default function MapDesktop() {
                   >
                     <span
                       className={desktopStyle.categoryDot}
-                      style={{ backgroundColor: category.color }}
+                      style={{
+                        backgroundColor: getCategoryStyle(index).color,
+                      }}
                     />
-                    {category.label}
+                    {category.name}
                   </button>
                 </li>
               ))}
@@ -407,16 +414,22 @@ export default function MapDesktop() {
           />
           <div className={desktopStyle.detailBody}>
             {(() => {
-              const category = getCategory(selected.categoryId);
+              const index = categories.findIndex(
+                (c) => c.id === selected.categoryId,
+              );
+              const style = getCategoryStyle(index);
+              const category = categories.find(
+                (c) => c.id === selected.categoryId,
+              );
               return (
                 <span
                   className={desktopStyle.detailTag}
                   style={{
-                    backgroundColor: category.tint,
-                    color: category.color,
+                    backgroundColor: style.tint,
+                    color: style.color,
                   }}
                 >
-                  {category.label}
+                  {category?.name}
                 </span>
               );
             })()}

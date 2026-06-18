@@ -11,7 +11,8 @@ import "../../../../style.css";
 import relayListStyle from "../css/RelayListDesktop.module.css";
 import { useRelayList } from "../Hook/useRelayList";
 import { RELAY_SORT_OPTIONS } from "../api/relayApi";
-import { getCategory } from "../../../../constants/categories";
+import { useCategories } from "../../../../hooks/useCategories";
+import { getCategoryStyle } from "../../../../constants/categoryPalette";
 
 function getPageNumbers(current: number, total: number): (number | "...")[] {
   if (total <= 7) {
@@ -48,8 +49,8 @@ export default function RelayListDesktop() {
     items,
     totalCount,
     totalPages,
-    categories,
   } = useRelayList();
+  const { categories } = useCategories();
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -107,13 +108,19 @@ export default function RelayListDesktop() {
               }}
             >
               <span className={relayListStyle.dropdownBtnContent}>
-                {category !== "전체" && (
+                {category !== null && (
                   <span
                     className={relayListStyle.categoryDot}
-                    style={{ backgroundColor: getCategory(category).color }}
+                    style={{
+                      backgroundColor: getCategoryStyle(
+                        categories.findIndex((item) => item.id === category),
+                      ).color,
+                    }}
                   />
                 )}
-                {category === "전체" ? "카테고리 전체" : getCategory(category).label}
+                {category === null
+                  ? "카테고리 전체"
+                  : categories.find((item) => item.id === category)?.name}
               </span>
               <ChevronDown size={16} />
             </button>
@@ -123,19 +130,19 @@ export default function RelayListDesktop() {
                   <button
                     type="button"
                     className={`${relayListStyle.dropdownOption} ${
-                      category === "전체"
+                      category === null
                         ? relayListStyle.dropdownOptionActive
                         : ""
                     }`}
                     onClick={() => {
-                      setCategory("전체");
+                      setCategory(null);
                       setIsCategoryOpen(false);
                     }}
                   >
                     전체
                   </button>
                 </li>
-                {categories.map((item) => (
+                {categories.map((item, index) => (
                   <li key={item.id}>
                     <button
                       type="button"
@@ -151,9 +158,11 @@ export default function RelayListDesktop() {
                     >
                       <span
                         className={relayListStyle.categoryDot}
-                        style={{ backgroundColor: item.color }}
+                        style={{
+                          backgroundColor: getCategoryStyle(index).color,
+                        }}
                       />
-                      {item.label}
+                      {item.name}
                     </button>
                   </li>
                 ))}
@@ -248,12 +257,22 @@ export default function RelayListDesktop() {
               />
               <span
                 className={relayListStyle.categoryBadge}
-                style={{
-                  backgroundColor: getCategory(relay.category).tint,
-                  color: getCategory(relay.category).color,
-                }}
+                style={
+                  {
+                    // backgroundColor: getCategoryStyle(
+                    //   categories.findIndex(
+                    //     (item) => item.id === relay.categoryId,
+                    //   ),
+                    // ).tint,
+                    // color: getCategoryStyle(
+                    //   categories.findIndex(
+                    //     (item) => item.id === relay.categoryId,
+                    //   ),
+                    // ).color,
+                  }
+                }
               >
-                {getCategory(relay.category).label}
+                {categories.find((item) => item.id === relay.categoryId)?.name}
               </span>
             </div>
             <div className={relayListStyle.cardBody}>
