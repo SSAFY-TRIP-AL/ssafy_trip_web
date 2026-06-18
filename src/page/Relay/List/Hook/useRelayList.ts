@@ -4,7 +4,6 @@ import {
   type RelayItem,
   type RelaySortOption,
 } from "../api/relayApi";
-import { CATEGORIES } from "../../../../constants/categories";
 
 const PAGE_SIZE = 18;
 
@@ -12,7 +11,7 @@ export type RelayViewMode = "grid" | "list";
 
 export const useRelayList = () => {
   const [keyword, setKeyword] = useState("");
-  const [category, setCategory] = useState<string>("전체");
+  const [category, setCategory] = useState<number | null>(null);
   const [sort, setSort] = useState<RelaySortOption>("latest");
   const [viewMode, setViewMode] = useState<RelayViewMode>("grid");
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +29,7 @@ export const useRelayList = () => {
 
     getRelayList({
       keyword,
-      category,
+      categoryId: category,
       sort,
       page: currentPage,
       pageSize: PAGE_SIZE,
@@ -60,6 +59,5 @@ export const useRelayList = () => {
     items,
     totalCount,
     totalPages,
-    categories: CATEGORIES,
   };
 };

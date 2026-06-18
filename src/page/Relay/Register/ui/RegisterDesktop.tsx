@@ -5,30 +5,45 @@ import "../../../../style.css";
 import "../../../auth/auth.css";
 import registerStyle from "../css/RegisterDesktop.module.css";
 import { useRegisterRelay } from "../Hook/useRegisterRelay";
-import { CATEGORIES, getCategory } from "../../../../constants/categories";
+import { useLocationSearch } from "../Hook/useLocationSearch";
+import { useCategories } from "../../../../hooks/useCategories";
+import { getCategoryStyle } from "../../../../constants/categoryPalette";
 
 const TITLE_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
 
 export default function RegisterDesktop() {
   const {
+    address,
+    setAddress,
+    latitude,
+    longitude,
+    suggestions,
+    isSuggestionsOpen,
+    setIsSuggestionsOpen,
+    isLocating,
+    selectSuggestion,
+    findCurrentLocation,
+  } = useLocationSearch();
+
+  const {
     title,
     setTitle,
     categoryId,
     setCategoryId,
-    location,
-    setLocation,
-    description,
-    setDescription,
+    content,
+    setContent,
     imagePreview,
     handleImageChange,
     handleSubmit,
-  } = useRegisterRelay();
+  } = useRegisterRelay({ address, latitude, longitude });
   const navigate = useNavigate();
+  const { categories } = useCategories();
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const categoryRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -38,11 +53,16 @@ export default function RegisterDesktop() {
       ) {
         setIsCategoryOpen(false);
       }
+      if (
+        locationRef.current &&
+        !locationRef.current.contains(event.target as Node)
+      ) {
+        setIsSuggestionsOpen(false);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [setIsSuggestionsOpen]);
 
   function handleDrop(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -86,15 +106,17 @@ export default function RegisterDesktop() {
                 className={registerStyle.categorySelect}
                 onClick={() => setIsCategoryOpen((prev) => !prev)}
               >
-                {categoryId ? (
+                {categoryId != null ? (
                   <span className={registerStyle.categorySelectValue}>
                     <span
                       className={registerStyle.categoryDot}
                       style={{
-                        backgroundColor: getCategory(categoryId).color,
+                        backgroundColor: getCategoryStyle(
+                          categories.findIndex((c) => c.id === categoryId),
+                        ).color,
                       }}
                     />
-                    {getCategory(categoryId).label}
+                    {categories.find((c) => c.id === categoryId)?.name}
                   </span>
                 ) : (
                   <span className={registerStyle.categoryPlaceholder}>
@@ -108,7 +130,7 @@ export default function RegisterDesktop() {
               </button>
               {isCategoryOpen && (
                 <ul className={registerStyle.categoryMenu}>
-                  {CATEGORIES.map((category) => (
+                  {categories.map((category, index) => (
                     <li key={category.id}>
                       <button
                         type="button"
@@ -124,9 +146,11 @@ export default function RegisterDesktop() {
                       >
                         <span
                           className={registerStyle.categoryDot}
-                          style={{ backgroundColor: category.color }}
+                          style={{
+                            backgroundColor: getCategoryStyle(index).color,
+                          }}
                         />
-                        {category.label}
+                        {category.name}
                       </button>
                     </li>
                   ))}
@@ -163,10 +187,7 @@ export default function RegisterDesktop() {
                 </>
               ) : (
                 <>
-                  <UploadCloud
-                    size={32}
-                    className={registerStyle.uploadIcon}
-                  />
+                  <UploadCloud size={32} className={registerStyle.uploadIcon} />
                   <span className={registerStyle.uploadText}>
                     이미지를 드래그하거나 클릭하여 업로드하세요
                   </span>
@@ -189,22 +210,58 @@ export default function RegisterDesktop() {
 
           <div className="authField">
             <label htmlFor="location">위치 정보</label>
+
             <div className={registerStyle.locationRow}>
               <div
                 className={`authInputBox ${registerStyle.locationInputBox}`}
+                ref={locationRef}
               >
                 <input
                   id="location"
                   type="text"
                   placeholder="여행 위치를 입력하세요"
-                  value={location}
-                  onChange={(event) => setLocation(event.target.value)}
+                  value={address}
+                  autoComplete="off"
+                  onChange={(event) => setAddress(event.target.value)}
+                  onFocus={() =>
+                    suggestions.length > 0 && setIsSuggestionsOpen(true)
+                  }
                   required
                 />
+                {isSuggestionsOpen && suggestions.length > 0 && (
+                  <ul className={registerStyle.locationSuggestions}>
+                    {suggestions.map((suggestion) => (
+                      <li key={suggestion.id}>
+                        <button
+                          type="button"
+                          className={registerStyle.locationSuggestionItem}
+                          onClick={() => selectSuggestion(suggestion)}
+                        >
+                          <span
+                            className={registerStyle.locationSuggestionName}
+                          >
+                            {suggestion.placeName}
+                          </span>
+                          <span
+                            className={registerStyle.locationSuggestionAddress}
+                          >
+                            {suggestion.addressName}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              <button type="button" className={registerStyle.locationBtn}>
+
+              <button
+                type="button"
+                className={registerStyle.locationBtn}
+                onClick={findCurrentLocation}
+                disabled={isLocating}
+              >
                 <MapPin size={16} />
-                위치 찾기
+                {isLocating ? "찾는 중..." : "위치 찾기"}
               </button>
             </div>
           </div>
@@ -213,16 +270,16 @@ export default function RegisterDesktop() {
             <div className={registerStyle.fieldHeader}>
               <label htmlFor="description">릴레이 설명</label>
               <span className={registerStyle.charCount}>
-                {description.length}/{DESCRIPTION_MAX_LENGTH}
+                {content.length}/{DESCRIPTION_MAX_LENGTH}
               </span>
             </div>
             <textarea
               id="description"
               className={registerStyle.textarea}
               placeholder="릴레이에 대한 설명을 입력하세요"
-              value={description}
+              value={content}
               maxLength={DESCRIPTION_MAX_LENGTH}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) => setContent(event.target.value)}
               required
             />
           </div>
