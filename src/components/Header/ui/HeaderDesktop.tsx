@@ -40,13 +40,13 @@ export default function HeaderDesktop() {
         </ul>
         <div className={headerStyle.myPage}>
           {isLogin ? (
-            <div className={headerStyle.myPage}>
+            <>
               <div className={headerStyle.profileImg}></div>
               <span>{userName}</span>
-            </div>
+            </>
           ) : (
             <span
-              className="trip-body1"
+              className={`trip-body1 ${headerStyle.loginBtn}`}
               onClick={() => navigate("/auth/login")}
             >
               로그인
