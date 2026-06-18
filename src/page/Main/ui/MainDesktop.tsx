@@ -1,5 +1,6 @@
 import desktopStyle from "../css/MainDesktop.module.css";
 import "../../../style.css";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 import mainImg from "../../../assets/main/main_img3.svg";
 import infoMapImg from "../../../assets/main/info_map.svg";
 import {
@@ -13,8 +14,51 @@ import {
   Trophy,
   Crown,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
+interface TopUser {
+  userId: number;
+  profileImage: string;
+  name: string;
+  participationCount: number;
+}
+
+interface Relay {
+  id: number;
+  title: string;
+  category: string;
+  participantCount: number;
+  status: string;
+  lastParticipatedAt: string;
+  createdAt: string;
+}
+
+interface MainInfo {
+  userCount: number;
+  relayCount: number;
+  topUsers: TopUser[];
+  relays: Relay[];
+}
 export default function MainDesktop() {
+  const [mainInfo, setMainInfo] = useState<MainInfo>({
+    userCount: 0,
+    relayCount: 0,
+    topUsers: [],
+    relays: [],
+  });
+  const fetchMainInfo = async () => {
+    try {
+      const response = await axios.get<MainInfo>(`${BASE_URL}/main`);
+      setMainInfo(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchMainInfo();
+  }, []);
+
   return (
     <>
       <section className={desktopStyle.hero}>
@@ -31,7 +75,7 @@ export default function MainDesktop() {
             <ArrowRight size={18} strokeWidth={2.5} />
           </div>
           <span className={desktopStyle.memberCount}>
-            현재 3,847명이 함께하고 있어요
+            현재 {mainInfo.userCount}명이 함께하고 있어요
           </span>
         </div>
       </section>
@@ -62,14 +106,22 @@ export default function MainDesktop() {
           </div>
           <div className={desktopStyle.infoSummary}>
             <div className={desktopStyle.infoSummaryItem}>
-              <Users size={20} strokeWidth={1.75} className={desktopStyle.summaryIcon} />
+              <Users
+                size={20}
+                strokeWidth={1.75}
+                className={desktopStyle.summaryIcon}
+              />
               <span className="trip-body1">총 참여 인원</span>
-              <span className="trip-h1">1,234명</span>
+              <span className="trip-h1">{mainInfo.userCount}명</span>
             </div>
             <div className={desktopStyle.infoSummaryItem}>
-              <Route size={20} strokeWidth={1.75} className={desktopStyle.summaryIcon} />
+              <Route
+                size={20}
+                strokeWidth={1.75}
+                className={desktopStyle.summaryIcon}
+              />
               <span className="trip-body1">총 릴레이 수</span>
-              <span className="trip-h1">1,234개</span>
+              <span className="trip-h1">{mainInfo.relayCount}개</span>
             </div>
           </div>
         </div>
@@ -77,7 +129,11 @@ export default function MainDesktop() {
         <div className={desktopStyle.relayContainer}>
           <div className={desktopStyle.relayTitle}>
             <span className="trip-h1">
-              <Globe size={28} strokeWidth={1.5} className={desktopStyle.sectionIcon} />
+              <Globe
+                size={28}
+                strokeWidth={1.5}
+                className={desktopStyle.sectionIcon}
+              />
               현재 진행 중인 릴레이
             </span>
             <span className={`trip-body1 ${desktopStyle.relayViewAll}`}>
@@ -120,7 +176,11 @@ export default function MainDesktop() {
         <div className={desktopStyle.rankingContainer}>
           <div className={desktopStyle.rankingTitle}>
             <span className="trip-h1">
-              <Trophy size={28} strokeWidth={1.5} className={desktopStyle.sectionIcon} />
+              <Trophy
+                size={28}
+                strokeWidth={1.5}
+                className={desktopStyle.sectionIcon}
+              />
               명예의 전당
             </span>
             <span className="trip-body1">
@@ -139,7 +199,11 @@ export default function MainDesktop() {
             <div
               className={`${desktopStyle.rankingItem} ${desktopStyle.rankingFirst}`}
             >
-              <Crown size={32} strokeWidth={1.5} className={desktopStyle.trophyIcon} />
+              <Crown
+                size={32}
+                strokeWidth={1.5}
+                className={desktopStyle.trophyIcon}
+              />
               <div className={desktopStyle.profileImg}></div>
               <span className="trip-h3">김싸피</span>
               <span className="trip-body1">릴레이 15회 참여</span>
