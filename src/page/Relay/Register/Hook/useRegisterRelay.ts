@@ -41,7 +41,7 @@ export const useRegisterRelay = ({
         latitude,
         longitude,
         content,
-        photoUrl: image,
+        // photoUrl: image,
       });
 
       alert("릴레이가 등록되었습니다.");
