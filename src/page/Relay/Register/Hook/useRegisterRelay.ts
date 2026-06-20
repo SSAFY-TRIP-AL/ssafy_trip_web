@@ -17,11 +17,11 @@ export const useRegisterRelay = ({
   const [title, setTitle] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [content, setContent] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  // const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleImageChange = (file: File | null) => {
-    setImage(file);
+    // setImage(file);
     setImagePreview(file ? URL.createObjectURL(file) : null);
   };
 
