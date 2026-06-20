@@ -1,32 +1,31 @@
+import api from "../../../../api/api";
+
 export interface CreateRelayRequest {
   title: string;
-  categoryId: string;
-  location: string;
-  description: string;
-  image?: File | null;
+  categoryId: number;
+  address: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  content: string;
+  photoUrl?: File | null;
 }
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const createRelay = async (payload: CreateRelayRequest) => {
   const formData = new FormData();
   formData.append("title", payload.title);
-  formData.append("categoryId", payload.categoryId);
-  formData.append("location", payload.location);
-  formData.append("description", payload.description);
-  if (payload.image) {
-    formData.append("image", payload.image);
+  formData.append("categoryId", String(payload.categoryId));
+  formData.append("address", payload.address);
+  if (payload.latitude != null) {
+    formData.append("latitude", String(payload.latitude));
   }
-
-  const response = await fetch(`${BASE_URL}/relays`, {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error);
+  if (payload.longitude != null) {
+    formData.append("longitude", String(payload.longitude));
   }
+  formData.append("content", payload.content);
+  // if (payload.photoUrl) {
+  //   formData.append("photoUrl", payload.photoUrl);
+  // }
+  const response = await api.post(`/relays`, formData);
 
-  return response.json();
+  return response.data;
 };
