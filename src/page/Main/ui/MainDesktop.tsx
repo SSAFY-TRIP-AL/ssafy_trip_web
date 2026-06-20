@@ -13,8 +13,54 @@ import {
   Trophy,
   Crown,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import api from "../../../api/api";
 
+interface RelaySummary {
+  id: number;
+  title: string;
+  category: string;
+  participantCount: number;
+}
+
+interface OngoingRelay extends RelaySummary {
+  lastParticipatedAt: string;
+}
+
+interface RankingUser {
+  id: number;
+  name: string;
+  profileImage: string;
+  participationCount: number;
+}
+
+interface MainInfo {
+  userCount: number;
+  relayCount: number;
+  relays: {
+    relays: OngoingRelay[];
+  };
+  ranking: RankingUser[];
+}
 export default function MainDesktop() {
+  const [mainInfo, setMainInfo] = useState<MainInfo>({
+    userCount: 0,
+    relayCount: 0,
+    relays: { relays: [] },
+    ranking: [],
+  });
+  const fetchMainInfo = async () => {
+    try {
+      const response = await api.get<MainInfo>("/main");
+      setMainInfo(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchMainInfo();
+  }, []);
+
   return (
     <>
       <section className={desktopStyle.hero}>
@@ -31,7 +77,7 @@ export default function MainDesktop() {
             <ArrowRight size={18} strokeWidth={2.5} />
           </div>
           <span className={desktopStyle.memberCount}>
-            현재 3,847명이 함께하고 있어요
+            현재 {mainInfo.userCount}명이 함께하고 있어요
           </span>
         </div>
       </section>
@@ -62,14 +108,22 @@ export default function MainDesktop() {
           </div>
           <div className={desktopStyle.infoSummary}>
             <div className={desktopStyle.infoSummaryItem}>
-              <Users size={20} strokeWidth={1.75} className={desktopStyle.summaryIcon} />
+              <Users
+                size={20}
+                strokeWidth={1.75}
+                className={desktopStyle.summaryIcon}
+              />
               <span className="trip-body1">총 참여 인원</span>
-              <span className="trip-h1">1,234명</span>
+              <span className="trip-h1">{mainInfo.userCount}명</span>
             </div>
             <div className={desktopStyle.infoSummaryItem}>
-              <Route size={20} strokeWidth={1.75} className={desktopStyle.summaryIcon} />
+              <Route
+                size={20}
+                strokeWidth={1.75}
+                className={desktopStyle.summaryIcon}
+              />
               <span className="trip-body1">총 릴레이 수</span>
-              <span className="trip-h1">1,234개</span>
+              <span className="trip-h1">{mainInfo.relayCount}개</span>
             </div>
           </div>
         </div>
@@ -77,7 +131,11 @@ export default function MainDesktop() {
         <div className={desktopStyle.relayContainer}>
           <div className={desktopStyle.relayTitle}>
             <span className="trip-h1">
-              <Globe size={28} strokeWidth={1.5} className={desktopStyle.sectionIcon} />
+              <Globe
+                size={28}
+                strokeWidth={1.5}
+                className={desktopStyle.sectionIcon}
+              />
               현재 진행 중인 릴레이
             </span>
             <span className={`trip-body1 ${desktopStyle.relayViewAll}`}>
@@ -86,41 +144,28 @@ export default function MainDesktop() {
             </span>
           </div>
           <div className={desktopStyle.relayList}>
-            <div className={desktopStyle.relayCard}>
-              <div className={desktopStyle.relayImg}></div>
-              <div className={desktopStyle.relayInfo}>
-                <span className="trip-h3">제주도 오름 한바퀴</span>
-                <span className="trip-body1">5번째 여행자 진행중</span>
+            {mainInfo.relays.relays.map((relay) => (
+              <div className={desktopStyle.relayCard} key={relay.id}>
+                <div className={desktopStyle.relayImg}></div>
+                <div className={desktopStyle.relayInfo}>
+                  <span className="trip-h3">{relay.title}</span>
+                  <span className="trip-body1">
+                    {relay.participantCount}명 참여중
+                  </span>
+                </div>
               </div>
-            </div>
-            <div className={desktopStyle.relayCard}>
-              <div className={desktopStyle.relayImg}></div>
-              <div className={desktopStyle.relayInfo}>
-                <span className="trip-h3">제주도 오름 한바퀴</span>
-                <span className="trip-body1">5번째 여행자 진행중</span>
-              </div>
-            </div>
-            <div className={desktopStyle.relayCard}>
-              <div className={desktopStyle.relayImg}></div>
-              <div className={desktopStyle.relayInfo}>
-                <span className="trip-h3">제주도 오름 한바퀴</span>
-                <span className="trip-body1">5번째 여행자 진행중</span>
-              </div>
-            </div>
-            <div className={desktopStyle.relayCard}>
-              <div className={desktopStyle.relayImg}></div>
-              <div className={desktopStyle.relayInfo}>
-                <span className="trip-h3">제주도 오름 한바퀴</span>
-                <span className="trip-body1">5번째 여행자 진행중</span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
         <div className={desktopStyle.rankingContainer}>
           <div className={desktopStyle.rankingTitle}>
             <span className="trip-h1">
-              <Trophy size={28} strokeWidth={1.5} className={desktopStyle.sectionIcon} />
+              <Trophy
+                size={28}
+                strokeWidth={1.5}
+                className={desktopStyle.sectionIcon}
+              />
               명예의 전당
             </span>
             <span className="trip-body1">
@@ -128,30 +173,74 @@ export default function MainDesktop() {
             </span>
           </div>
           <div className={desktopStyle.rankingList}>
-            <div
-              className={`${desktopStyle.rankingItem} ${desktopStyle.rankingSecond}`}
-            >
-              <div className={desktopStyle.rankBadge}>2</div>
-              <div className={desktopStyle.profileImg}></div>
-              <span className="trip-h3">김싸피</span>
-              <span className="trip-body1">릴레이 15회 참여</span>
-            </div>
-            <div
-              className={`${desktopStyle.rankingItem} ${desktopStyle.rankingFirst}`}
-            >
-              <Crown size={32} strokeWidth={1.5} className={desktopStyle.trophyIcon} />
-              <div className={desktopStyle.profileImg}></div>
-              <span className="trip-h3">김싸피</span>
-              <span className="trip-body1">릴레이 15회 참여</span>
-            </div>
-            <div
-              className={`${desktopStyle.rankingItem} ${desktopStyle.rankingThird}`}
-            >
-              <div className={desktopStyle.rankBadge}>3</div>
-              <div className={desktopStyle.profileImg}></div>
-              <span className="trip-h3">김싸피</span>
-              <span className="trip-body1">릴레이 15회 참여</span>
-            </div>
+            {(() => {
+              const [first, second, third] = mainInfo.ranking;
+              return (
+                <>
+                  {second && (
+                    <div
+                      className={`${desktopStyle.rankingItem} ${desktopStyle.rankingSecond}`}
+                    >
+                      <div className={desktopStyle.rankBadge}>2</div>
+                      <div
+                        className={desktopStyle.profileImg}
+                        style={{
+                          backgroundImage: `url(${second.profileImage})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      ></div>
+                      <span className="trip-h3">{second.name}</span>
+                      <span className="trip-body1">
+                        릴레이 {second.participationCount}회 참여
+                      </span>
+                    </div>
+                  )}
+                  {first && (
+                    <div
+                      className={`${desktopStyle.rankingItem} ${desktopStyle.rankingFirst}`}
+                    >
+                      <Crown
+                        size={32}
+                        strokeWidth={1.5}
+                        className={desktopStyle.trophyIcon}
+                      />
+                      <div
+                        className={desktopStyle.profileImg}
+                        style={{
+                          backgroundImage: `url(${first.profileImage})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      ></div>
+                      <span className="trip-h3">{first.name}</span>
+                      <span className="trip-body1">
+                        릴레이 {first.participationCount}회 참여
+                      </span>
+                    </div>
+                  )}
+                  {third && (
+                    <div
+                      className={`${desktopStyle.rankingItem} ${desktopStyle.rankingThird}`}
+                    >
+                      <div className={desktopStyle.rankBadge}>3</div>
+                      <div
+                        className={desktopStyle.profileImg}
+                        style={{
+                          backgroundImage: `url(${third.profileImage})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      ></div>
+                      <span className="trip-h3">{third.name}</span>
+                      <span className="trip-body1">
+                        릴레이 {third.participationCount}회 참여
+                      </span>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       </div>

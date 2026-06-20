@@ -32,7 +32,7 @@
   gap: 10px;
   /* font-weight: 600; */
 }
-.myPage span {
+.loginBtn {
   background-color: var(--color-electric-blue);
   border: none;
   color: var(--color-pure-white);
