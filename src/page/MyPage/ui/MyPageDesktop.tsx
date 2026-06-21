@@ -166,7 +166,7 @@ export default function MyPageDesktop() {
                 <div
                   key={item.id}
                   className={myPageStyle.relayCard}
-                  onClick={() => navigate("/relaydetail")}
+                  onClick={() => navigate(`/relaydetail/${item.id}`)}
                 >
                   <div className={myPageStyle.relayImageWrap}>
                     <img

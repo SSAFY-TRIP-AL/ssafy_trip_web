@@ -32,7 +32,7 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/map" element={<Map />} />
         <Route path="/relaylist" element={<RelayList />} />
-        <Route path="/relaydetail" element={<RelayDetail />} />
+        <Route path="/relaydetail/:id" element={<RelayDetail />} />
         <Route path="/relayregister" element={<Register />} />
         <Route path="/mypage" element={<MyPage />} />
       </Route>

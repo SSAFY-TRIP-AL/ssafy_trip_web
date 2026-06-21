@@ -13,6 +13,7 @@ import { useRelayList } from "../Hook/useRelayList";
 import { RELAY_SORT_OPTIONS } from "../api/relayApi";
 import { useCategories } from "../../../../hooks/useCategories";
 import { getCategoryStyle } from "../../../../constants/categoryPalette";
+import RelayCard from "../../../../components/RelayCard/RelayCard";
 
 function getPageNumbers(current: number, total: number): (number | "...")[] {
   if (total <= 7) {
@@ -243,45 +244,17 @@ export default function RelayListDesktop() {
         }
       >
         {items.map((relay) => (
-          <div
+          <RelayCard
             key={relay.id}
-            className={
-              viewMode === "grid" ? relayListStyle.card : relayListStyle.cardRow
+            id={relay.id}
+            title={relay.title}
+            description={relay.description}
+            imageUrl={relay.imageUrl}
+            categoryName={
+              categories.find((item) => item.id === relay.categoryId)?.name
             }
-          >
-            <div className={relayListStyle.cardImageWrap}>
-              <img
-                src={relay.imageUrl}
-                alt={relay.title}
-                className={relayListStyle.cardImage}
-              />
-              <span
-                className={relayListStyle.categoryBadge}
-                style={
-                  {
-                    // backgroundColor: getCategoryStyle(
-                    //   categories.findIndex(
-                    //     (item) => item.id === relay.categoryId,
-                    //   ),
-                    // ).tint,
-                    // color: getCategoryStyle(
-                    //   categories.findIndex(
-                    //     (item) => item.id === relay.categoryId,
-                    //   ),
-                    // ).color,
-                  }
-                }
-              >
-                {categories.find((item) => item.id === relay.categoryId)?.name}
-              </span>
-            </div>
-            <div className={relayListStyle.cardBody}>
-              <span className={relayListStyle.cardTitle}>{relay.title}</span>
-              <p className={relayListStyle.cardDescription}>
-                {relay.description}
-              </p>
-            </div>
-          </div>
+            variant={viewMode === "grid" ? "grid" : "row"}
+          />
         ))}
       </div>
 
