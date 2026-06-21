@@ -5,6 +5,7 @@ export interface RelaySummary {
   title: string;
   category: string;
   participantCount: number;
+  photoUrl: string;
 }
 
 export interface OngoingRelay extends RelaySummary {
