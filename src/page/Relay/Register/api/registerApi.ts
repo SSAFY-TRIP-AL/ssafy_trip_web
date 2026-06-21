@@ -7,7 +7,7 @@ export interface CreateRelayRequest {
   latitude?: number | null;
   longitude?: number | null;
   content: string;
-  // photoUrl?: File | null;
+  photoUrl?: string | null;
 }
 
 export const createRelay = async (payload: CreateRelayRequest) => {
