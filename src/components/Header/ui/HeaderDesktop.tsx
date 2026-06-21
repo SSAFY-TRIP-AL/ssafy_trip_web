@@ -42,8 +42,12 @@ export default function HeaderDesktop() {
         <div className={headerStyle.myPage}>
           {isLogin ? (
             <>
-              <img className={headerStyle.profileImg} src={profileImage} />
-              <span>{userName}</span>
+              <img
+                className={headerStyle.profileImg}
+                src={profileImage}
+                onClick={() => navigate("/mypage")}
+              />
+              <span onClick={() => navigate("/mypage")}>{userName}</span>
             </>
           ) : (
             <span

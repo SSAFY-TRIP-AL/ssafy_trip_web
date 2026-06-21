@@ -1,0 +1,397 @@
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 32px 0 24px;
+}
+.title span:last-child {
+  color: var(--color-gray-500);
+}
+
+/* 프로필 카드 */
+.profileCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  background-color: var(--color-pure-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-default);
+}
+.profileLeft {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.profileImg {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--color-gray-300);
+  flex-shrink: 0;
+}
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.profileInfo span:last-child {
+  color: var(--color-gray-500);
+}
+.joinedAt {
+  font-size: 13px;
+  color: var(--color-gray-500);
+}
+.editBtn {
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 통계 */
+.statsRow {
+  display: flex;
+  margin-top: 20px;
+  padding: 24px 30px;
+  background-color: var(--color-pure-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-default);
+}
+.statItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.statItem + .statItem {
+  border-left: 1px solid var(--color-gray-100);
+}
+.statIcon {
+  color: var(--color-electric-blue);
+}
+.statItem span:nth-child(2) {
+  color: var(--color-gray-500);
+}
+
+/* 본문 그리드 */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* 탭 */
+.tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--color-gray-100);
+}
+.tabBtn {
+  padding: 12px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  color: var(--color-gray-500);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.tabBtnActive {
+  border-bottom-color: var(--color-electric-blue);
+  color: var(--color-electric-blue);
+  font-weight: 600;
+}
+.tabDescription {
+  display: block;
+  margin: 16px 0;
+  font-size: 14px;
+  color: var(--color-gray-500);
+}
+
+/* 릴레이 리스트 */
+.relayList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.emptyState {
+  padding: 60px 0;
+  text-align: center;
+  color: var(--color-gray-500);
+}
+.relayCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  background-color: var(--color-pure-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-default);
+  cursor: pointer;
+}
+.relayImageWrap {
+  position: relative;
+  width: 140px;
+  height: 90px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-10);
+  overflow: hidden;
+}
+.relayImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.statusBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 10px;
+  border-radius: var(--border-radius-20);
+  font-size: 11px;
+  font-weight: 600;
+}
+.statusOngoing {
+  background-color: #e8ecfe;
+  color: var(--color-electric-blue);
+}
+.statusDone {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-500);
+}
+.relayBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.relayTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+.relayDescription {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-gray-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.relayDate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.relayDateLabel {
+  font-size: 12px;
+  color: var(--color-gray-500);
+}
+.relayDateValue {
+  font-size: 14px;
+  color: var(--color-gray-700);
+}
+.relayChevron {
+  color: var(--color-gray-300);
+  flex-shrink: 0;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 28px;
+}
+.pageArrowBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  cursor: pointer;
+}
+.pageArrowBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.pageBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: transparent;
+  color: var(--color-gray-700);
+  font-size: 14px;
+  cursor: pointer;
+}
+.pageBtnActive {
+  background-color: var(--color-electric-blue);
+  color: var(--color-pure-white);
+  font-weight: 600;
+}
+.pageEllipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--color-gray-500);
+}
+
+/* 계정 관리 패널 */
+.accountPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: fit-content;
+  padding: 20px;
+  background-color: #fde9e9;
+  border-radius: var(--border-radius-10);
+}
+.logoutBtn,
+.withdrawBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  font-size: 14px;
+  cursor: pointer;
+}
+.withdrawBtn {
+  color: #ef4444;
+}
+
+/* 회원 정보 수정 모달 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+.modalBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 380px;
+  padding: 30px;
+  box-sizing: border-box;
+  background-color: var(--color-pure-white);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-default);
+}
+.modalCloseBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--color-gray-500);
+  cursor: pointer;
+}
+.modalAvatarField {
+  display: flex;
+  justify-content: center;
+}
+.modalAvatarUpload {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  cursor: pointer;
+}
+.modalAvatarPreview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.modalAvatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--color-gray-300);
+}
+.modalAvatarEditBtn {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-electric-blue);
+  color: var(--color-pure-white);
+  box-shadow: var(--box-shadow-default);
+}
+.modalAvatarInput {
+  display: none;
+}
+.modalActions {
+  display: flex;
+  gap: 12px;
+}
+.modalCancelBtn {
+  flex: 1;
+  height: 44px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.modalSubmitBtn {
+  flex: 1;
+  height: 44px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-electric-blue);
+  color: var(--color-pure-white);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

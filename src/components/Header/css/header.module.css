@@ -32,6 +32,10 @@
   gap: 10px;
   /* font-weight: 600; */
 }
+.myPage img,
+.myPage span {
+  cursor: pointer;
+}
 .loginBtn {
   background-color: var(--color-electric-blue);
   border: none;
