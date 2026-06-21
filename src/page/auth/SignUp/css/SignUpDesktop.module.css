@@ -1,3 +1,44 @@
+.avatarField {
+  display: flex;
+  justify-content: center;
+}
+.avatarUpload {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  cursor: pointer;
+}
+.avatarPreview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--color-gray-300);
+}
+.avatarEditBtn {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-electric-blue);
+  color: var(--color-pure-white);
+  box-shadow: var(--box-shadow-default);
+}
+.avatarInput {
+  display: none;
+}
+
 .signupText {
   display: flex;
   flex-direction: column;
