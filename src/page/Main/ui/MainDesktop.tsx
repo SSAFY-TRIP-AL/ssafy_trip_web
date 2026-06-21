@@ -14,6 +14,7 @@ import {
   Crown,
 } from "lucide-react";
 import { useMain } from "../Hook/useMain";
+import RelayCard from "../../../components/RelayCard/RelayCard";
 
 export default function MainDesktop() {
   const { mainInfo, goMap } = useMain();
@@ -102,22 +103,14 @@ export default function MainDesktop() {
           </div>
           <div className={desktopStyle.relayList}>
             {mainInfo.relays.relays.map((relay) => (
-              <div className={desktopStyle.relayCard} key={relay.id}>
-                <div
-                  className={desktopStyle.relayImg}
-                  style={{
-                    backgroundImage: `url(${relay.photoUrl})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                ></div>
-                <div className={desktopStyle.relayInfo}>
-                  <span className="trip-h3">{relay.title}</span>
-                  <span className="trip-body1">
-                    {relay.participantCount}명 참여중
-                  </span>
-                </div>
-              </div>
+              <RelayCard
+                key={relay.id}
+                id={relay.id}
+                title={relay.title}
+                description={`${relay.participantCount}명 참여중`}
+                imageUrl={relay.photoUrl}
+                categoryName={relay.category}
+              />
             ))}
           </div>
         </div>

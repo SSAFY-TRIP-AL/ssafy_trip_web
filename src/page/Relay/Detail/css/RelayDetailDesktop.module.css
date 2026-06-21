@@ -192,49 +192,63 @@
 .aiCardHeader svg {
   color: var(--color-electric-blue);
 }
-.aiImage {
-  display: block;
+.aiPreferenceInput {
   width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: var(--border-radius-10);
-}
-.aiTitleRow {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.aiTitle {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--color-gray-900);
-}
-.aiTags {
-  display: flex;
-  gap: 6px;
-}
-.aiTag {
-  padding: 4px 10px;
-  border-radius: var(--border-radius-20);
-  background-color: #e8ecfe;
-  color: var(--color-electric-blue);
-  font-size: 12px;
-  font-weight: 500;
-}
-.aiDescription {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--color-gray-500);
-}
-.aiSetBtn {
-  width: 100%;
-  height: 44px;
+  min-height: 88px;
+  padding: 12px;
   border: 1px solid var(--color-gray-300);
   border-radius: var(--border-radius-10);
-  background-color: var(--color-pure-white);
-  color: var(--color-electric-blue);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-gray-900);
+  resize: vertical;
+  box-sizing: border-box;
+}
+.aiPreferenceInput:focus {
+  outline: none;
+  border-color: var(--color-electric-blue);
+}
+.aiRecommendBtn {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-electric-blue);
+  color: var(--color-pure-white);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+}
+.aiRecommendBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.aiError {
+  margin: 0;
+  font-size: 13px;
+  color: #ef4444;
+}
+.aiResultList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.aiResultItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background-color: var(--color-gray-100);
+  border-radius: var(--border-radius-10);
+}
+.aiResultLocation {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+.aiResultReason {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-gray-500);
 }
