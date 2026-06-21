@@ -22,7 +22,7 @@ export default function RelayDetailDesktop() {
           <div className={relayDetailStyle.titleRow}>
             <span className="trip-h1">{detail.title}</span>
             <span className={relayDetailStyle.statusBadge}>
-              {detail.status}
+              {detail.category}
             </span>
           </div>
 
@@ -96,7 +96,7 @@ export default function RelayDetailDesktop() {
             <ArrowRight size={18} />
           </button>
 
-          <div className={relayDetailStyle.aiRecommend}>
+          {/* <div className={relayDetailStyle.aiRecommend}>
             <div className={relayDetailStyle.aiCardHeader}>
               <Sparkles size={18} />
               <span>AI 다음 지역 추천</span>
@@ -121,10 +121,7 @@ export default function RelayDetailDesktop() {
             <p className={relayDetailStyle.aiDescription}>
               {detail.recommendation.description}
             </p>
-            {/* <button type="button" className={relayDetailStyle.aiSetBtn}>
-              추천 지역으로 설정
-            </button> */}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
