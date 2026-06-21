@@ -30,13 +30,6 @@ export interface RelayPreviousStop {
   participantCount: number;
 }
 
-export interface RelayRecommendation {
-  imageUrl: string;
-  title: string;
-  tags: string[];
-  description: string;
-}
-
 export interface RelayDetailData {
   id: number;
   title: string;
@@ -45,7 +38,6 @@ export interface RelayDetailData {
   participantCount: number;
   coverImageUrl: string;
   previousStops: RelayPreviousStop[];
-  // recommendation: RelayRecommendation;
 }
 
 export const getRelayDetail = async (id: number): Promise<RelayDetailData> => {
@@ -68,7 +60,5 @@ export const getRelayDetail = async (id: number): Promise<RelayDetailData> => {
       period: new Date(step.createdAt).toLocaleDateString(),
       participantCount: data.participantCount,
     })),
-
-    // recommendation: undefined,
   };
 };

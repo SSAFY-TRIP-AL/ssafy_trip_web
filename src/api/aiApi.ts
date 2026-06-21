@@ -1,14 +1,14 @@
 import api from "./api";
 
-interface Recommendation {
+export interface Recommendation {
   locationName: string;
   reason: string;
 }
 
-interface RecommendationsResponse {
+export interface RecommendationsResponse {
   recommendations: Recommendation[];
 }
-interface RecommendationsRequest {
+export interface RecommendationsRequest {
   relayId: number;
   currentLocation: string;
   category: string;
@@ -20,7 +20,7 @@ export const getRecommendations = async (
 ): Promise<RecommendationsResponse> => {
   try {
     const response = await api.post<RecommendationsResponse>(
-      "/recommend",
+      "/ai/recommend",
       request,
     );
 

@@ -11,7 +11,15 @@ import relayDetailStyle from "../css/RelayDetailDesktop.module.css";
 import { useRelayDetail } from "../Hook/useRelayDetail";
 
 export default function RelayDetailDesktop() {
-  const { detail } = useRelayDetail();
+  const {
+    detail,
+    preference,
+    setPreference,
+    recommendations,
+    isRecommendLoading,
+    recommendError,
+    fetchRecommendations,
+  } = useRelayDetail();
 
   if (!detail) return <div className="container" />;
 
@@ -96,32 +104,49 @@ export default function RelayDetailDesktop() {
             <ArrowRight size={18} />
           </button>
 
-          {/* <div className={relayDetailStyle.aiRecommend}>
+          <div className={relayDetailStyle.aiRecommend}>
             <div className={relayDetailStyle.aiCardHeader}>
               <Sparkles size={18} />
               <span>AI 다음 지역 추천</span>
             </div>
-            <img
-              src={detail.recommendation.imageUrl}
-              alt={detail.recommendation.title}
-              className={relayDetailStyle.aiImage}
+
+            <textarea
+              className={relayDetailStyle.aiPreferenceInput}
+              placeholder="원하는 여행 스타일이나 선호사항을 입력해주세요. (예: 한적한 바다, 미식 여행)"
+              value={preference}
+              onChange={(event) => setPreference(event.target.value)}
             />
-            <div className={relayDetailStyle.aiTitleRow}>
-              <span className={relayDetailStyle.aiTitle}>
-                {detail.recommendation.title}
-              </span>
-              <div className={relayDetailStyle.aiTags}>
-                {detail.recommendation.tags.map((tag) => (
-                  <span key={tag} className={relayDetailStyle.aiTag}>
-                    {tag}
-                  </span>
+            <button
+              type="button"
+              className={relayDetailStyle.aiRecommendBtn}
+              onClick={fetchRecommendations}
+              disabled={isRecommendLoading}
+            >
+              {isRecommendLoading ? "추천 받는 중..." : "AI 추천 받기"}
+            </button>
+
+            {recommendError && (
+              <p className={relayDetailStyle.aiError}>{recommendError}</p>
+            )}
+
+            {recommendations.length > 0 && (
+              <div className={relayDetailStyle.aiResultList}>
+                {recommendations.map((item, index) => (
+                  <div
+                    key={`${item.locationName}-${index}`}
+                    className={relayDetailStyle.aiResultItem}
+                  >
+                    <span className={relayDetailStyle.aiResultLocation}>
+                      {item.locationName}
+                    </span>
+                    <p className={relayDetailStyle.aiResultReason}>
+                      {item.reason}
+                    </p>
+                  </div>
                 ))}
               </div>
-            </div>
-            <p className={relayDetailStyle.aiDescription}>
-              {detail.recommendation.description}
-            </p>
-          </div> */}
+            )}
+          </div>
         </div>
       </div>
     </div>
