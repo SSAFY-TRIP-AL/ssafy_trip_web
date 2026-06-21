@@ -1,4 +1,5 @@
-import { Eye, EyeOff } from "lucide-react";
+import { useRef } from "react";
+import { Camera, Eye, EyeOff } from "lucide-react";
 import desktopStyle from "../css/SignUpDesktop.module.css";
 import "../../../../style.css";
 import "../../auth.css";
@@ -54,8 +55,16 @@ const fields: {
 ];
 
 export default function SignUpDesktop() {
-  const { values, handleChange, passwordMismatch, handleSubmit } = useSignUp();
+  const {
+    values,
+    handleChange,
+    passwordMismatch,
+    profileImagePreview,
+    handleProfileImageChange,
+    handleSubmit,
+  } = useSignUp();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="container">
@@ -69,6 +78,34 @@ export default function SignUpDesktop() {
           onSubmit={handleSubmit}
           className={`authForm ${desktopStyle.signupForm}`}
         >
+          <div className={desktopStyle.avatarField}>
+            <div
+              className={desktopStyle.avatarUpload}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              {profileImagePreview ? (
+                <img
+                  src={profileImagePreview}
+                  alt="프로필 이미지"
+                  className={desktopStyle.avatarPreview}
+                />
+              ) : (
+                <div className={desktopStyle.avatarPlaceholder} />
+              )}
+              <span className={desktopStyle.avatarEditBtn}>
+                <Camera size={14} />
+              </span>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className={desktopStyle.avatarInput}
+                onChange={(event) =>
+                  handleProfileImageChange(event.target.files?.[0] ?? null)
+                }
+              />
+            </div>
+          </div>
           {fields.map(({ id, label, type, placeholder }) => {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;

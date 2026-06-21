@@ -1,6 +1,7 @@
-import { type SubmitEventHandler } from "react";
+import { type SubmitEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../api/authApi";
+import { uploadImageToS3 } from "../../../api/s3Api";
 import { useForm } from "./useForm";
 
 type SignUpForm = {
@@ -22,15 +23,28 @@ export const useSignUp = () => {
     email: "",
     phone: "",
   });
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<
+    string | null
+  >(null);
 
   const passwordMismatch =
     Boolean(values.passwordConfirm) &&
     values.password !== values.passwordConfirm;
 
+  const handleProfileImageChange = (file: File | null) => {
+    setProfileImage(file);
+    setProfileImagePreview(file ? URL.createObjectURL(file) : null);
+  };
+
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
     try {
+      const profileImageUrl = profileImage
+        ? await uploadImageToS3(profileImage, "PROFILE")
+        : undefined;
+
       await signUp({
         loginId: values.loginId,
         name: values.name,
@@ -38,6 +52,7 @@ export const useSignUp = () => {
         passwordConfirm: values.passwordConfirm,
         email: values.email,
         phone: values.phone,
+        profileImage: profileImageUrl,
       });
 
       alert("회원가입이 완료되었습니다.");
@@ -53,6 +68,8 @@ export const useSignUp = () => {
     values,
     handleChange,
     passwordMismatch,
+    profileImagePreview,
+    handleProfileImageChange,
     handleSubmit,
   };
 };
