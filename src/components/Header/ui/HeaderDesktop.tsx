@@ -7,6 +7,7 @@ import { useAuthStore } from "../../../store/authStore";
 export default function HeaderDesktop() {
   const navigate = useNavigate();
   const userName = useAuthStore((state) => state.userName);
+  const profileImage = useAuthStore((state) => state.profileImage);
   function goHome() {
     navigate("/");
   }
@@ -41,7 +42,7 @@ export default function HeaderDesktop() {
         <div className={headerStyle.myPage}>
           {isLogin ? (
             <>
-              <div className={headerStyle.profileImg}></div>
+              <img className={headerStyle.profileImg} src={profileImage} />
               <span>{userName}</span>
             </>
           ) : (

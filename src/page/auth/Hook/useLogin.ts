@@ -27,7 +27,7 @@ export default function useLogin() {
       });
 
       alert(data.message);
-      storeLogin(data.accessToken, data.name);
+      storeLogin(data.accessToken, data.name, data.profileImage);
       navigate("/");
     } catch (error) {
       alert(error instanceof Error ? error.message : "로그인에 실패했습니다.");
