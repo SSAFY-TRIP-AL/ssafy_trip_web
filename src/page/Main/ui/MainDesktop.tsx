@@ -103,7 +103,14 @@ export default function MainDesktop() {
           <div className={desktopStyle.relayList}>
             {mainInfo.relays.relays.map((relay) => (
               <div className={desktopStyle.relayCard} key={relay.id}>
-                <div className={desktopStyle.relayImg}></div>
+                <div
+                  className={desktopStyle.relayImg}
+                  style={{
+                    backgroundImage: `url(${relay.photoUrl})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></div>
                 <div className={desktopStyle.relayInfo}>
                   <span className="trip-h3">{relay.title}</span>
                   <span className="trip-body1">
