@@ -13,53 +13,10 @@ import {
   Trophy,
   Crown,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import api from "../../../api/api";
+import { useMain } from "../Hook/useMain";
 
-interface RelaySummary {
-  id: number;
-  title: string;
-  category: string;
-  participantCount: number;
-}
-
-interface OngoingRelay extends RelaySummary {
-  lastParticipatedAt: string;
-}
-
-interface RankingUser {
-  id: number;
-  name: string;
-  profileImage: string;
-  participationCount: number;
-}
-
-interface MainInfo {
-  userCount: number;
-  relayCount: number;
-  relays: {
-    relays: OngoingRelay[];
-  };
-  ranking: RankingUser[];
-}
 export default function MainDesktop() {
-  const [mainInfo, setMainInfo] = useState<MainInfo>({
-    userCount: 0,
-    relayCount: 0,
-    relays: { relays: [] },
-    ranking: [],
-  });
-  const fetchMainInfo = async () => {
-    try {
-      const response = await api.get<MainInfo>("/main");
-      setMainInfo(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchMainInfo();
-  }, []);
+  const { mainInfo, goMap } = useMain();
 
   return (
     <>
@@ -72,7 +29,7 @@ export default function MainDesktop() {
             <span>이어보세요</span>
           </div>
           <span className="trip-h3">AI가 설계하는 당신만의 릴레이 여행</span>
-          <div className={desktopStyle.heroBtn}>
+          <div className={desktopStyle.heroBtn} onClick={goMap}>
             <span className="trip-body1">릴레이 참여하기</span>
             <ArrowRight size={18} strokeWidth={2.5} />
           </div>
@@ -98,7 +55,7 @@ export default function MainDesktop() {
                 지금, 전 세계 어딘가에서 릴레이가 이어지고 있어요.
               </span>
             </div>
-            <div className={desktopStyle.infoBtn}>
+            <div className={desktopStyle.infoBtn} onClick={goMap}>
               <Map size={16} strokeWidth={1.75} />
               <span className="trip-body1">지도에서 보기</span>
             </div>
