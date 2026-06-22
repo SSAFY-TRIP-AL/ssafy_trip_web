@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useMatch, useNavigate, useParams } from "react-router-dom";
 import { ChevronDown, MapPin, UploadCloud, X } from "lucide-react";
 import "../../../../style.css";
 import "../../../auth/auth.css";
@@ -13,6 +13,9 @@ const TITLE_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
 
 export default function RegisterDesktop() {
+  const isStepAdd = !!useMatch("/relay/:id/step");
+  const { id } = useParams();
+  const relayId = Number(id);
   const {
     address,
     setAddress,
@@ -36,11 +39,9 @@ export default function RegisterDesktop() {
     imagePreview,
     handleImageChange,
     handleSubmit,
-  } = useRegisterRelay({ address, latitude, longitude });
+  } = useRegisterRelay({ address, latitude, longitude, isStepAdd, relayId });
   const navigate = useNavigate();
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const location = useLocation();
-  const isStepAdd = location.pathname === "/relaystepadd";
   const { categories } = useCategories(!isStepAdd);
   const categoryRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -13,10 +13,7 @@ import MyPage from "./page/MyPage/MyPage";
 function App() {
   useEffect(() => {
     const setVh = () => {
-      document.documentElement.style.setProperty(
-        "--vh",
-        `${window.innerHeight * 0.01}px`,
-      );
+      document.documentElement.style.setProperty("--vh", `${window.innerHeight * 0.01}px`);
     };
 
     setVh(); // 초기 실행
@@ -31,10 +28,10 @@ function App() {
         <Route path="/auth/signup" element={<SignUp />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/map" element={<Map />} />
-        <Route path="/relaylist" element={<RelayList />} />
-        <Route path="/relaydetail/:id" element={<RelayDetail />} />
-        <Route path="/relayregister" element={<Register />} />
-        <Route path="/relaystepadd" element={<Register />} />
+        <Route path="/relay/list" element={<RelayList />} />
+        <Route path="/relay/detail/:id" element={<RelayDetail />} />
+        <Route path="/relay/register" element={<Register />} />
+        <Route path="/relay/:id/step" element={<Register />} />
         <Route path="/mypage" element={<MyPage />} />
       </Route>
     </Routes>
