@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { getCategories, type Category } from "../api/categoryApi";
 
-export const useCategories = () => {
+export const useCategories = (enabled = true) => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    getCategories()
-      .then(setCategories)
-      .catch((error) => console.error(error));
-  }, []);
+    if (!enabled) return;
+
+    getCategories().then(setCategories).catch(console.error);
+  }, [enabled]);
 
   return { categories };
 };

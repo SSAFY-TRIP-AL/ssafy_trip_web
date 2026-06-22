@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, MapPin, UploadCloud, X } from "lucide-react";
 import "../../../../style.css";
 import "../../../auth/auth.css";
@@ -38,25 +38,20 @@ export default function RegisterDesktop() {
     handleSubmit,
   } = useRegisterRelay({ address, latitude, longitude });
   const navigate = useNavigate();
-  const { categories } = useCategories();
-
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const location = useLocation();
+  const isStepAdd = location.pathname === "/relaystepadd";
+  const { categories } = useCategories(!isStepAdd);
   const categoryRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        categoryRef.current &&
-        !categoryRef.current.contains(event.target as Node)
-      ) {
+      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
         setIsCategoryOpen(false);
       }
-      if (
-        locationRef.current &&
-        !locationRef.current.contains(event.target as Node)
-      ) {
+      if (locationRef.current && !locationRef.current.contains(event.target as Node)) {
         setIsSuggestionsOpen(false);
       }
     }
@@ -73,91 +68,100 @@ export default function RegisterDesktop() {
   return (
     <div className="container">
       <div className={registerStyle.container}>
-        <span className="trip-h1">릴레이 등록</span>
-        <span className={`trip-body1 ${registerStyle.titleText}`}>
-          새로운 여행 릴레이를 등록해보세요.
-        </span>
+        {!isStepAdd ? (
+          <>
+            <span className="trip-h1">릴레이 등록</span>
+            <span className={`trip-body1 ${registerStyle.titleText}`}>
+              새로운 여행 릴레이를 등록해보세요.
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="trip-h1">릴레이 스텝 등록</span>
+            <span className={`trip-body1 ${registerStyle.titleText}`}>
+              당신이 여행한 장소를 등록해주세요.
+            </span>
+          </>
+        )}
         <form onSubmit={handleSubmit} className={registerStyle.formContainer}>
-          <div className="authField">
-            <div className={registerStyle.fieldHeader}>
-              <label htmlFor="title">릴레이 제목</label>
-              <span className={registerStyle.charCount}>
-                {title.length}/{TITLE_MAX_LENGTH}
-              </span>
-            </div>
-            <div className="authInputBox">
-              <input
-                id="title"
-                type="text"
-                placeholder="릴레이 제목을 입력하세요"
-                value={title}
-                maxLength={TITLE_MAX_LENGTH}
-                onChange={(event) => setTitle(event.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="authField">
-            <label>카테고리 선택</label>
-            <div className={registerStyle.categoryWrapper} ref={categoryRef}>
-              <button
-                type="button"
-                className={registerStyle.categorySelect}
-                onClick={() => setIsCategoryOpen((prev) => !prev)}
-              >
-                {categoryId != null ? (
-                  <span className={registerStyle.categorySelectValue}>
-                    <span
-                      className={registerStyle.categoryDot}
-                      style={{
-                        backgroundColor: getCategoryStyle(
-                          categories.findIndex((c) => c.id === categoryId),
-                        ).color,
-                      }}
-                    />
-                    {categories.find((c) => c.id === categoryId)?.name}
+          {!isStepAdd && (
+            <>
+              <div className="authField">
+                <div className={registerStyle.fieldHeader}>
+                  <label htmlFor="title">릴레이 제목</label>
+                  <span className={registerStyle.charCount}>
+                    {title.length}/{TITLE_MAX_LENGTH}
                   </span>
-                ) : (
-                  <span className={registerStyle.categoryPlaceholder}>
-                    카테고리를 선택하세요
-                  </span>
-                )}
-                <ChevronDown
-                  size={16}
-                  className={registerStyle.categoryChevron}
-                />
-              </button>
-              {isCategoryOpen && (
-                <ul className={registerStyle.categoryMenu}>
-                  {categories.map((category, index) => (
-                    <li key={category.id}>
-                      <button
-                        type="button"
-                        className={`${registerStyle.categoryOption} ${
-                          categoryId === category.id
-                            ? registerStyle.categoryOptionActive
-                            : ""
-                        }`}
-                        onClick={() => {
-                          setCategoryId(category.id);
-                          setIsCategoryOpen(false);
-                        }}
-                      >
+                </div>
+                <div className="authInputBox">
+                  <input
+                    id="title"
+                    type="text"
+                    placeholder="릴레이 제목을 입력하세요"
+                    value={title}
+                    maxLength={TITLE_MAX_LENGTH}
+                    onChange={(event) => setTitle(event.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="authField">
+                <label>카테고리 선택</label>
+                <div className={registerStyle.categoryWrapper} ref={categoryRef}>
+                  <button
+                    type="button"
+                    className={registerStyle.categorySelect}
+                    onClick={() => setIsCategoryOpen((prev) => !prev)}
+                  >
+                    {categoryId != null ? (
+                      <span className={registerStyle.categorySelectValue}>
                         <span
                           className={registerStyle.categoryDot}
                           style={{
-                            backgroundColor: getCategoryStyle(index).color,
+                            backgroundColor: getCategoryStyle(
+                              categories.findIndex((c) => c.id === categoryId),
+                            ).color,
                           }}
                         />
-                        {category.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+                        {categories.find((c) => c.id === categoryId)?.name}
+                      </span>
+                    ) : (
+                      <span className={registerStyle.categoryPlaceholder}>
+                        카테고리를 선택하세요
+                      </span>
+                    )}
+                    <ChevronDown size={16} className={registerStyle.categoryChevron} />
+                  </button>
+                  {isCategoryOpen && (
+                    <ul className={registerStyle.categoryMenu}>
+                      {categories.map((category, index) => (
+                        <li key={category.id}>
+                          <button
+                            type="button"
+                            className={`${registerStyle.categoryOption} ${
+                              categoryId === category.id ? registerStyle.categoryOptionActive : ""
+                            }`}
+                            onClick={() => {
+                              setCategoryId(category.id);
+                              setIsCategoryOpen(false);
+                            }}
+                          >
+                            <span
+                              className={registerStyle.categoryDot}
+                              style={{
+                                backgroundColor: getCategoryStyle(index).color,
+                              }}
+                            />
+                            {category.name}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="authField">
             <label>사진 업로드</label>
@@ -191,9 +195,7 @@ export default function RegisterDesktop() {
                   <span className={registerStyle.uploadText}>
                     이미지를 드래그하거나 클릭하여 업로드하세요
                   </span>
-                  <span className={registerStyle.uploadHint}>
-                    PNG, JPG 파일 (최대 10MB)
-                  </span>
+                  <span className={registerStyle.uploadHint}>PNG, JPG 파일 (최대 10MB)</span>
                 </>
               )}
               <input
@@ -201,9 +203,7 @@ export default function RegisterDesktop() {
                 type="file"
                 accept="image/*"
                 className={registerStyle.uploadInput}
-                onChange={(event) =>
-                  handleImageChange(event.target.files?.[0] ?? null)
-                }
+                onChange={(event) => handleImageChange(event.target.files?.[0] ?? null)}
               />
             </div>
           </div>
@@ -212,10 +212,7 @@ export default function RegisterDesktop() {
             <label htmlFor="location">위치 정보</label>
 
             <div className={registerStyle.locationRow}>
-              <div
-                className={`authInputBox ${registerStyle.locationInputBox}`}
-                ref={locationRef}
-              >
+              <div className={`authInputBox ${registerStyle.locationInputBox}`} ref={locationRef}>
                 <input
                   id="location"
                   type="text"
@@ -223,9 +220,7 @@ export default function RegisterDesktop() {
                   value={address}
                   autoComplete="off"
                   onChange={(event) => setAddress(event.target.value)}
-                  onFocus={() =>
-                    suggestions.length > 0 && setIsSuggestionsOpen(true)
-                  }
+                  onFocus={() => suggestions.length > 0 && setIsSuggestionsOpen(true)}
                   required
                 />
                 {isSuggestionsOpen && suggestions.length > 0 && (
@@ -237,14 +232,10 @@ export default function RegisterDesktop() {
                           className={registerStyle.locationSuggestionItem}
                           onClick={() => selectSuggestion(suggestion)}
                         >
-                          <span
-                            className={registerStyle.locationSuggestionName}
-                          >
+                          <span className={registerStyle.locationSuggestionName}>
                             {suggestion.placeName}
                           </span>
-                          <span
-                            className={registerStyle.locationSuggestionAddress}
-                          >
+                          <span className={registerStyle.locationSuggestionAddress}>
                             {suggestion.addressName}
                           </span>
                         </button>
@@ -285,11 +276,7 @@ export default function RegisterDesktop() {
           </div>
 
           <div className={registerStyle.actions}>
-            <button
-              type="button"
-              className={registerStyle.cancelBtn}
-              onClick={() => navigate(-1)}
-            >
+            <button type="button" className={registerStyle.cancelBtn} onClick={() => navigate(-1)}>
               취소
             </button>
             <button type="submit" className={registerStyle.submitBtn}>

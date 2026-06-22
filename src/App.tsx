@@ -34,6 +34,7 @@ function App() {
         <Route path="/relaylist" element={<RelayList />} />
         <Route path="/relaydetail/:id" element={<RelayDetail />} />
         <Route path="/relayregister" element={<Register />} />
+        <Route path="/relaystepadd" element={<Register />} />
         <Route path="/mypage" element={<MyPage />} />
       </Route>
     </Routes>

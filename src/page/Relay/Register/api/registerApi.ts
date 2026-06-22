@@ -4,6 +4,7 @@ export interface CreateRelayRequest {
   title: string;
   categoryId: number;
   address: string;
+  locationName: string;
   latitude?: number | null;
   longitude?: number | null;
   content: string;

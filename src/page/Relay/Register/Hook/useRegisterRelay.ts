@@ -9,11 +9,7 @@ interface UseRegisterRelayParams {
   longitude: number | null;
 }
 
-export const useRegisterRelay = ({
-  address,
-  latitude,
-  longitude,
-}: UseRegisterRelayParams) => {
+export const useRegisterRelay = ({ address, latitude, longitude }: UseRegisterRelayParams) => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -35,14 +31,13 @@ export const useRegisterRelay = ({
     }
 
     try {
-      const photoUrl = image
-        ? await uploadImageToS3(image, "RELAY")
-        : undefined;
+      const photoUrl = image ? await uploadImageToS3(image, "RELAY") : undefined;
 
       await createRelay({
         title,
         categoryId,
         address,
+        locationName: address,
         latitude,
         longitude,
         photoUrl: photoUrl,
@@ -52,9 +47,7 @@ export const useRegisterRelay = ({
       alert("릴레이가 등록되었습니다.");
       navigate("/relaylist");
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "릴레이 등록에 실패했습니다.",
-      );
+      alert(error instanceof Error ? error.message : "릴레이 등록에 실패했습니다.");
     }
   };
 
