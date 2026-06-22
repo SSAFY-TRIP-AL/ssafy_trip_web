@@ -125,7 +125,8 @@ export const useMyPage = () => {
     }
 
     try {
-      await withdrawMyAccount();
+      const response = await withdrawMyAccount();
+      alert(response.message);
       logout();
       navigate("/");
     } catch (error) {

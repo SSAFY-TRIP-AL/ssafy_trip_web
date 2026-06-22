@@ -149,8 +149,10 @@ export const updateMyProfile = async (payload: UpdateMyProfileRequest): Promise<
   return response.data;
 };
 
+// 탈퇴
 export const withdrawMyAccount = async () => {
-  await api.delete("/users/me");
+  const response = await api.delete("/users/me");
+  return response.data;
 };
 
 // 내가 참여한 릴레이 리스트
