@@ -163,7 +163,7 @@ export default function MyPageDesktop() {
                     ) : (
                       <div className={myPageStyle.relayImagePlaceholder} />
                     )}
-                    <span
+                    {/* <span
                       className={`${myPageStyle.statusBadge} ${
                         item.status === "진행중"
                           ? myPageStyle.statusOngoing
@@ -171,16 +171,16 @@ export default function MyPageDesktop() {
                       }`}
                     >
                       {item.status}
-                    </span>
+                    </span> */}
                   </div>
                   <div className={myPageStyle.relayBody}>
                     <span className={myPageStyle.relayTitle}>{item.title}</span>
                     <p className={myPageStyle.relayDescription}>{item.content}</p>
                   </div>
                   <div className={myPageStyle.relayDate}>
-                    <span className={myPageStyle.relayDateLabel}>
+                    {/* <span className={myPageStyle.relayDateLabel}>
                       {item.status === "진행중" ? "참여일" : "완료일"}
-                    </span>
+                    </span> */}
                     <span className={myPageStyle.relayDateValue}>{item.date}</span>
                   </div>
                   <ChevronRight size={18} className={myPageStyle.relayChevron} />
