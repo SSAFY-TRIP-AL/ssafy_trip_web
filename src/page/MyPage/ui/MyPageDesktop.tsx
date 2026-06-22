@@ -85,35 +85,24 @@ export default function MyPageDesktop() {
     <div className="container">
       <div className={myPageStyle.title}>
         <span className="trip-h1">마이 페이지</span>
-        <span className="trip-body1">
-          나의 여행 릴레이 활동을 관리하고 확인하세요.
-        </span>
+        <span className="trip-body1">나의 여행 릴레이 활동을 관리하고 확인하세요.</span>
       </div>
 
       <div className={myPageStyle.profileCard}>
         <div className={myPageStyle.profileLeft}>
-          <img
-            src={profile.profileImage}
-            alt={profile.name}
-            className={myPageStyle.profileImg}
-          />
+          {profile.profileImage ? (
+            <img src={profile.profileImage} alt={profile.name} className={myPageStyle.profileImg} />
+          ) : (
+            <div className={myPageStyle.profileImg} />
+          )}
           <div className={myPageStyle.profileInfo}>
             <span className="trip-h3">{profile.name}</span>
-            {profile.bio && (
-              <span className="trip-body1">{profile.bio}</span>
-            )}
-            {profile.joinedAt && (
-              <span className={myPageStyle.joinedAt}>
-                {profile.joinedAt} 가입
-              </span>
+            {profile.createdAt && (
+              <span className={myPageStyle.joinedAt}>{profile.createdAt} 가입</span>
             )}
           </div>
         </div>
-        <button
-          type="button"
-          className={myPageStyle.editBtn}
-          onClick={openEdit}
-        >
+        <button type="button" className={myPageStyle.editBtn} onClick={openEdit}>
           회원 정보 수정
         </button>
       </div>
@@ -122,7 +111,7 @@ export default function MyPageDesktop() {
         <div className={myPageStyle.statItem}>
           <Send size={20} className={myPageStyle.statIcon} />
           <span className="trip-body1">참여한 릴레이</span>
-          <span className="trip-h1">{profile.participatedCount}</span>
+          <span className="trip-h1">{profile.participationCount}</span>
         </div>
         <div className={myPageStyle.statItem}>
           <Flag size={20} className={myPageStyle.statIcon} />
@@ -152,28 +141,28 @@ export default function MyPageDesktop() {
               </button>
             ))}
           </div>
-          <span className={myPageStyle.tabDescription}>
-            {currentTab.description}
-          </span>
+          <span className={myPageStyle.tabDescription}>{currentTab.description}</span>
 
           <div className={myPageStyle.relayList}>
             {items.length === 0 ? (
-              <div className={myPageStyle.emptyState}>
-                아직 표시할 릴레이가 없습니다.
-              </div>
+              <div className={myPageStyle.emptyState}>아직 표시할 릴레이가 없습니다.</div>
             ) : (
               items.map((item) => (
                 <div
                   key={item.id}
                   className={myPageStyle.relayCard}
-                  onClick={() => navigate(`/relaydetail/${item.id}`)}
+                  onClick={() => navigate(`/relay/detail/${item.id}`)}
                 >
                   <div className={myPageStyle.relayImageWrap}>
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className={myPageStyle.relayImage}
-                    />
+                    {item.photoUrl ? (
+                      <img
+                        src={item.photoUrl}
+                        alt={item.title}
+                        className={myPageStyle.relayImage}
+                      />
+                    ) : (
+                      <div className={myPageStyle.relayImagePlaceholder} />
+                    )}
                     <span
                       className={`${myPageStyle.statusBadge} ${
                         item.status === "진행중"
@@ -185,25 +174,16 @@ export default function MyPageDesktop() {
                     </span>
                   </div>
                   <div className={myPageStyle.relayBody}>
-                    <span className={myPageStyle.relayTitle}>
-                      {item.title}
-                    </span>
-                    <p className={myPageStyle.relayDescription}>
-                      {item.description}
-                    </p>
+                    <span className={myPageStyle.relayTitle}>{item.title}</span>
+                    <p className={myPageStyle.relayDescription}>{item.content}</p>
                   </div>
                   <div className={myPageStyle.relayDate}>
                     <span className={myPageStyle.relayDateLabel}>
                       {item.status === "진행중" ? "참여일" : "완료일"}
                     </span>
-                    <span className={myPageStyle.relayDateValue}>
-                      {item.date}
-                    </span>
+                    <span className={myPageStyle.relayDateValue}>{item.date}</span>
                   </div>
-                  <ChevronRight
-                    size={18}
-                    className={myPageStyle.relayChevron}
-                  />
+                  <ChevronRight size={18} className={myPageStyle.relayChevron} />
                 </div>
               ))
             )}
@@ -222,10 +202,7 @@ export default function MyPageDesktop() {
               </button>
               {pageNumbers.map((page, index) =>
                 page === "..." ? (
-                  <span
-                    key={`ellipsis-${index}`}
-                    className={myPageStyle.pageEllipsis}
-                  >
+                  <span key={`ellipsis-${index}`} className={myPageStyle.pageEllipsis}>
                     ...
                   </span>
                 ) : (
@@ -246,9 +223,7 @@ export default function MyPageDesktop() {
                 className={myPageStyle.pageArrowBtn}
                 aria-label="다음 페이지"
                 disabled={currentPage === totalPages}
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-                }
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
               >
                 <ChevronRight size={16} />
               </button>
@@ -258,19 +233,11 @@ export default function MyPageDesktop() {
 
         <div className={myPageStyle.accountPanel}>
           <span className="trip-h3">계정</span>
-          <button
-            type="button"
-            className={myPageStyle.logoutBtn}
-            onClick={handleLogout}
-          >
+          <button type="button" className={myPageStyle.logoutBtn} onClick={handleLogout}>
             <LogOut size={16} />
             로그아웃
           </button>
-          <button
-            type="button"
-            className={myPageStyle.withdrawBtn}
-            onClick={handleWithdraw}
-          >
+          <button type="button" className={myPageStyle.withdrawBtn} onClick={handleWithdraw}>
             <Trash2 size={16} />
             회원 탈퇴
           </button>
@@ -279,15 +246,8 @@ export default function MyPageDesktop() {
 
       {isEditOpen && (
         <div className={myPageStyle.modalOverlay} onClick={closeEdit}>
-          <div
-            className={myPageStyle.modalBox}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              className={myPageStyle.modalCloseBtn}
-              onClick={closeEdit}
-            >
+          <div className={myPageStyle.modalBox} onClick={(event) => event.stopPropagation()}>
+            <button type="button" className={myPageStyle.modalCloseBtn} onClick={closeEdit}>
               <X size={18} />
             </button>
             <span className="trip-h3">회원 정보 수정</span>
@@ -314,9 +274,7 @@ export default function MyPageDesktop() {
                   type="file"
                   accept="image/*"
                   className={myPageStyle.modalAvatarInput}
-                  onChange={(event) =>
-                    handleEditImageChange(event.target.files?.[0] ?? null)
-                  }
+                  onChange={(event) => handleEditImageChange(event.target.files?.[0] ?? null)}
                 />
               </div>
             </div>
@@ -335,18 +293,10 @@ export default function MyPageDesktop() {
             </div>
 
             <div className={myPageStyle.modalActions}>
-              <button
-                type="button"
-                className={myPageStyle.modalCancelBtn}
-                onClick={closeEdit}
-              >
+              <button type="button" className={myPageStyle.modalCancelBtn} onClick={closeEdit}>
                 취소
               </button>
-              <button
-                type="button"
-                className={myPageStyle.modalSubmitBtn}
-                onClick={submitEdit}
-              >
+              <button type="button" className={myPageStyle.modalSubmitBtn} onClick={submitEdit}>
                 저장
               </button>
             </div>
