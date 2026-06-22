@@ -18,12 +18,7 @@ export default function HeaderDesktop() {
     <header className={headerStyle.headerContainer}>
       <div className={headerStyle.headerContent}>
         <div className={headerStyle.logoContainer}>
-          <img
-            src={logo}
-            alt="Logo"
-            className={headerStyle.logo}
-            onClick={goHome}
-          />
+          <img src={logo} alt="Logo" className={headerStyle.logo} onClick={goHome} />
         </div>
         <ul>
           <li>
@@ -33,10 +28,10 @@ export default function HeaderDesktop() {
             <a href="/map">지도</a>
           </li>
           <li>
-            <a href="/relaylist">릴레이 리스트</a>
+            <a href="/relay/list">릴레이 리스트</a>
           </li>
           <li>
-            <a href="/relayregister">릴레이 등록</a>
+            <a href="/relay/register">릴레이 등록</a>
           </li>
         </ul>
         <div className={headerStyle.myPage}>

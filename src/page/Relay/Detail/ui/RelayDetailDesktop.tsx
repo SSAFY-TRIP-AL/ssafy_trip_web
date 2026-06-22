@@ -1,11 +1,4 @@
-import {
-  ArrowRight,
-  Calendar,
-  ChevronRight,
-  History,
-  Sparkles,
-  Users,
-} from "lucide-react";
+import { ArrowRight, Calendar, ChevronRight, History, Sparkles, Users } from "lucide-react";
 import "../../../../style.css";
 import relayDetailStyle from "../css/RelayDetailDesktop.module.css";
 import { useRelayDetail } from "../Hook/useRelayDetail";
@@ -19,6 +12,7 @@ export default function RelayDetailDesktop() {
     isRecommendLoading,
     recommendError,
     fetchRecommendations,
+    goAddRelayStep,
   } = useRelayDetail();
 
   if (!detail) return <div className="container" />;
@@ -29,9 +23,7 @@ export default function RelayDetailDesktop() {
         <div className={relayDetailStyle.content}>
           <div className={relayDetailStyle.titleRow}>
             <span className="trip-h1">{detail.title}</span>
-            <span className={relayDetailStyle.statusBadge}>
-              {detail.category}
-            </span>
+            <span className={relayDetailStyle.statusBadge}>{detail.category}</span>
           </div>
 
           <div className={relayDetailStyle.metaRow}>
@@ -59,9 +51,7 @@ export default function RelayDetailDesktop() {
               {detail.previousStops.map((stop, index) => (
                 <div key={stop.id} className={relayDetailStyle.stopItem}>
                   <div className={relayDetailStyle.stopOrderColumn}>
-                    <span className={relayDetailStyle.stopOrderBadge}>
-                      {stop.order}
-                    </span>
+                    <span className={relayDetailStyle.stopOrderBadge}>{stop.order}</span>
                     {index < detail.previousStops.length - 1 && (
                       <span className={relayDetailStyle.stopLine} />
                     )}
@@ -73,9 +63,7 @@ export default function RelayDetailDesktop() {
                       className={relayDetailStyle.stopImage}
                     />
                     <div className={relayDetailStyle.stopInfo}>
-                      <span className={relayDetailStyle.stopTitle}>
-                        {stop.location}
-                      </span>
+                      <span className={relayDetailStyle.stopTitle}>{stop.location}</span>
                       <div className={relayDetailStyle.stopMeta}>
                         <span className={relayDetailStyle.stopMetaItem}>
                           <Calendar size={14} />
@@ -87,10 +75,7 @@ export default function RelayDetailDesktop() {
                         </span>
                       </div>
                     </div>
-                    <ChevronRight
-                      size={18}
-                      className={relayDetailStyle.stopArrow}
-                    />
+                    <ChevronRight size={18} className={relayDetailStyle.stopArrow} />
                   </div>
                 </div>
               ))}
@@ -99,7 +84,7 @@ export default function RelayDetailDesktop() {
         </div>
 
         <div className={relayDetailStyle.subContent}>
-          <button type="button" className={relayDetailStyle.joinBtn}>
+          <button type="button" className={relayDetailStyle.joinBtn} onClick={goAddRelayStep}>
             릴레이 참여하기
             <ArrowRight size={18} />
           </button>
@@ -125,9 +110,7 @@ export default function RelayDetailDesktop() {
               {isRecommendLoading ? "추천 받는 중..." : "AI 추천 받기"}
             </button>
 
-            {recommendError && (
-              <p className={relayDetailStyle.aiError}>{recommendError}</p>
-            )}
+            {recommendError && <p className={relayDetailStyle.aiError}>{recommendError}</p>}
 
             {recommendations.length > 0 && (
               <div className={relayDetailStyle.aiResultList}>
@@ -136,12 +119,8 @@ export default function RelayDetailDesktop() {
                     key={`${item.locationName}-${index}`}
                     className={relayDetailStyle.aiResultItem}
                   >
-                    <span className={relayDetailStyle.aiResultLocation}>
-                      {item.locationName}
-                    </span>
-                    <p className={relayDetailStyle.aiResultReason}>
-                      {item.reason}
-                    </p>
+                    <span className={relayDetailStyle.aiResultLocation}>{item.locationName}</span>
+                    <p className={relayDetailStyle.aiResultReason}>{item.reason}</p>
                   </div>
                 ))}
               </div>

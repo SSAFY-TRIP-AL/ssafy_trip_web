@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getRelayDetail, type RelayDetailData } from "../api/relayDetailApi";
-import {
-  getRecommendations,
-  type Recommendation,
-} from "../../../../api/aiApi";
+import { getRecommendations, type Recommendation } from "../../../../api/aiApi";
 
 export const useRelayDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [detail, setDetail] = useState<RelayDetailData | null>(null);
-
+  const navigate = useNavigate();
   const [preference, setPreference] = useState("");
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [isRecommendLoading, setIsRecommendLoading] = useState(false);
@@ -47,6 +44,10 @@ export const useRelayDetail = () => {
     }
   };
 
+  const goAddRelayStep = () => {
+    navigate(`/relay/${id}/step`);
+  };
+
   return {
     detail,
     preference,
@@ -55,5 +56,6 @@ export const useRelayDetail = () => {
     isRecommendLoading,
     recommendError,
     fetchRecommendations,
+    goAddRelayStep,
   };
 };

@@ -13,9 +13,68 @@ import "../../../style.css";
 import { useCategories } from "../../../hooks/useCategories";
 import { getCategoryStyle } from "../../../constants/categoryPalette";
 
+interface KakaoLatLng {
+  getLat(): number;
+  getLng(): number;
+}
+
+interface KakaoLatLngBounds {
+  extend(latlng: KakaoLatLng): void;
+}
+
+interface KakaoMapInstance {
+  setBounds(
+    bounds: KakaoLatLngBounds,
+    paddingTop?: number,
+    paddingRight?: number,
+    paddingBottom?: number,
+    paddingLeft?: number,
+  ): void;
+  setCenter(latlng: KakaoLatLng): void;
+  setLevel(level: number): void;
+  getLevel(): number;
+}
+
+interface KakaoOverlay {
+  setMap(map: KakaoMapInstance | null): void;
+}
+
+interface KakaoMaps {
+  load(callback: () => void): void;
+  LatLng: new (lat: number, lng: number) => KakaoLatLng;
+  LatLngBounds: new () => KakaoLatLngBounds;
+  Map: new (
+    container: HTMLElement,
+    options: { center: KakaoLatLng; level: number },
+  ) => KakaoMapInstance;
+  Marker: new (options: {
+    position: KakaoLatLng;
+    map?: KakaoMapInstance;
+  }) => KakaoOverlay;
+  Polyline: new (options: {
+    path: KakaoLatLng[];
+    strokeWeight: number;
+    strokeColor: string;
+    strokeOpacity: number;
+    strokeStyle: string;
+  }) => KakaoOverlay;
+  CustomOverlay: new (options: {
+    position: KakaoLatLng;
+    content: HTMLElement;
+    xAnchor: number;
+    yAnchor: number;
+    zIndex: number;
+  }) => KakaoOverlay;
+  event: {
+    addListener(target: KakaoOverlay, type: string, handler: () => void): void;
+  };
+}
+
 declare global {
   interface Window {
-    kakao: any;
+    kakao: {
+      maps: KakaoMaps;
+    };
   }
 }
 
@@ -148,13 +207,13 @@ export default function MapDesktop() {
   const { categories } = useCategories();
   const categoryRef = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<KakaoMapInstance | null>(null);
   const markerInstancesRef = useRef<
-    { id: number; categoryId: number; instance: any }[]
+    { id: number; categoryId: number; instance: KakaoOverlay }[]
   >([]);
-  const polylineInstancesRef = useRef<any[]>([]);
-  const flowDotOverlaysRef = useRef<any[]>([]);
-  const relayStopOverlaysRef = useRef<any[]>([]);
+  const polylineInstancesRef = useRef<KakaoOverlay[]>([]);
+  const flowDotOverlaysRef = useRef<KakaoOverlay[]>([]);
+  const relayStopOverlaysRef = useRef<KakaoOverlay[]>([]);
 
   const selected = markers.find((marker) => marker.id === selectedId) ?? null;
 
@@ -183,7 +242,7 @@ export default function MapDesktop() {
     );
 
     const bounds = new window.kakao.maps.LatLngBounds();
-    path.forEach((latlng: any) => bounds.extend(latlng));
+    path.forEach((latlng) => bounds.extend(latlng));
     map.setBounds(bounds, 80, 80, 80, 80);
 
     const polyline = new window.kakao.maps.Polyline({
