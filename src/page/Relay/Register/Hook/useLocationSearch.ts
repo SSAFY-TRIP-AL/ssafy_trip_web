@@ -12,6 +12,19 @@ export interface LocationSuggestion {
   lng: number;
 }
 
+interface KakaoPlaceDocument {
+  id: string;
+  place_name: string;
+  address_name: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
+
+interface KakaoKeywordSearchResponse {
+  documents: KakaoPlaceDocument[];
+}
+
 const kakaoLocalHeaders = {
   Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
 };
@@ -58,9 +71,9 @@ export const useLocationSearch = () => {
         )}&size=${MAX_SUGGESTIONS}`,
         { headers: kakaoLocalHeaders },
       );
-      const data = await response.json();
+      const data: KakaoKeywordSearchResponse = await response.json();
       const places: LocationSuggestion[] = (data.documents ?? []).map(
-        (place: any) => ({
+        (place) => ({
           id: place.id,
           placeName: place.place_name,
           addressName: place.road_address_name || place.address_name,
