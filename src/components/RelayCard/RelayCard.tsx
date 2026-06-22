@@ -25,13 +25,11 @@ export default function RelayCard({
   return (
     <div
       className={variant === "grid" ? cardStyle.card : cardStyle.cardRow}
-      onClick={() => navigate(`/relaydetail/${id}`)}
+      onClick={() => navigate(`/relay/detail/${id}`)}
     >
       <div className={cardStyle.cardImageWrap}>
         <img src={imageUrl} alt={title} className={cardStyle.cardImage} />
-        {categoryName && (
-          <span className={cardStyle.categoryBadge}>{categoryName}</span>
-        )}
+        {categoryName && <span className={cardStyle.categoryBadge}>{categoryName}</span>}
       </div>
       <div className={cardStyle.cardBody}>
         <span className={cardStyle.cardTitle}>{title}</span>
