@@ -26,12 +26,15 @@ export const useAuthStore = create<AuthStore>()(
           profileImage,
         }),
 
-      logout: () =>
+      logout: () => {
         set({
           accessToken: null,
           userName: null,
           profileImage: undefined,
-        }),
+        });
+
+        useAuthStore.persist.clearStorage();
+      },
 
       setAccessToken: (accessToken) =>
         set({

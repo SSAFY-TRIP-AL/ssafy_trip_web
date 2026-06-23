@@ -3,26 +3,38 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
 import { uploadImageToS3 } from "../../../api/s3Api";
 import {
+  getMyBookmarks,
+  getMyCreatedRelays,
   getMyProfile,
   getMyRelays,
   updateMyProfile,
   withdrawMyAccount,
+  type MyPageListParams,
   type MyPageRelayItem,
+  type MyPageRelayListResponse,
   type MyProfile,
   type RelayTabType,
 } from "../api/myPageApi";
 
-const PAGE_SIZE = 5;
+const TAB_FETCHERS: Record<
+  RelayTabType,
+  (params?: MyPageListParams) => Promise<MyPageRelayListResponse>
+> = {
+  PARTICIPATED: getMyRelays,
+  CREATED: getMyCreatedRelays,
+  LIKED: getMyBookmarks,
+};
 
 const EMPTY_PROFILE: MyProfile = {
   id: 0,
   name: "",
+  email: "",
   profileImage: "",
-  bio: "",
-  joinedAt: "",
-  participatedCount: 0,
+  participationCount: 0,
   createdCount: 0,
   likedCount: 0,
+  provider: "",
+  createdAt: "",
 };
 
 export const useMyPage = () => {
@@ -38,9 +50,7 @@ export const useMyPage = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editName, setEditName] = useState("");
   const [editImageFile, setEditImageFile] = useState<File | null>(null);
-  const [editImagePreview, setEditImagePreview] = useState<string | null>(
-    null,
-  );
+  const [editImagePreview, setEditImagePreview] = useState<string | null>(null);
 
   const fetchProfile = async () => {
     try {
@@ -58,11 +68,11 @@ export const useMyPage = () => {
   useEffect(() => {
     let active = true;
 
-    getMyRelays(activeTab, currentPage, PAGE_SIZE)
+    TAB_FETCHERS[activeTab]({ page: currentPage - 1 })
       .then((response) => {
         if (!active) return;
         setItems(response.items);
-        setTotalPages(response.totalPages);
+        setTotalPages(Math.max(1, response.totalPages));
       })
       .catch((error) => console.log(error));
 
@@ -99,10 +109,9 @@ export const useMyPage = () => {
       const updated = await updateMyProfile({ name: editName, profileImage });
       setProfile(updated);
       setIsEditOpen(false);
+      fetchProfile();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.",
-      );
+      alert(error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.");
     }
   };
 
@@ -117,7 +126,8 @@ export const useMyPage = () => {
     }
 
     try {
-      await withdrawMyAccount();
+      const response = await withdrawMyAccount();
+      alert(response.message);
       logout();
       navigate("/");
     } catch (error) {

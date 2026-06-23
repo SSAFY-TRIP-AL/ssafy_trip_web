@@ -15,7 +15,10 @@ export default function RelayDetailDesktop() {
     fetchRecommendations,
     goAddRelayStep,
   } = useRelayDetail();
-  const { isBookmarked, toggleBookmark } = useBookmark(detail?.id ?? 0);
+  const { isBookmarked, toggleBookmark } = useBookmark(
+    detail?.id ?? 0,
+    detail?.bookmarked ?? false,
+  );
 
   if (!detail) return <div className="container" />;
 
