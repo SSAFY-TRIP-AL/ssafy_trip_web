@@ -1,0 +1,357 @@
+.mapPage {
+  position: fixed;
+  top: 52px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+.mapContainer {
+  position: absolute;
+  inset: 0;
+}
+
+.searchHeader {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-pure-white);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-default);
+  padding: 10px;
+  z-index: 10;
+}
+.searchInputBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  box-sizing: border-box;
+  min-width: 0;
+}
+.searchInputBox input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--color-gray-700);
+}
+.searchIcon {
+  color: var(--color-gray-500);
+  flex-shrink: 0;
+}
+.categorySelect {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.categoryWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+.categoryMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background-color: var(--color-pure-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  box-shadow: var(--box-shadow-default);
+  padding: 6px;
+  z-index: 20;
+}
+.categoryOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: transparent;
+  color: var(--color-gray-700);
+  font-size: 14px;
+  text-align: left;
+}
+.categoryOptionActive {
+  background-color: var(--color-gray-100);
+  color: var(--color-electric-blue);
+  font-weight: 500;
+}
+.categoryDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.mapControls {
+  position: absolute;
+  left: 14px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+.zoomGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.controlBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  box-shadow: var(--box-shadow-default);
+}
+
+/* 상세 바텀시트 */
+.sheetBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 15;
+}
+.detailSheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-pure-white);
+  border-radius: var(--border-radius-20) var(--border-radius-20) 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 16;
+}
+.sheetHandle {
+  width: 40px;
+  height: 4px;
+  margin: 10px auto 0;
+  border-radius: 4px;
+  background-color: var(--color-gray-300);
+  flex-shrink: 0;
+}
+.sheetScroll {
+  overflow-y: auto;
+}
+.detailCloseBtn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-pure-white);
+  box-shadow: var(--box-shadow-default);
+  color: var(--color-gray-700);
+  z-index: 1;
+}
+.detailImage {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.detailBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px 24px;
+}
+.detailTag {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--border-radius-20);
+}
+.detailTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+.detailMetaRow {
+  display: flex;
+  gap: 20px;
+  padding: 12px 0;
+  border-top: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid var(--color-gray-100);
+}
+.detailMetaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-gray-700);
+}
+.aiSummaryBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-gray-100);
+}
+.aiSummaryLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+.aiSummaryPlaceholder {
+  font-size: 13px;
+  color: var(--color-gray-500);
+}
+
+.detailActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.relayStartBtn {
+  height: 46px;
+  border: none;
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-electric-blue);
+  color: var(--color-pure-white);
+  font-size: 14px;
+  font-weight: 500;
+}
+.relayDetailBtn {
+  height: 46px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-pure-white);
+  color: var(--color-gray-700);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.customMarker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.customMarkerPin {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-electric-blue);
+  border: 3px solid var(--color-pure-white);
+  box-shadow: var(--box-shadow-default);
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
+}
+.customMarkerPin::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid var(--color-electric-blue);
+}
+.customMarkerPin::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--color-pure-white);
+  transform: translate(-50%, -50%);
+}
+.customMarkerPinActive {
+  transform: scale(1.25);
+  background-color: var(--color-electric-blue);
+  z-index: 1;
+}
+.customMarkerPinActive::after {
+  border-top-color: var(--color-electric-blue);
+}
+
+.relayStopDot {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--color-electric-blue);
+  border: 3px solid var(--color-pure-white);
+  box-shadow: var(--box-shadow-default);
+  color: var(--color-pure-white);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.relayDirectionArrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid var(--color-electric-blue);
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+}
+
+.relayFlowDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-electric-blue);
+  box-shadow: 0 0 6px rgba(35, 64, 250, 0.55);
+  animation: relayFlowPulseMobile 1.6s ease-in-out infinite;
+}
+@keyframes relayFlowPulseMobile {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}

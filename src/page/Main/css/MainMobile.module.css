@@ -1,0 +1,276 @@
+@import "../../../style.css";
+
+.container {
+  padding: 0 16px 40px;
+  box-sizing: border-box;
+}
+
+/* hero 시작 */
+.hero {
+  position: relative;
+  height: 360px;
+  overflow: hidden;
+}
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.heroText {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.heroTitle {
+  display: flex;
+  flex-direction: column;
+}
+.heroTitle span {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-pure-white);
+}
+.heroText > span {
+  color: var(--color-gray-300);
+}
+.gradientText {
+  background: linear-gradient(
+    120deg,
+    #6fa0ff 0%,
+    #2563ff 35%,
+    #1e4fd8 50%,
+    #2563ff 65%,
+    #6fa0ff 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(10, 27, 61, 0.55));
+  animation: wave-flow-mobile 8s linear infinite;
+}
+@keyframes wave-flow-mobile {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 250% 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gradientText {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+.heroBtn {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--color-pure-white);
+  background-color: var(--color-electric-blue);
+  width: fit-content;
+  padding: 12px 16px;
+  border-radius: var(--border-radius-10);
+  margin-top: 8px;
+}
+.memberCount {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--fs-caption);
+}
+/* hero 끝 */
+
+/* info 시작 */
+.infoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 20px;
+  border-radius: var(--border-radius-20);
+  box-shadow: var(--box-shadow-default);
+  background-color: var(--color-pure-white);
+  margin-top: -50px;
+  position: relative;
+  z-index: 10;
+}
+.infoLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-electric-blue);
+  font-size: var(--fs-caption);
+}
+.subTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.subTitle > span {
+  color: var(--color-gray-500);
+}
+.infoMap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.infoMap img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+}
+.infoBtn {
+  border: 1px solid var(--color-electric-blue);
+  border-radius: var(--border-radius-10);
+  width: fit-content;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.infoBtn > span {
+  color: var(--color-electric-blue);
+}
+.infoBtn svg {
+  color: var(--color-electric-blue);
+}
+.infoSummary {
+  display: flex;
+  gap: 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-gray-100);
+}
+.infoSummaryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.infoSummaryItem > span:first-of-type {
+  color: var(--color-gray-500);
+}
+.summaryIcon {
+  color: var(--color-electric-blue);
+}
+/* info 끝*/
+
+/* 현재 진행 중인 릴레이 시작 */
+.relayContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 48px;
+}
+.relayTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.relayTitle > span:first-child {
+  color: var(--color-midnight-indigo);
+  display: flex;
+  align-items: center;
+}
+.sectionIcon {
+  margin-right: 8px;
+}
+.relayTitle > span:last-child {
+  color: var(--color-electric-blue);
+}
+.relayViewAll {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.relayList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+/* 현재 진행 중인 릴레이 끝 */
+
+/* 명예의 전당 시작 */
+.rankingContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 48px;
+}
+.rankingTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rankingTitle > span:first-child {
+  display: flex;
+  align-items: center;
+  color: var(--color-midnight-indigo);
+}
+.rankingTitle > span:last-child {
+  color: var(--color-gray-500);
+}
+.rankingList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+.rankingItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: var(--color-pure-white);
+  border-radius: var(--border-radius-20);
+  padding: 16px 20px;
+  box-sizing: border-box;
+}
+.rankingItem > span:nth-last-child(2) {
+  flex: 1;
+}
+.rankingItem > span:last-child {
+  color: var(--color-gray-500);
+}
+.profileImg {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--color-gray-300);
+  flex-shrink: 0;
+}
+.rankingFirst {
+  border: 2px solid #f0e4b5;
+  box-shadow: var(--box-shadow-default);
+}
+.rankingFirst .profileImg {
+  width: 56px;
+  height: 56px;
+}
+.rankingSecond {
+  border: 1px solid #e5e5e5;
+}
+.rankingThird {
+  border: 1px solid #e6b88a;
+}
+.rankBadge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-500);
+}
+.trophyIcon {
+  color: #c9a227;
+  flex-shrink: 0;
+}
+/* 명예의 전당 끝 */
