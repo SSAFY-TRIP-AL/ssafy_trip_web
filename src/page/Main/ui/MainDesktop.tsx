@@ -15,9 +15,12 @@ import {
 } from "lucide-react";
 import { useMain } from "../Hook/useMain";
 import RelayCard from "../../../components/RelayCard/RelayCard";
+import { useCategories } from "../../../hooks/useCategories";
+import { getCategoryStyle } from "../../../constants/categoryPalette";
 
 export default function MainDesktop() {
   const { mainInfo, goMap, goRelayList } = useMain();
+  const { categories } = useCategories();
 
   return (
     <>
@@ -94,6 +97,9 @@ export default function MainDesktop() {
                 description={`${relay.participantCount}명 참여중`}
                 imageUrl={relay.photoUrl}
                 categoryName={relay.category}
+                categoryStyle={getCategoryStyle(
+                  categories.findIndex((c) => c.name === relay.category),
+                )}
               />
             ))}
           </div>

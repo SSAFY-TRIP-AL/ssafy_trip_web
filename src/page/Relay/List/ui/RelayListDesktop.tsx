@@ -233,6 +233,9 @@ export default function RelayListDesktop() {
             description={`참여자 ${relay.participantCount}명`}
             imageUrl={relay.photoUrl}
             categoryName={relay.category}
+            categoryStyle={getCategoryStyle(
+              categories.findIndex((c) => c.name === relay.category),
+            )}
             variant={viewMode === "grid" ? "grid" : "row"}
             showBookmark
             initialBookmarked={relay.bookmarked}

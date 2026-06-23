@@ -12,6 +12,8 @@ import "../../../../style.css";
 import relayDetailStyle from "../css/RelayDetailDesktop.module.css";
 import { useRelayDetail } from "../Hook/useRelayDetail";
 import { useBookmark } from "../../../../Hook/useBookmark";
+import { useCategories } from "../../../../hooks/useCategories";
+import { getCategoryStyle } from "../../../../constants/categoryPalette";
 
 export default function RelayDetailDesktop() {
   const {
@@ -28,8 +30,13 @@ export default function RelayDetailDesktop() {
     detail?.id ?? 0,
     detail?.bookmarked ?? false,
   );
+  const { categories } = useCategories();
 
   if (!detail) return <div className="container" />;
+
+  const categoryStyle = getCategoryStyle(
+    categories.findIndex((c) => c.name === detail.category),
+  );
 
   return (
     <div className="container">
@@ -37,7 +44,16 @@ export default function RelayDetailDesktop() {
         <div className={relayDetailStyle.content}>
           <div className={relayDetailStyle.titleRow}>
             <span className="trip-h1">{detail.title}</span>
-            <span className={relayDetailStyle.statusBadge}>{detail.category}</span>
+            <span
+              className={relayDetailStyle.statusBadge}
+              style={{
+                backgroundColor: categoryStyle.tint,
+                borderColor: categoryStyle.color,
+                color: categoryStyle.color,
+              }}
+            >
+              {detail.category}
+            </span>
             <button
               type="button"
               className={relayDetailStyle.bookmarkBtn}
