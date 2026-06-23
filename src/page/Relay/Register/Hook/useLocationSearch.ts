@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useDebouncedValue } from "../../../../Hook/useDebounce";
 
 const KAKAO_REST_API_KEY = import.meta.env.VITE_KKAKO_REST_API_KEY;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -37,31 +38,8 @@ export const useLocationSearch = () => {
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
 
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const skipNextSearchRef = useRef(false);
-
-  useEffect(() => {
-    if (skipNextSearchRef.current) {
-      skipNextSearchRef.current = false;
-      return;
-    }
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    const keyword = address.trim();
-    if (!keyword) {
-      setSuggestions([]);
-      setIsSuggestionsOpen(false);
-      return;
-    }
-
-    debounceRef.current = setTimeout(() => {
-      searchPlaces(keyword);
-    }, SEARCH_DEBOUNCE_MS);
-
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [address]);
+  const debouncedAddress = useDebouncedValue(address, SEARCH_DEBOUNCE_MS);
 
   async function searchPlaces(keyword: string) {
     try {
@@ -89,6 +67,22 @@ export const useLocationSearch = () => {
       setIsSuggestionsOpen(false);
     }
   }
+
+  useEffect(() => {
+    if (skipNextSearchRef.current) {
+      skipNextSearchRef.current = false;
+      return;
+    }
+
+    const keyword = debouncedAddress.trim();
+    if (!keyword) {
+      setSuggestions([]);
+      setIsSuggestionsOpen(false);
+      return;
+    }
+
+    searchPlaces(keyword);
+  }, [debouncedAddress]);
 
   function selectSuggestion(suggestion: LocationSuggestion) {
     skipNextSearchRef.current = true;

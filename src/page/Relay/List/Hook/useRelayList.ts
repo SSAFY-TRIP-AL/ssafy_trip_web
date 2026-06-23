@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { getRelayList, type RelayItem, type RelaySortOption } from "../api/relayApi";
+import { useDebouncedValue } from "../../../../Hook/useDebounce";
 
 const PAGE_SIZE = 18;
+const SEARCH_DEBOUNCE_MS = 300;
 
 export type RelayViewMode = "grid" | "list";
 
@@ -16,15 +18,17 @@ export const useRelayList = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
+  const debouncedKeyword = useDebouncedValue(keyword, SEARCH_DEBOUNCE_MS);
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [keyword, category, orderBy]);
+  }, [debouncedKeyword, category, orderBy]);
 
   useEffect(() => {
     let active = true;
 
     getRelayList({
-      keyword,
+      keyword: debouncedKeyword,
       categoryId: category,
       orderBy,
       page: currentPage,
@@ -39,7 +43,7 @@ export const useRelayList = () => {
     return () => {
       active = false;
     };
-  }, [keyword, category, orderBy, currentPage]);
+  }, [debouncedKeyword, category, orderBy, currentPage]);
 
   return {
     keyword,
