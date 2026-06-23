@@ -86,7 +86,7 @@ interface CreatedRelayListResponseDto {
 }
 
 interface BookmarkListItemDto {
-  relayId: number;
+  id: number;
   title: string;
   category: string;
   participantCount: number;
@@ -127,7 +127,7 @@ const toCreatedRelayListResponse = (dto: CreatedRelayListResponseDto): MyPageRel
 
 const toBookmarkListResponse = (dto: BookmarkListResponseDto): MyPageRelayListResponse => ({
   items: dto.bookmarks.map((bookmark) => ({
-    id: bookmark.relayId,
+    id: bookmark.id,
     title: bookmark.title,
     content: bookmark.category,
     photoUrl: bookmark.photoUrl,
