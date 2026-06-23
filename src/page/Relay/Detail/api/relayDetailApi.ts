@@ -19,6 +19,8 @@ export interface RelayDetailResponse {
     content: string;
     createdAt: string;
   }[];
+
+  bookmarked: boolean;
 }
 
 export interface RelayPreviousStop {
@@ -38,6 +40,7 @@ export interface RelayDetailData {
   participantCount: number;
   coverImageUrl: string;
   previousStops: RelayPreviousStop[];
+  bookmarked: boolean;
 }
 
 export const getRelayDetail = async (id: number): Promise<RelayDetailData> => {
@@ -60,5 +63,6 @@ export const getRelayDetail = async (id: number): Promise<RelayDetailData> => {
       period: new Date(step.createdAt).toLocaleDateString(),
       participantCount: data.participantCount,
     })),
+    bookmarked: data.bookmarked,
   };
 };

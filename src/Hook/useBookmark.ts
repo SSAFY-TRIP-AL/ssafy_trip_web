@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addBookmark, removeBookmark } from "../api/bookmarkApi";
 
 export const useBookmark = (relayId: number, initialBookmarked = false) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
   const [isToggling, setIsToggling] = useState(false);
+
+  useEffect(() => {
+    setIsBookmarked(initialBookmarked);
+  }, [initialBookmarked]);
 
   const toggleBookmark = async () => {
     if (isToggling) return;
