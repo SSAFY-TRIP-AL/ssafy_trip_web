@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { isMobile } from "react-device-detect";
 import DesktopLayout from "./layout/DesktopLayout";
+import MobileLayout from "./layout/MobileLayout";
 import Main from "./page/Main/Main";
 import SignUp from "./page/auth/SignUp/SignUp";
 import Login from "./page/auth/Login/Login";
@@ -23,7 +25,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<DesktopLayout />}>
+      <Route path="/" element={isMobile ? <MobileLayout /> : <DesktopLayout />}>
         <Route index element={<Main />} />
         <Route path="/auth/signup" element={<SignUp />} />
         <Route path="/auth/login" element={<Login />} />

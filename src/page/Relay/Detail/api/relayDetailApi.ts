@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import api from "../../../../api/api";
 
 export interface RelayDetailResponse {
@@ -22,6 +23,8 @@ export interface RelayDetailResponse {
   }[];
 
   bookmarked: boolean;
+  content: ReactNode;
+  userName: ReactNode;
 }
 
 export interface RelayPreviousStop {

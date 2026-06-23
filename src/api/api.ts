@@ -1,6 +1,14 @@
-import axios from "axios";
+import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "../store/authStore";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+interface RetryableRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
+
+interface ReissueResponse {
+  message?: string;
+}
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -16,22 +24,22 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error: AxiosError) => Promise.reject(error),
 );
 
 // 응답 인터셉터
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryableRequestConfig | undefined;
 
     // 액세스 토큰 만료
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true; // 무한 루프 방지
 
       try {
         // 액세스 토큰 갱신 요청
-        const res = await axios.post(
+        const res = await axios.post<string>(
           "/auth/reissue",
           {},
           { withCredentials: true },
@@ -45,11 +53,11 @@ api.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axios(originalRequest);
         } else {
-          const error = res.data;
+          const reissueData = res.data as unknown as ReissueResponse;
           console.error("토큰 갱신 실패");
-          alert(error.message);
+          alert(reissueData.message);
         }
-      } catch (refreshError) {
+      } catch {
         const { logout } = useAuthStore.getState();
         logout();
         window.location.href = "/auth/login";

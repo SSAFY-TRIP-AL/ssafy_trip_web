@@ -1,7 +1,7 @@
 import "../../../../style.css";
 import "../../auth.css";
 import useLogin from "../../Hook/useLogin";
-import desktopStyle from "../css/LoginDesktop.module.css";
+import mobileStyle from "../css/LoginMobile.module.css";
 
 function GoogleIcon() {
   return (
@@ -62,19 +62,19 @@ const fields: {
   },
 ];
 
-export default function LoginDesktop() {
+export default function LoginMobile() {
   const { values, handleChange, handleSubmit } = useLogin();
 
   return (
-    <div className="container">
-      <div className="authContainer">
-        <span className="trip-h1">로그인</span>
-        <span className={`trip-body1 ${desktopStyle.loginText}`}>
+    <div className={mobileStyle.container}>
+      <div className={mobileStyle.authContainer}>
+        <span className="trip-h2">로그인</span>
+        <span className={`trip-body1 ${mobileStyle.loginText}`}>
           Trip Baton에 로그인하세요.
         </span>
         <form
           onSubmit={handleSubmit}
-          className={`authForm ${desktopStyle.loginForm}`}
+          className={`authForm ${mobileStyle.loginForm}`}
         >
           {fields.map(({ id, label, type, placeholder }) => {
             return (
@@ -96,20 +96,20 @@ export default function LoginDesktop() {
           <button type="submit" className="authBtn">
             로그인
           </button>
-          <div className={desktopStyle.divider}>
+          <div className={mobileStyle.divider}>
             <span>또는</span>
           </div>
-          <div className={desktopStyle.socialContainer}>
+          <div className={mobileStyle.socialContainer}>
             <button
               type="button"
-              className={`${desktopStyle.socialBtn} ${desktopStyle.googleBtn}`}
+              className={`${mobileStyle.socialBtn} ${mobileStyle.googleBtn}`}
             >
               <GoogleIcon />
               Google로 로그인
             </button>
             <button
               type="button"
-              className={`${desktopStyle.socialBtn} ${desktopStyle.kakaoBtn}`}
+              className={`${mobileStyle.socialBtn} ${mobileStyle.kakaoBtn}`}
             >
               <KakaoIcon />
               Kakao로 로그인

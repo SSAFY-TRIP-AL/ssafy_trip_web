@@ -9,7 +9,7 @@ import {
   Minus,
   Users,
 } from "lucide-react";
-import desktopStyle from "../css/MapDesktop.module.css";
+import mobileStyle from "../css/MapMobile.module.css";
 import "../../../style.css";
 import { useCategories } from "../../../hooks/useCategories";
 import { getCategoryStyle } from "../../../constants/categoryPalette";
@@ -123,7 +123,7 @@ function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
   return points;
 }
 
-export default function MapDesktop() {
+export default function MapMobile() {
   const navigate = useNavigate();
   const {
     keyword,
@@ -216,11 +216,11 @@ export default function MapDesktop() {
     markerInstancesRef.current.forEach(({ overlay }) => overlay.setMap(null));
     markerInstancesRef.current = relays.map((relay) => {
       const element = document.createElement("div");
-      element.className = desktopStyle.customMarker;
+      element.className = mobileStyle.customMarker;
       const pin = document.createElement("div");
-      pin.className = desktopStyle.customMarkerPin;
+      pin.className = mobileStyle.customMarkerPin;
       if (relay.id === selectedId) {
-        pin.classList.add(desktopStyle.customMarkerPinActive);
+        pin.classList.add(mobileStyle.customMarkerPinActive);
       }
       element.appendChild(pin);
       element.addEventListener("click", () => selectRelay(relay.id));
@@ -250,7 +250,7 @@ export default function MapDesktop() {
 
     const bounds = new window.kakao.maps.LatLngBounds();
     path.forEach((latlng) => bounds.extend(latlng));
-    map.setBounds(bounds, 80, 80, 80, 80);
+    map.setBounds(bounds, 60, 40, 60, 40);
 
     if (stops.length < 2) return;
 
@@ -266,7 +266,7 @@ export default function MapDesktop() {
 
     relayStopOverlaysRef.current = stops.map((stop, index) => {
       const dot = document.createElement("div");
-      dot.className = desktopStyle.relayStopDot;
+      dot.className = mobileStyle.relayStopDot;
       dot.textContent = String(index + 1);
       const overlay = new window.kakao.maps.CustomOverlay({
         position: new window.kakao.maps.LatLng(stop.latitude, stop.longitude),
@@ -289,7 +289,7 @@ export default function MapDesktop() {
         Math.PI;
 
       const arrow = document.createElement("div");
-      arrow.className = desktopStyle.relayDirectionArrow;
+      arrow.className = mobileStyle.relayDirectionArrow;
       arrow.style.transform = `rotate(${bearing}deg)`;
 
       const overlay = new window.kakao.maps.CustomOverlay({
@@ -309,7 +309,7 @@ export default function MapDesktop() {
     );
     flowDotOverlaysRef.current = flowPoints.map((point, index) => {
       const dot = document.createElement("div");
-      dot.className = desktopStyle.relayFlowDot;
+      dot.className = mobileStyle.relayFlowDot;
       dot.style.animationDelay = `${(index * 1.6) / FLOW_DOT_COUNT}s`;
       const overlay = new window.kakao.maps.CustomOverlay({
         position: new window.kakao.maps.LatLng(point.lat, point.lng),
@@ -356,12 +356,12 @@ export default function MapDesktop() {
   }
 
   return (
-    <div className={desktopStyle.mapPage}>
-      <div ref={mapContainerRef} className={desktopStyle.mapContainer} />
+    <div className={mobileStyle.mapPage}>
+      <div ref={mapContainerRef} className={mobileStyle.mapContainer} />
 
-      <div className={desktopStyle.searchHeader}>
-        <div className={desktopStyle.searchInputBox}>
-          <Search size={18} className={desktopStyle.searchIcon} />
+      <div className={mobileStyle.searchHeader}>
+        <div className={mobileStyle.searchInputBox}>
+          <Search size={18} className={mobileStyle.searchIcon} />
           <input
             type="text"
             placeholder="여행지, 도시, 명소를 검색하세요"
@@ -369,10 +369,10 @@ export default function MapDesktop() {
             onChange={(event) => setKeyword(event.target.value)}
           />
         </div>
-        <div className={desktopStyle.categoryWrapper} ref={categoryRef}>
+        <div className={mobileStyle.categoryWrapper} ref={categoryRef}>
           <button
             type="button"
-            className={desktopStyle.categorySelect}
+            className={mobileStyle.categorySelect}
             onClick={() => setIsCategoryOpen((prev) => !prev)}
           >
             <span>
@@ -383,12 +383,12 @@ export default function MapDesktop() {
             <ChevronDown size={16} />
           </button>
           {isCategoryOpen && (
-            <ul className={desktopStyle.categoryMenu}>
+            <ul className={mobileStyle.categoryMenu}>
               <li>
                 <button
                   type="button"
-                  className={`${desktopStyle.categoryOption} ${
-                    category === null ? desktopStyle.categoryOptionActive : ""
+                  className={`${mobileStyle.categoryOption} ${
+                    category === null ? mobileStyle.categoryOptionActive : ""
                   }`}
                   onClick={() => selectCategory(null)}
                 >
@@ -399,15 +399,15 @@ export default function MapDesktop() {
                 <li key={item.id}>
                   <button
                     type="button"
-                    className={`${desktopStyle.categoryOption} ${
+                    className={`${mobileStyle.categoryOption} ${
                       category === item.id
-                        ? desktopStyle.categoryOptionActive
+                        ? mobileStyle.categoryOptionActive
                         : ""
                     }`}
                     onClick={() => selectCategory(item.id)}
                   >
                     <span
-                      className={desktopStyle.categoryDot}
+                      className={mobileStyle.categoryDot}
                       style={{
                         backgroundColor: getCategoryStyle(index).color,
                       }}
@@ -421,84 +421,19 @@ export default function MapDesktop() {
         </div>
       </div>
 
-      {selected && (
-        <aside className={desktopStyle.detailPanel}>
-          <button
-            type="button"
-            className={desktopStyle.detailCloseBtn}
-            onClick={handleClosePanel}
-          >
-            <X size={18} />
-          </button>
-          <img
-            src={selected.photoUrl}
-            alt={selected.title}
-            className={desktopStyle.detailImage}
-          />
-          <div className={desktopStyle.detailBody}>
-            {(() => {
-              const index = Math.max(
-                0,
-                categories.findIndex((c) => c.name === selected.category),
-              );
-              const style = getCategoryStyle(index);
-              return (
-                <span
-                  className={desktopStyle.detailTag}
-                  style={{
-                    backgroundColor: style.tint,
-                    color: style.color,
-                  }}
-                >
-                  {selected.category}
-                </span>
-              );
-            })()}
-            <span className={desktopStyle.detailTitle}>{selected.title}</span>
-
-            <div className={desktopStyle.detailMetaRow}>
-              <span className={desktopStyle.detailMetaItem}>
-                <Users size={14} />
-                참여자 {selected.participantCount}명
-              </span>
-            </div>
-
-            <div className={desktopStyle.aiSummaryBox}>
-              <span className={desktopStyle.aiSummaryLabel}>AI 요약</span>
-              <p className={desktopStyle.aiSummaryPlaceholder}>
-                AI 요약 기능은 준비 중입니다.
-              </p>
-            </div>
-
-            <div className={desktopStyle.detailActions}>
-              <button type="button" className={desktopStyle.relayStartBtn}>
-                릴레이 시작하기
-              </button>
-              <button
-                type="button"
-                className={desktopStyle.relayDetailBtn}
-                onClick={() => navigate(`/relay/detail/${selected.id}`)}
-              >
-                릴레이 상세보기
-              </button>
-            </div>
-          </div>
-        </aside>
-      )}
-
-      <div className={desktopStyle.mapControls}>
+      <div className={mobileStyle.mapControls}>
         <button
           type="button"
-          className={desktopStyle.controlBtn}
+          className={mobileStyle.controlBtn}
           aria-label="내 위치로 이동"
           onClick={moveToMyLocation}
         >
           <LocateFixed size={18} />
         </button>
-        <div className={desktopStyle.zoomGroup}>
+        <div className={mobileStyle.zoomGroup}>
           <button
             type="button"
-            className={desktopStyle.controlBtn}
+            className={mobileStyle.controlBtn}
             aria-label="확대"
             onClick={zoomIn}
           >
@@ -506,7 +441,7 @@ export default function MapDesktop() {
           </button>
           <button
             type="button"
-            className={desktopStyle.controlBtn}
+            className={mobileStyle.controlBtn}
             aria-label="축소"
             onClick={zoomOut}
           >
@@ -514,6 +449,77 @@ export default function MapDesktop() {
           </button>
         </div>
       </div>
+
+      {selected && (
+        <>
+          <div className={mobileStyle.sheetBackdrop} onClick={handleClosePanel} />
+          <aside className={mobileStyle.detailSheet}>
+            <div className={mobileStyle.sheetHandle} />
+            <button
+              type="button"
+              className={mobileStyle.detailCloseBtn}
+              onClick={handleClosePanel}
+            >
+              <X size={18} />
+            </button>
+            <div className={mobileStyle.sheetScroll}>
+              <img
+                src={selected.photoUrl}
+                alt={selected.title}
+                className={mobileStyle.detailImage}
+              />
+              <div className={mobileStyle.detailBody}>
+                {(() => {
+                  const index = Math.max(
+                    0,
+                    categories.findIndex((c) => c.name === selected.category),
+                  );
+                  const style = getCategoryStyle(index);
+                  return (
+                    <span
+                      className={mobileStyle.detailTag}
+                      style={{
+                        backgroundColor: style.tint,
+                        color: style.color,
+                      }}
+                    >
+                      {selected.category}
+                    </span>
+                  );
+                })()}
+                <span className={mobileStyle.detailTitle}>{selected.title}</span>
+
+                <div className={mobileStyle.detailMetaRow}>
+                  <span className={mobileStyle.detailMetaItem}>
+                    <Users size={14} />
+                    참여자 {selected.participantCount}명
+                  </span>
+                </div>
+
+                <div className={mobileStyle.aiSummaryBox}>
+                  <span className={mobileStyle.aiSummaryLabel}>AI 요약</span>
+                  <p className={mobileStyle.aiSummaryPlaceholder}>
+                    AI 요약 기능은 준비 중입니다.
+                  </p>
+                </div>
+
+                <div className={mobileStyle.detailActions}>
+                  <button type="button" className={mobileStyle.relayStartBtn}>
+                    릴레이 시작하기
+                  </button>
+                  <button
+                    type="button"
+                    className={mobileStyle.relayDetailBtn}
+                    onClick={() => navigate(`/relay/detail/${selected.id}`)}
+                  >
+                    릴레이 상세보기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </>
+      )}
     </div>
   );
 }

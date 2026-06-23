@@ -1,3 +1,19 @@
+.container {
+  padding: 0 20px 40px;
+  box-sizing: border-box;
+}
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+.loginForm {
+  width: 100%;
+  padding: 24px 20px;
+  box-sizing: border-box;
+}
 .loginText {
   color: var(--color-gray-500);
 }
@@ -7,7 +23,6 @@
   gap: 16px;
   color: var(--color-gray-500);
 }
-
 .divider::before,
 .divider::after {
   content: "";
@@ -29,11 +44,10 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  height: 40px;
+  height: 44px;
   border-radius: var(--border-radius-10);
   font-size: 14px;
   font-weight: 500;
-  cursor: pointer;
 }
 .googleBtn {
   background-color: var(--color-pure-white);
