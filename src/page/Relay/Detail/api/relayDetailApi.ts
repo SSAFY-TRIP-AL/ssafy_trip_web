@@ -11,6 +11,7 @@ export interface RelayDetailResponse {
 
   steps: {
     stepOrder: number;
+    userName: string;
     locationName: string;
     address: string;
     latitude: number;
@@ -25,11 +26,13 @@ export interface RelayDetailResponse {
 
 export interface RelayPreviousStop {
   id: number;
+  userName: string;
   order: number;
   location: string;
   imageUrl: string;
   period: string;
   participantCount: number;
+  content: string;
 }
 
 export interface RelayDetailData {
@@ -57,11 +60,13 @@ export const getRelayDetail = async (id: number): Promise<RelayDetailData> => {
     coverImageUrl: data.steps.at(-1)?.photoUrl ?? "",
     previousStops: data.steps.map((step) => ({
       id: step.stepOrder,
+      userName: step.userName,
       order: step.stepOrder,
       location: step.locationName,
       imageUrl: step.photoUrl,
       period: new Date(step.createdAt).toLocaleDateString(),
       participantCount: data.participantCount,
+      content: step.content,
     })),
     bookmarked: data.bookmarked,
   };

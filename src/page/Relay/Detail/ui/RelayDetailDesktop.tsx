@@ -1,4 +1,13 @@
-import { ArrowRight, Calendar, ChevronRight, Heart, History, Sparkles, Users } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  ChevronRight,
+  Heart,
+  History,
+  Sparkles,
+  Users,
+  User,
+} from "lucide-react";
 import "../../../../style.css";
 import relayDetailStyle from "../css/RelayDetailDesktop.module.css";
 import { useRelayDetail } from "../Hook/useRelayDetail";
@@ -81,14 +90,15 @@ export default function RelayDetailDesktop() {
                     />
                     <div className={relayDetailStyle.stopInfo}>
                       <span className={relayDetailStyle.stopTitle}>{stop.location}</span>
+                      <p className={relayDetailStyle.stopContent}>{stop.content}</p>
                       <div className={relayDetailStyle.stopMeta}>
                         <span className={relayDetailStyle.stopMetaItem}>
                           <Calendar size={14} />
                           {stop.period}
                         </span>
                         <span className={relayDetailStyle.stopMetaItem}>
-                          <Users size={14} />
-                          참여자 {stop.participantCount}명
+                          <User size={14} />
+                          {stop.userName}
                         </span>
                       </div>
                     </div>
