@@ -109,6 +109,7 @@ export const useMyPage = () => {
       const updated = await updateMyProfile({ name: editName, profileImage });
       setProfile(updated);
       setIsEditOpen(false);
+      fetchProfile();
     } catch (error) {
       alert(error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.");
     }

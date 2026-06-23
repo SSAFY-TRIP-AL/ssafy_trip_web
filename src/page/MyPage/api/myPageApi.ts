@@ -144,8 +144,9 @@ export const getMyProfile = async (): Promise<MyProfile> => {
   return response.data;
 };
 
+// 프로필 수정하기
 export const updateMyProfile = async (payload: UpdateMyProfileRequest): Promise<MyProfile> => {
-  const response = await api.patch<MyProfile>("/users/me", payload);
+  const response = await api.put<MyProfile>("/users/me", payload);
   return response.data;
 };
 
