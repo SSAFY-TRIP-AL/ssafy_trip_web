@@ -10,6 +10,8 @@ export interface RelayItem {
   status: string;
   bookmarked: boolean;
   photoUrl: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface GetRelayListParams {
@@ -41,6 +43,8 @@ interface RelayListItemDto {
   createdAt: string;
   bookmarked: boolean;
   photoUrl: string;
+  latitude: number;
+  longitude: number;
 }
 
 interface RelayListResponseDto {
@@ -76,6 +80,8 @@ export const getRelayList = async (
       status: relay.status,
       bookmarked: relay.bookmarked,
       photoUrl: relay.photoUrl,
+      latitude: relay.latitude,
+      longitude: relay.longitude,
     })),
     totalCount: response.data.totalElements,
     totalPages: response.data.totalPages,

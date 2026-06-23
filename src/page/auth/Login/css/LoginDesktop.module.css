@@ -45,3 +45,12 @@
   border: none;
   color: #191919;
 }
+.loginForm > span {
+  display: flex;
+  justify-content: center;
+  color: var(--color-gray-500);
+}
+.loginForm > span > a {
+  margin-left: 5px;
+  color: var(--color-electric-blue);
+}

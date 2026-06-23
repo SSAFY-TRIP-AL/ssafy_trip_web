@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   ChevronDown,
-  LayoutGrid,
   X,
   LocateFixed,
   Plus,
   Minus,
+  Users,
 } from "lucide-react";
 import desktopStyle from "../css/MapDesktop.module.css";
 import "../../../style.css";
 import { useCategories } from "../../../hooks/useCategories";
 import { getCategoryStyle } from "../../../constants/categoryPalette";
+import { useMap } from "../Hook/useMap";
 
 interface KakaoLatLng {
   getLat(): number;
@@ -83,84 +85,7 @@ const KAKAO_JAVASCRIPT_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_API_KEY;
 const KOREA_CENTER = { lat: 36.5, lng: 127.8 };
 const KOREA_ZOOM_LEVEL = 12;
 const MY_LOCATION_ZOOM_LEVEL = 5;
-
-const markers = [
-  {
-    id: 1,
-    name: "서울 남산타워",
-    categoryId: 3,
-    lat: 37.5512,
-    lng: 126.9882,
-    image: "https://picsum.photos/seed/namsan/480/320",
-    summary:
-      "서울의 대표적인 랜드마크로, 아름다운 전망과 야경을 감상할 수 있는 곳입니다.",
-    participants: 128,
-    duration: "2~3시간",
-  },
-  {
-    id: 2,
-    name: "서울 가로수길",
-    categoryId: 3,
-    lat: 37.5196,
-    lng: 127.0227,
-    image: "https://picsum.photos/seed/garosugil/480/320",
-    summary: "트렌디한 카페와 편집숍이 모여있는 서울의 대표 산책 거리입니다.",
-    participants: 76,
-    duration: "2시간",
-  },
-  {
-    id: 3,
-    name: "이태원 거리",
-    categoryId: 2,
-    lat: 37.5345,
-    lng: 126.9947,
-    image: "https://picsum.photos/seed/itaewon/480/320",
-    summary: "다양한 나라의 음식과 문화를 한 번에 경험할 수 있는 거리입니다.",
-    participants: 102,
-    duration: "3시간",
-  },
-  {
-    id: 4,
-    name: "부산 해운대",
-    categoryId: 4,
-    lat: 35.1587,
-    lng: 129.1604,
-    image: "https://picsum.photos/seed/haeundae/480/320",
-    summary: "다양한 액티비티와 먹거리가 가득한 부산의 대표 해변입니다.",
-    participants: 152,
-    duration: "하루",
-  },
-  {
-    id: 5,
-    name: "부산 광안리",
-    categoryId: 5,
-    lat: 35.1532,
-    lng: 129.1186,
-    image: "https://picsum.photos/seed/gwangalli/480/320",
-    summary: "광안대교의 야경과 함께 신선한 해산물을 즐길 수 있는 해변입니다.",
-    participants: 88,
-    duration: "반나절",
-  },
-];
-
-const relays = [
-  { id: 1, name: "서울 도심 릴레이", markerIds: [2, 3, 1] },
-  { id: 2, name: "부산 해변 릴레이", markerIds: [5, 4] },
-];
-
 const FLOW_DOT_COUNT = 6;
-
-function findRelayByLastMarkerId(markerId: number) {
-  return (
-    relays.find(
-      (relay) => relay.markerIds[relay.markerIds.length - 1] === markerId,
-    ) ?? null
-  );
-}
-
-function isRelayEndpoint(markerId: number) {
-  return findRelayByLastMarkerId(markerId) !== null;
-}
 
 function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
   const segments: {
@@ -199,23 +124,33 @@ function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
 }
 
 export default function MapDesktop() {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [activeCategoryId, setActiveCategoryId] = useState<number | null>(
-    null,
-  );
+  const navigate = useNavigate();
+  const {
+    keyword,
+    setKeyword,
+    category,
+    setCategory,
+    relays,
+    selectedId,
+    route,
+    selectRelay,
+    closeRelay,
+  } = useMap();
+
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isMapReady, setIsMapReady] = useState(false);
   const { categories } = useCategories();
   const categoryRef = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<KakaoMapInstance | null>(null);
   const markerInstancesRef = useRef<
-    { id: number; categoryId: number; instance: KakaoOverlay }[]
+    { id: number; instance: KakaoOverlay }[]
   >([]);
   const polylineInstancesRef = useRef<KakaoOverlay[]>([]);
   const flowDotOverlaysRef = useRef<KakaoOverlay[]>([]);
   const relayStopOverlaysRef = useRef<KakaoOverlay[]>([]);
 
-  const selected = markers.find((marker) => marker.id === selectedId) ?? null;
+  const selected = relays.find((relay) => relay.id === selectedId) ?? null;
 
   function clearRelayPath() {
     polylineInstancesRef.current.forEach((line) => line.setMap(null));
@@ -226,75 +161,8 @@ export default function MapDesktop() {
     relayStopOverlaysRef.current = [];
   }
 
-  function drawRelayPath(markerId: number) {
-    clearRelayPath();
-    const map = mapInstanceRef.current;
-    const relay = findRelayByLastMarkerId(markerId);
-    if (!map || !relay) return;
-
-    const stops = relay.markerIds
-      .map((id) => markers.find((marker) => marker.id === id))
-      .filter((marker): marker is (typeof markers)[number] => Boolean(marker));
-    if (stops.length < 2) return;
-
-    const path = stops.map(
-      (stop) => new window.kakao.maps.LatLng(stop.lat, stop.lng),
-    );
-
-    const bounds = new window.kakao.maps.LatLngBounds();
-    path.forEach((latlng) => bounds.extend(latlng));
-    map.setBounds(bounds, 80, 80, 80, 80);
-
-    const polyline = new window.kakao.maps.Polyline({
-      path,
-      strokeWeight: 3,
-      strokeColor: "#2340fa",
-      strokeOpacity: 0.6,
-      strokeStyle: "shortdash",
-    });
-    polyline.setMap(map);
-    polylineInstancesRef.current.push(polyline);
-
-    relayStopOverlaysRef.current = stops
-      .filter((stop) => stop.id !== markerId)
-      .map((stop) => {
-        const dot = document.createElement("div");
-        dot.className = desktopStyle.relayStopDot;
-        const overlay = new window.kakao.maps.CustomOverlay({
-          position: new window.kakao.maps.LatLng(stop.lat, stop.lng),
-          content: dot,
-          xAnchor: 0.5,
-          yAnchor: 0.5,
-          zIndex: 4,
-        });
-        overlay.setMap(map);
-        return overlay;
-      });
-
-    const flowPoints = buildFlowPoints(stops, FLOW_DOT_COUNT);
-    flowDotOverlaysRef.current = flowPoints.map((point, index) => {
-      const dot = document.createElement("div");
-      dot.className = desktopStyle.relayFlowDot;
-      dot.style.animationDelay = `${(index * 1.6) / FLOW_DOT_COUNT}s`;
-      const overlay = new window.kakao.maps.CustomOverlay({
-        position: new window.kakao.maps.LatLng(point.lat, point.lng),
-        content: dot,
-        xAnchor: 0.5,
-        yAnchor: 0.5,
-        zIndex: 5,
-      });
-      overlay.setMap(map);
-      return overlay;
-    });
-  }
-
-  function handleMarkerSelect(markerId: number) {
-    setSelectedId(markerId);
-    drawRelayPath(markerId);
-  }
-
   function handleClosePanel() {
-    setSelectedId(null);
+    closeRelay();
     clearRelayPath();
   }
 
@@ -329,19 +197,7 @@ export default function MapDesktop() {
           level: KOREA_ZOOM_LEVEL,
         });
         mapInstanceRef.current = map;
-
-        markerInstancesRef.current = markers
-          .filter((marker) => isRelayEndpoint(marker.id))
-          .map((marker) => {
-            const instance = new window.kakao.maps.Marker({
-              position: new window.kakao.maps.LatLng(marker.lat, marker.lng),
-              map,
-            });
-            window.kakao.maps.event.addListener(instance, "click", () => {
-              handleMarkerSelect(marker.id);
-            });
-            return { id: marker.id, categoryId: marker.categoryId, instance };
-          });
+        setIsMapReady(true);
       });
     };
 
@@ -351,15 +207,85 @@ export default function MapDesktop() {
   }, []);
 
   useEffect(() => {
-    markerInstancesRef.current.forEach(({ categoryId, instance }) => {
-      const visible =
-        activeCategoryId == null || categoryId === activeCategoryId;
-      instance.setMap(visible ? mapInstanceRef.current : null);
+    const map = mapInstanceRef.current;
+    if (!isMapReady || !map) return;
+
+    markerInstancesRef.current.forEach(({ instance }) => instance.setMap(null));
+    markerInstancesRef.current = relays.map((relay) => {
+      const instance = new window.kakao.maps.Marker({
+        position: new window.kakao.maps.LatLng(relay.latitude, relay.longitude),
+        map,
+      });
+      window.kakao.maps.event.addListener(instance, "click", () => {
+        selectRelay(relay.id);
+      });
+      return { id: relay.id, instance };
     });
-  }, [activeCategoryId]);
+  }, [isMapReady, relays, selectRelay]);
+
+  useEffect(() => {
+    clearRelayPath();
+    const map = mapInstanceRef.current;
+    if (!map || !route || route.steps.length === 0) return;
+
+    const stops = [...route.steps].sort((a, b) => a.stepOrder - b.stepOrder);
+
+    const path = stops.map(
+      (stop) => new window.kakao.maps.LatLng(stop.latitude, stop.longitude),
+    );
+
+    const bounds = new window.kakao.maps.LatLngBounds();
+    path.forEach((latlng) => bounds.extend(latlng));
+    map.setBounds(bounds, 80, 80, 80, 80);
+
+    if (stops.length < 2) return;
+
+    const polyline = new window.kakao.maps.Polyline({
+      path,
+      strokeWeight: 3,
+      strokeColor: "#2340fa",
+      strokeOpacity: 0.6,
+      strokeStyle: "shortdash",
+    });
+    polyline.setMap(map);
+    polylineInstancesRef.current.push(polyline);
+
+    relayStopOverlaysRef.current = stops.map((stop) => {
+      const dot = document.createElement("div");
+      dot.className = desktopStyle.relayStopDot;
+      const overlay = new window.kakao.maps.CustomOverlay({
+        position: new window.kakao.maps.LatLng(stop.latitude, stop.longitude),
+        content: dot,
+        xAnchor: 0.5,
+        yAnchor: 0.5,
+        zIndex: 4,
+      });
+      overlay.setMap(map);
+      return overlay;
+    });
+
+    const flowPoints = buildFlowPoints(
+      stops.map((stop) => ({ lat: stop.latitude, lng: stop.longitude })),
+      FLOW_DOT_COUNT,
+    );
+    flowDotOverlaysRef.current = flowPoints.map((point, index) => {
+      const dot = document.createElement("div");
+      dot.className = desktopStyle.relayFlowDot;
+      dot.style.animationDelay = `${(index * 1.6) / FLOW_DOT_COUNT}s`;
+      const overlay = new window.kakao.maps.CustomOverlay({
+        position: new window.kakao.maps.LatLng(point.lat, point.lng),
+        content: dot,
+        xAnchor: 0.5,
+        yAnchor: 0.5,
+        zIndex: 5,
+      });
+      overlay.setMap(map);
+      return overlay;
+    });
+  }, [route]);
 
   function selectCategory(categoryId: number | null) {
-    setActiveCategoryId(categoryId);
+    setCategory(categoryId);
     setIsCategoryOpen(false);
     handleClosePanel();
   }
@@ -397,7 +323,12 @@ export default function MapDesktop() {
       <div className={desktopStyle.searchHeader}>
         <div className={desktopStyle.searchInputBox}>
           <Search size={18} className={desktopStyle.searchIcon} />
-          <input type="text" placeholder="여행지, 도시, 명소를 검색하세요" />
+          <input
+            type="text"
+            placeholder="여행지, 도시, 명소를 검색하세요"
+            value={keyword}
+            onChange={(event) => setKeyword(event.target.value)}
+          />
         </div>
         <div className={desktopStyle.categoryWrapper} ref={categoryRef}>
           <button
@@ -405,10 +336,9 @@ export default function MapDesktop() {
             className={desktopStyle.categorySelect}
             onClick={() => setIsCategoryOpen((prev) => !prev)}
           >
-            <LayoutGrid size={16} />
             <span>
-              {activeCategoryId != null
-                ? categories.find((c) => c.id === activeCategoryId)?.name
+              {category != null
+                ? categories.find((c) => c.id === category)?.name
                 : "카테고리"}
             </span>
             <ChevronDown size={16} />
@@ -419,25 +349,23 @@ export default function MapDesktop() {
                 <button
                   type="button"
                   className={`${desktopStyle.categoryOption} ${
-                    activeCategoryId === null
-                      ? desktopStyle.categoryOptionActive
-                      : ""
+                    category === null ? desktopStyle.categoryOptionActive : ""
                   }`}
                   onClick={() => selectCategory(null)}
                 >
                   전체
                 </button>
               </li>
-              {categories.map((category, index) => (
-                <li key={category.id}>
+              {categories.map((item, index) => (
+                <li key={item.id}>
                   <button
                     type="button"
                     className={`${desktopStyle.categoryOption} ${
-                      activeCategoryId === category.id
+                      category === item.id
                         ? desktopStyle.categoryOptionActive
                         : ""
                     }`}
-                    onClick={() => selectCategory(category.id)}
+                    onClick={() => selectCategory(item.id)}
                   >
                     <span
                       className={desktopStyle.categoryDot}
@@ -445,16 +373,13 @@ export default function MapDesktop() {
                         backgroundColor: getCategoryStyle(index).color,
                       }}
                     />
-                    {category.name}
+                    {item.name}
                   </button>
                 </li>
               ))}
             </ul>
           )}
         </div>
-        <button type="button" className={desktopStyle.searchBtn}>
-          검색
-        </button>
       </div>
 
       {selected && (
@@ -467,19 +392,17 @@ export default function MapDesktop() {
             <X size={18} />
           </button>
           <img
-            src={selected.image}
-            alt={selected.name}
+            src={selected.photoUrl}
+            alt={selected.title}
             className={desktopStyle.detailImage}
           />
           <div className={desktopStyle.detailBody}>
             {(() => {
-              const index = categories.findIndex(
-                (c) => c.id === selected.categoryId,
+              const index = Math.max(
+                0,
+                categories.findIndex((c) => c.name === selected.category),
               );
               const style = getCategoryStyle(index);
-              const category = categories.find(
-                (c) => c.id === selected.categoryId,
-              );
               return (
                 <span
                   className={desktopStyle.detailTag}
@@ -488,17 +411,35 @@ export default function MapDesktop() {
                     color: style.color,
                   }}
                 >
-                  {category?.name}
+                  {selected.category}
                 </span>
               );
             })()}
-            <span className={desktopStyle.detailTitle}>{selected.name}</span>
-            <p className={desktopStyle.detailSummary}>{selected.summary}</p>
+            <span className={desktopStyle.detailTitle}>{selected.title}</span>
+
+            <div className={desktopStyle.detailMetaRow}>
+              <span className={desktopStyle.detailMetaItem}>
+                <Users size={14} />
+                참여자 {selected.participantCount}명
+              </span>
+            </div>
+
+            <div className={desktopStyle.aiSummaryBox}>
+              <span className={desktopStyle.aiSummaryLabel}>AI 요약</span>
+              <p className={desktopStyle.aiSummaryPlaceholder}>
+                AI 요약 기능은 준비 중입니다.
+              </p>
+            </div>
+
             <div className={desktopStyle.detailActions}>
               <button type="button" className={desktopStyle.relayStartBtn}>
                 릴레이 시작하기
               </button>
-              <button type="button" className={desktopStyle.relayDetailBtn}>
+              <button
+                type="button"
+                className={desktopStyle.relayDetailBtn}
+                onClick={() => navigate(`/relay/detail/${selected.id}`)}
+              >
                 릴레이 상세보기
               </button>
             </div>

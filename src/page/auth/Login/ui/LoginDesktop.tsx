@@ -72,7 +72,10 @@ export default function LoginDesktop() {
         <span className={`trip-body1 ${desktopStyle.loginText}`}>
           Trip Baton에 로그인하세요.
         </span>
-        <form onSubmit={handleSubmit} className="authForm">
+        <form
+          onSubmit={handleSubmit}
+          className={`authForm ${desktopStyle.loginForm}`}
+        >
           {fields.map(({ id, label, type, placeholder }) => {
             return (
               <div key={id} className="authField">
@@ -112,6 +115,9 @@ export default function LoginDesktop() {
               Kakao로 로그인
             </button>
           </div>
+          <span>
+            계정이 없으신가요?<a href="/auth/signup">회원가입</a>
+          </span>
         </form>
       </div>
     </div>
