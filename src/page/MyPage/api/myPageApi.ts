@@ -88,9 +88,11 @@ interface CreatedRelayListResponseDto {
 interface BookmarkListItemDto {
   id: number;
   title: string;
+  content: string;
   category: string;
   participantCount: number;
   photoUrl: string;
+  date: string;
 }
 
 interface BookmarkListResponseDto {
@@ -99,7 +101,9 @@ interface BookmarkListResponseDto {
   totalPages: number;
 }
 
-const toMyRelayListResponse = (dto: MyRelayListResponseDto): MyPageRelayListResponse => ({
+const toMyRelayListResponse = (
+  dto: MyRelayListResponseDto,
+): MyPageRelayListResponse => ({
   items: dto.relays.map((relay) => ({
     id: relay.id,
     title: relay.title,
@@ -112,7 +116,9 @@ const toMyRelayListResponse = (dto: MyRelayListResponseDto): MyPageRelayListResp
   totalPages: dto.totalPages,
 });
 
-const toCreatedRelayListResponse = (dto: CreatedRelayListResponseDto): MyPageRelayListResponse => ({
+const toCreatedRelayListResponse = (
+  dto: CreatedRelayListResponseDto,
+): MyPageRelayListResponse => ({
   items: dto.relays.map((relay) => ({
     id: relay.id,
     title: relay.title,
@@ -125,14 +131,16 @@ const toCreatedRelayListResponse = (dto: CreatedRelayListResponseDto): MyPageRel
   totalPages: dto.totalPages,
 });
 
-const toBookmarkListResponse = (dto: BookmarkListResponseDto): MyPageRelayListResponse => ({
+const toBookmarkListResponse = (
+  dto: BookmarkListResponseDto,
+): MyPageRelayListResponse => ({
   items: dto.bookmarks.map((bookmark) => ({
     id: bookmark.id,
     title: bookmark.title,
-    content: bookmark.category,
+    content: bookmark.content,
     photoUrl: bookmark.photoUrl,
+    date: bookmark.date,
     status: "",
-    date: "",
   })),
   totalCount: dto.totalElements,
   totalPages: dto.totalPages,
@@ -145,7 +153,9 @@ export const getMyProfile = async (): Promise<MyProfile> => {
 };
 
 // 프로필 수정하기
-export const updateMyProfile = async (payload: UpdateMyProfileRequest): Promise<MyProfile> => {
+export const updateMyProfile = async (
+  payload: UpdateMyProfileRequest,
+): Promise<MyProfile> => {
   const response = await api.put<MyProfile>("/users/me", payload);
   return response.data;
 };
@@ -157,7 +167,9 @@ export const withdrawMyAccount = async () => {
 };
 
 // 내가 참여한 릴레이 리스트
-export const getMyRelays = async (params?: MyPageListParams): Promise<MyPageRelayListResponse> => {
+export const getMyRelays = async (
+  params?: MyPageListParams,
+): Promise<MyPageRelayListResponse> => {
   const response = await api.get<MyRelayListResponseDto>("/users/me/relays", {
     params: toMyPageListQuery(params),
     paramsSerializer: { indexes: null },
@@ -169,10 +181,13 @@ export const getMyRelays = async (params?: MyPageListParams): Promise<MyPageRela
 export const getMyBookmarks = async (
   params?: MyPageListParams,
 ): Promise<MyPageRelayListResponse> => {
-  const response = await api.get<BookmarkListResponseDto>("/users/me/bookmarks", {
-    params: toMyPageListQuery(params),
-    paramsSerializer: { indexes: null },
-  });
+  const response = await api.get<BookmarkListResponseDto>(
+    "/users/me/bookmarks",
+    {
+      params: toMyPageListQuery(params),
+      paramsSerializer: { indexes: null },
+    },
+  );
   return toBookmarkListResponse(response.data);
 };
 
@@ -180,9 +195,12 @@ export const getMyBookmarks = async (
 export const getMyCreatedRelays = async (
   params?: MyPageListParams,
 ): Promise<MyPageRelayListResponse> => {
-  const response = await api.get<CreatedRelayListResponseDto>("/users/me/relays/created", {
-    params: toMyPageListQuery(params),
-    paramsSerializer: { indexes: null },
-  });
+  const response = await api.get<CreatedRelayListResponseDto>(
+    "/users/me/relays/created",
+    {
+      params: toMyPageListQuery(params),
+      paramsSerializer: { indexes: null },
+    },
+  );
   return toCreatedRelayListResponse(response.data);
 };
