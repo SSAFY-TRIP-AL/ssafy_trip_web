@@ -1,6 +1,7 @@
 import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookmark } from "../../Hook/useBookmark";
+import type { CategoryStyle } from "../../constants/categoryPalette";
 import cardStyle from "./RelayCard.module.css";
 
 export type RelayCardVariant = "grid" | "row";
@@ -11,8 +12,10 @@ export interface RelayCardProps {
   description: string;
   imageUrl: string;
   categoryName?: string;
+  categoryStyle?: CategoryStyle;
   variant?: RelayCardVariant;
   showBookmark?: boolean;
+  initialBookmarked?: boolean;
 }
 
 export default function RelayCard({
@@ -21,11 +24,13 @@ export default function RelayCard({
   description,
   imageUrl,
   categoryName,
+  categoryStyle,
   variant = "grid",
   showBookmark = false,
+  initialBookmarked = false,
 }: RelayCardProps) {
   const navigate = useNavigate();
-  const { isBookmarked, toggleBookmark } = useBookmark(id);
+  const { isBookmarked, toggleBookmark } = useBookmark(id, initialBookmarked);
 
   return (
     <div
@@ -33,8 +38,23 @@ export default function RelayCard({
       onClick={() => navigate(`/relay/detail/${id}`)}
     >
       <div className={cardStyle.cardImageWrap}>
-        <img src={imageUrl} alt={title} className={cardStyle.cardImage} />
-        {categoryName && <span className={cardStyle.categoryBadge}>{categoryName}</span>}
+        {imageUrl ? (
+          <img src={imageUrl} alt={title} className={cardStyle.cardImage} />
+        ) : (
+          <div className={cardStyle.cardImagePlaceholder} />
+        )}
+        {categoryName && (
+          <span
+            className={cardStyle.categoryBadge}
+            style={
+              categoryStyle
+                ? { backgroundColor: categoryStyle.tint, color: categoryStyle.color }
+                : undefined
+            }
+          >
+            {categoryName}
+          </span>
+        )}
         {showBookmark && (
           <button
             type="button"

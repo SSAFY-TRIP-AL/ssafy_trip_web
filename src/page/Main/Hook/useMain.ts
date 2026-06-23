@@ -28,5 +28,9 @@ export const useMain = () => {
     navigate("/map");
   };
 
-  return { mainInfo, goMap };
+  const goRelayList = () => {
+    navigate("/relay/list");
+  };
+
+  return { mainInfo, goMap, goRelayList };
 };
