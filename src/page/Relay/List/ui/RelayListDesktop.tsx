@@ -254,6 +254,7 @@ export default function RelayListDesktop() {
               categories.find((item) => item.id === relay.categoryId)?.name
             }
             variant={viewMode === "grid" ? "grid" : "row"}
+            showBookmark
           />
         ))}
       </div>
