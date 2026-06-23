@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  getRelayList,
-  type RelayItem,
-  type RelaySortOption,
-} from "../api/relayApi";
+import { getRelayList, type RelayItem, type RelaySortOption } from "../api/relayApi";
 
 const PAGE_SIZE = 18;
 
@@ -12,7 +8,7 @@ export type RelayViewMode = "grid" | "list";
 export const useRelayList = () => {
   const [keyword, setKeyword] = useState("");
   const [category, setCategory] = useState<number | null>(null);
-  const [sort, setSort] = useState<RelaySortOption>("latest");
+  const [orderBy, setOrderBy] = useState<RelaySortOption>("latest");
   const [viewMode, setViewMode] = useState<RelayViewMode>("grid");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -22,7 +18,7 @@ export const useRelayList = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [keyword, category, sort]);
+  }, [keyword, category, orderBy]);
 
   useEffect(() => {
     let active = true;
@@ -30,28 +26,28 @@ export const useRelayList = () => {
     getRelayList({
       keyword,
       categoryId: category,
-      sort,
+      orderBy,
       page: currentPage,
       pageSize: PAGE_SIZE,
     }).then((response) => {
       if (!active) return;
       setItems(response.items);
       setTotalCount(response.totalCount);
-      setTotalPages(response.totalPages);
+      setTotalPages(Math.max(1, response.totalPages));
     });
 
     return () => {
       active = false;
     };
-  }, [keyword, category, sort, currentPage]);
+  }, [keyword, category, orderBy, currentPage]);
 
   return {
     keyword,
     setKeyword,
     category,
     setCategory,
-    sort,
-    setSort,
+    orderBy,
+    setOrderBy,
     viewMode,
     setViewMode,
     currentPage,

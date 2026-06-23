@@ -41,8 +41,8 @@ export default function RelayListDesktop() {
     setKeyword,
     category,
     setCategory,
-    sort,
-    setSort,
+    orderBy,
+    setOrderBy,
     viewMode,
     setViewMode,
     currentPage,
@@ -60,10 +60,7 @@ export default function RelayListDesktop() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        categoryRef.current &&
-        !categoryRef.current.contains(event.target as Node)
-      ) {
+      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
         setIsCategoryOpen(false);
       }
       if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
@@ -74,8 +71,7 @@ export default function RelayListDesktop() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const sortLabel =
-    RELAY_SORT_OPTIONS.find((option) => option.id === sort)?.label ?? "최신순";
+  const sortLabel = RELAY_SORT_OPTIONS.find((option) => option.id === orderBy)?.label ?? "최신순";
   const pageNumbers = getPageNumbers(currentPage, totalPages);
 
   return (
@@ -131,9 +127,7 @@ export default function RelayListDesktop() {
                   <button
                     type="button"
                     className={`${relayListStyle.dropdownOption} ${
-                      category === null
-                        ? relayListStyle.dropdownOptionActive
-                        : ""
+                      category === null ? relayListStyle.dropdownOptionActive : ""
                     }`}
                     onClick={() => {
                       setCategory(null);
@@ -148,9 +142,7 @@ export default function RelayListDesktop() {
                     <button
                       type="button"
                       className={`${relayListStyle.dropdownOption} ${
-                        category === item.id
-                          ? relayListStyle.dropdownOptionActive
-                          : ""
+                        category === item.id ? relayListStyle.dropdownOptionActive : ""
                       }`}
                       onClick={() => {
                         setCategory(item.id);
@@ -190,12 +182,10 @@ export default function RelayListDesktop() {
                     <button
                       type="button"
                       className={`${relayListStyle.dropdownOption} ${
-                        sort === option.id
-                          ? relayListStyle.dropdownOptionActive
-                          : ""
+                        orderBy === option.id ? relayListStyle.dropdownOptionActive : ""
                       }`}
                       onClick={() => {
-                        setSort(option.id);
+                        setOrderBy(option.id);
                         setIsSortOpen(false);
                       }}
                     >
@@ -231,30 +221,21 @@ export default function RelayListDesktop() {
           </div>
         </div>
 
-        <span className={relayListStyle.resultCount}>
-          총 {totalCount}개의 릴레이가 있습니다.
-        </span>
+        <span className={relayListStyle.resultCount}>총 {totalCount}개의 릴레이가 있습니다.</span>
       </div>
 
-      <div
-        className={
-          viewMode === "grid"
-            ? relayListStyle.cardGrid
-            : relayListStyle.cardListWrap
-        }
-      >
+      <div className={viewMode === "grid" ? relayListStyle.cardGrid : relayListStyle.cardListWrap}>
         {items.map((relay) => (
           <RelayCard
             key={relay.id}
             id={relay.id}
             title={relay.title}
-            description={relay.description}
-            imageUrl={relay.imageUrl}
-            categoryName={
-              categories.find((item) => item.id === relay.categoryId)?.name
-            }
+            description={`참여자 ${relay.participantCount}명`}
+            imageUrl={relay.photoUrl}
+            categoryName={relay.category}
             variant={viewMode === "grid" ? "grid" : "row"}
             showBookmark
+            initialBookmarked={relay.bookmarked}
           />
         ))}
       </div>
@@ -271,10 +252,7 @@ export default function RelayListDesktop() {
         </button>
         {pageNumbers.map((page, index) =>
           page === "..." ? (
-            <span
-              key={`ellipsis-${index}`}
-              className={relayListStyle.pageEllipsis}
-            >
+            <span key={`ellipsis-${index}`} className={relayListStyle.pageEllipsis}>
               ...
             </span>
           ) : (
@@ -295,9 +273,7 @@ export default function RelayListDesktop() {
           className={relayListStyle.pageArrowBtn}
           aria-label="다음 페이지"
           disabled={currentPage === totalPages}
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-          }
+          onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
         >
           <ChevronRight size={16} />
         </button>
