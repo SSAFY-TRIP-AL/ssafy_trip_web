@@ -1,7 +1,8 @@
-import { ArrowRight, Calendar, ChevronRight, History, Sparkles, Users } from "lucide-react";
+import { ArrowRight, Calendar, ChevronRight, Heart, History, Sparkles, Users } from "lucide-react";
 import "../../../../style.css";
 import relayDetailStyle from "../css/RelayDetailDesktop.module.css";
 import { useRelayDetail } from "../Hook/useRelayDetail";
+import { useBookmark } from "../../../../Hook/useBookmark";
 
 export default function RelayDetailDesktop() {
   const {
@@ -14,6 +15,7 @@ export default function RelayDetailDesktop() {
     fetchRecommendations,
     goAddRelayStep,
   } = useRelayDetail();
+  const { isBookmarked, toggleBookmark } = useBookmark(detail?.id ?? 0);
 
   if (!detail) return <div className="container" />;
 
@@ -24,6 +26,18 @@ export default function RelayDetailDesktop() {
           <div className={relayDetailStyle.titleRow}>
             <span className="trip-h1">{detail.title}</span>
             <span className={relayDetailStyle.statusBadge}>{detail.category}</span>
+            <button
+              type="button"
+              className={relayDetailStyle.bookmarkBtn}
+              aria-label={isBookmarked ? "북마크 해제" : "북마크 추가"}
+              onClick={toggleBookmark}
+            >
+              <Heart
+                size={24}
+                fill={isBookmarked ? "#ef4444" : "none"}
+                color={isBookmarked ? "#ef4444" : "var(--color-gray-300)"}
+              />
+            </button>
           </div>
 
           <div className={relayDetailStyle.metaRow}>
