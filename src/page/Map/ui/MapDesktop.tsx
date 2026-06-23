@@ -144,11 +144,12 @@ export default function MapDesktop() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<KakaoMapInstance | null>(null);
   const markerInstancesRef = useRef<
-    { id: number; instance: KakaoOverlay }[]
+    { id: number; overlay: KakaoOverlay; element: HTMLDivElement }[]
   >([]);
   const polylineInstancesRef = useRef<KakaoOverlay[]>([]);
   const flowDotOverlaysRef = useRef<KakaoOverlay[]>([]);
   const relayStopOverlaysRef = useRef<KakaoOverlay[]>([]);
+  const directionArrowOverlaysRef = useRef<KakaoOverlay[]>([]);
 
   const selected = relays.find((relay) => relay.id === selectedId) ?? null;
 
@@ -159,6 +160,8 @@ export default function MapDesktop() {
     flowDotOverlaysRef.current = [];
     relayStopOverlaysRef.current.forEach((overlay) => overlay.setMap(null));
     relayStopOverlaysRef.current = [];
+    directionArrowOverlaysRef.current.forEach((overlay) => overlay.setMap(null));
+    directionArrowOverlaysRef.current = [];
   }
 
   function handleClosePanel() {
@@ -210,18 +213,29 @@ export default function MapDesktop() {
     const map = mapInstanceRef.current;
     if (!isMapReady || !map) return;
 
-    markerInstancesRef.current.forEach(({ instance }) => instance.setMap(null));
+    markerInstancesRef.current.forEach(({ overlay }) => overlay.setMap(null));
     markerInstancesRef.current = relays.map((relay) => {
-      const instance = new window.kakao.maps.Marker({
+      const element = document.createElement("div");
+      element.className = desktopStyle.customMarker;
+      const pin = document.createElement("div");
+      pin.className = desktopStyle.customMarkerPin;
+      if (relay.id === selectedId) {
+        pin.classList.add(desktopStyle.customMarkerPinActive);
+      }
+      element.appendChild(pin);
+      element.addEventListener("click", () => selectRelay(relay.id));
+
+      const overlay = new window.kakao.maps.CustomOverlay({
         position: new window.kakao.maps.LatLng(relay.latitude, relay.longitude),
-        map,
+        content: element,
+        xAnchor: 0.5,
+        yAnchor: 1,
+        zIndex: 3,
       });
-      window.kakao.maps.event.addListener(instance, "click", () => {
-        selectRelay(relay.id);
-      });
-      return { id: relay.id, instance };
+      overlay.setMap(map);
+      return { id: relay.id, overlay, element };
     });
-  }, [isMapReady, relays, selectRelay]);
+  }, [isMapReady, relays, selectedId, selectRelay]);
 
   useEffect(() => {
     clearRelayPath();
@@ -250,12 +264,37 @@ export default function MapDesktop() {
     polyline.setMap(map);
     polylineInstancesRef.current.push(polyline);
 
-    relayStopOverlaysRef.current = stops.map((stop) => {
+    relayStopOverlaysRef.current = stops.map((stop, index) => {
       const dot = document.createElement("div");
       dot.className = desktopStyle.relayStopDot;
+      dot.textContent = String(index + 1);
       const overlay = new window.kakao.maps.CustomOverlay({
         position: new window.kakao.maps.LatLng(stop.latitude, stop.longitude),
         content: dot,
+        xAnchor: 0.5,
+        yAnchor: 0.5,
+        zIndex: 4,
+      });
+      overlay.setMap(map);
+      return overlay;
+    });
+
+    directionArrowOverlaysRef.current = stops.slice(0, -1).map((stop, index) => {
+      const next = stops[index + 1];
+      const midLat = (stop.latitude + next.latitude) / 2;
+      const midLng = (stop.longitude + next.longitude) / 2;
+      const bearing =
+        (Math.atan2(next.longitude - stop.longitude, next.latitude - stop.latitude) *
+          180) /
+        Math.PI;
+
+      const arrow = document.createElement("div");
+      arrow.className = desktopStyle.relayDirectionArrow;
+      arrow.style.transform = `rotate(${bearing}deg)`;
+
+      const overlay = new window.kakao.maps.CustomOverlay({
+        position: new window.kakao.maps.LatLng(midLat, midLng),
+        content: arrow,
         xAnchor: 0.5,
         yAnchor: 0.5,
         zIndex: 4,

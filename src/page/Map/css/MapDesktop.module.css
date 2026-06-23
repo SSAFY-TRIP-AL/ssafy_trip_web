@@ -232,13 +232,78 @@
   cursor: pointer;
 }
 
-.relayStopDot {
-  width: 16px;
-  height: 16px;
+.customMarker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.customMarkerPin {
+  position: relative;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: var(--color-electric-blue);
   border: 3px solid var(--color-pure-white);
   box-shadow: var(--box-shadow-default);
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
+}
+.customMarkerPin::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid var(--color-electric-blue);
+}
+.customMarkerPin::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-pure-white);
+  transform: translate(-50%, -50%);
+}
+.customMarkerPinActive {
+  transform: scale(1.25);
+  background-color: var(--color-electric-blue);
+  z-index: 1;
+}
+.customMarkerPinActive::after {
+  border-top-color: var(--color-electric-blue);
+}
+
+.relayStopDot {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--color-electric-blue);
+  border: 3px solid var(--color-pure-white);
+  box-shadow: var(--box-shadow-default);
+  color: var(--color-pure-white);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.relayDirectionArrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid var(--color-electric-blue);
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
 }
 
 .relayFlowDot {
