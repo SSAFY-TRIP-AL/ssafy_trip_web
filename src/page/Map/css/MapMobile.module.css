@@ -116,7 +116,7 @@
   align-items: center;
   gap: 8px;
   z-index: 10;
-  bottom: 80px;
+  bottom: 150px;
 }
 .zoomGroup {
   display: flex;
@@ -150,7 +150,7 @@
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
   padding-bottom: env(safe-area-inset-bottom);
   z-index: 16;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
 }
 .sheetDragZone {
   display: flex;

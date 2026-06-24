@@ -169,6 +169,7 @@ export default function MapMobile() {
   function handleClosePanel() {
     closeRelay();
     clearRelayPath();
+    setSheetHeight(SHEET_PEEK_HEIGHT);
   }
 
   useEffect(() => {
