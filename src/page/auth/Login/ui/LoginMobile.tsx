@@ -2,6 +2,7 @@ import "../../../../style.css";
 import "../../auth.css";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import useLogin from "../../Hook/useLogin";
+import { useSocialLogin } from "../../Hook/useSocialLogin";
 import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
 import logo from "../../../../assets/logo_lf.svg";
 import mobileStyle from "../css/LoginMobile.module.css";
@@ -73,6 +74,7 @@ const fieldIcons: Record<keyof LoginForm, typeof User> = {
 export default function LoginMobile() {
   const { values, handleChange, handleSubmit, isSubmitting, errors } = useLogin();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
+  const { loginWithGoogle, loginWithKakao } = useSocialLogin();
 
   return (
     <div className={mobileStyle.container}>
@@ -131,11 +133,19 @@ export default function LoginMobile() {
             <span>또는</span>
           </div>
           <div className={mobileStyle.socialContainer}>
-            <button type="button" className={`${mobileStyle.socialBtn} ${mobileStyle.googleBtn}`}>
+            <button
+              type="button"
+              className={`${mobileStyle.socialBtn} ${mobileStyle.googleBtn}`}
+              onClick={loginWithGoogle}
+            >
               <GoogleIcon />
               Google로 로그인
             </button>
-            <button type="button" className={`${mobileStyle.socialBtn} ${mobileStyle.kakaoBtn}`}>
+            <button
+              type="button"
+              className={`${mobileStyle.socialBtn} ${mobileStyle.kakaoBtn}`}
+              onClick={loginWithKakao}
+            >
               <KakaoIcon />
               Kakao로 로그인
             </button>
