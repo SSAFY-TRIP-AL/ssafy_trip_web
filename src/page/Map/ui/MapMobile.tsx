@@ -78,7 +78,7 @@ const FLOW_DOT_COUNT = 6;
 
 const SHEET_PEEK_HEIGHT = 80;
 const SHEET_FULL_RATIO = 0.72;
-const SHEET_CLOSE_THRESHOLD = SHEET_PEEK_HEIGHT * 0.55;
+// const SHEET_CLOSE_THRESHOLD = SHEET_PEEK_HEIGHT * 0.55;
 
 function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
   const segments: {

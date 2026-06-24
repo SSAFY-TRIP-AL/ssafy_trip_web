@@ -40,7 +40,7 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--color-gray-700);
 }
 .searchIcon {
@@ -62,7 +62,7 @@
   border-radius: var(--border-radius-10);
   background-color: var(--color-pure-white);
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 .dropdownMenu {
@@ -92,7 +92,7 @@
   border-radius: var(--border-radius-10);
   background-color: transparent;
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   text-align: left;
   cursor: pointer;
 }
@@ -143,7 +143,7 @@
 }
 
 .resultCount {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--color-gray-500);
 }
 
@@ -163,7 +163,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--color-gray-500);
 }
 .cardFooter {
@@ -190,14 +190,14 @@
 }
 .extraCount {
   margin-left: 8px;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--color-gray-500);
 }
 
 .statusBadge {
   padding: 4px 10px;
   border-radius: var(--border-radius-20);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 .statusOngoing {
@@ -243,7 +243,7 @@
   border-radius: var(--border-radius-10);
   background-color: transparent;
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 .pageBtnActive {

@@ -1,7 +1,14 @@
 @import url("https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css");
 html {
+  font-size: 16px;
   font-family: var(--font-base);
   -webkit-font-smoothing: antialiased;
+}
+/* 모바일에서는 루트 폰트크기를 줄여 rem 기반 텍스트를 일괄 축소 */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
 }
 body {
   margin: auto;
@@ -56,16 +63,16 @@ a {
   --fw-bold: 700;
 
   /* 타이포 스케일: size / line-height */
-  --fs-h1: 36px;
+  --fs-h1: 2.25rem;
   --lh-h1: 1.4;
-  --fs-h2: 24px;
+  --fs-h2: 1.5rem;
   --lh-h2: 1.4;
-  --fs-h3: 24px;
+  --fs-h3: 1.5rem;
   --lh-h3: 1.4;
-  --fs-body1: 16px;
+  --fs-body1: 1rem;
   --lh-body: 1.6;
-  --fs-body2: 12px;
-  --fs-caption: 14px;
+  --fs-body2: 0.75rem;
+  --fs-caption: 0.875rem;
 
   /* 기타 */
   --border-radius-20: 20px;
