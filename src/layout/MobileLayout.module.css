@@ -15,6 +15,7 @@
   height: 52px;
   padding: 0 16px;
   background-color: var(--color-pure-white);
+  /* background-color: black; */
   border-bottom: 1px solid var(--color-gray-100);
 }
 
@@ -27,4 +28,22 @@
   flex: 1;
   min-height: 0;
   padding-bottom: calc(60px + env(safe-area-inset-bottom));
+}
+
+.heroAvatar {
+  position: absolute;
+  right: 16px;
+  z-index: 200;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #5a73ff;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--color-pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
 }
