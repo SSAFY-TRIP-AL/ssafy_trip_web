@@ -11,6 +11,7 @@ import RelayList from "./page/Relay/List/RelayList";
 import RelayDetail from "./page/Relay/Detail/RelayDetail";
 import Register from "./page/Relay/Register/Register";
 import MyPage from "./page/MyPage/MyPage";
+import OAuthCallback from "./page/auth/OAuthCallback/OAuthCallback";
 import RequireAuth from "./components/RequireAuth/RequireAuth";
 import ToastViewport from "./components/Toast/ToastViewport";
 import ConfirmDialog from "./components/ConfirmDialog/ConfirmDialog";
@@ -35,6 +36,7 @@ function App() {
           <Route index element={<Main />} />
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/:provider/callback" element={<OAuthCallback />} />
           <Route element={<RequireAuth />}>
             <Route path="/map" element={<Map />} />
             <Route path="/relay/list" element={<RelayList />} />

@@ -1,6 +1,7 @@
 import "../../../../style.css";
 import "../../auth.css";
 import useLogin from "../../Hook/useLogin";
+import { useSocialLogin } from "../../Hook/useSocialLogin";
 import desktopStyle from "../css/LoginDesktop.module.css";
 
 function GoogleIcon() {
@@ -64,6 +65,7 @@ const fields: {
 
 export default function LoginDesktop() {
   const { values, handleChange, handleSubmit, isSubmitting, errors } = useLogin();
+  const { loginWithGoogle, loginWithKakao } = useSocialLogin();
 
   return (
     <div className="container">
@@ -104,6 +106,7 @@ export default function LoginDesktop() {
             <button
               type="button"
               className={`${desktopStyle.socialBtn} ${desktopStyle.googleBtn}`}
+              onClick={loginWithGoogle}
             >
               <GoogleIcon />
               Google로 로그인
@@ -111,6 +114,7 @@ export default function LoginDesktop() {
             <button
               type="button"
               className={`${desktopStyle.socialBtn} ${desktopStyle.kakaoBtn}`}
+              onClick={loginWithKakao}
             >
               <KakaoIcon />
               Kakao로 로그인

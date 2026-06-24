@@ -12,6 +12,16 @@ interface AuthStore {
   isLogin: () => boolean;
 }
 
+/** JWT 만료 체크 */
+const isTokenExpired = (token: string) => {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+};
+
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
@@ -33,6 +43,7 @@ export const useAuthStore = create<AuthStore>()(
           profileImage: undefined,
         });
 
+        // persist storage 초기화
         useAuthStore.persist.clearStorage();
       },
 
@@ -41,10 +52,27 @@ export const useAuthStore = create<AuthStore>()(
           accessToken,
         }),
 
-      isLogin: () => get().accessToken !== null,
+      isLogin: () => {
+        const token = get().accessToken;
+        if (!token) return false;
+
+        return !isTokenExpired(token);
+      },
     }),
     {
       name: "auth-storage",
+
+      /**
+       * 앱 새로 로드될 때 localStorage 복원 직후 실행
+       * → 만료된 토큰 자동 삭제
+       */
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+
+        if (state.accessToken && isTokenExpired(state.accessToken)) {
+          state.logout();
+        }
+      },
     },
   ),
 );
