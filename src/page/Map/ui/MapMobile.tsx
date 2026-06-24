@@ -572,8 +572,12 @@ export default function MapMobile() {
               </div>
 
               <div className={mobileStyle.detailActions}>
-                <button type="button" className={mobileStyle.relayStartBtn}>
-                  릴레이 시작하기
+                <button
+                  type="button"
+                  className={mobileStyle.relayStartBtn}
+                  onClick={() => navigate(`/relay/${selected.id}/step`)}
+                >
+                  릴레이 이어하기
                 </button>
                 <button
                   type="button"

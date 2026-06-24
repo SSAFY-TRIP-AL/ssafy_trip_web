@@ -34,9 +34,7 @@ export default function RelayDetailDesktop() {
 
   if (!detail) return <div className="container" />;
 
-  const categoryStyle = getCategoryStyle(
-    categories.findIndex((c) => c.name === detail.category),
-  );
+  const categoryStyle = getCategoryStyle(categories.findIndex((c) => c.name === detail.category));
 
   return (
     <div className="container">
@@ -128,7 +126,7 @@ export default function RelayDetailDesktop() {
 
         <div className={relayDetailStyle.subContent}>
           <button type="button" className={relayDetailStyle.joinBtn} onClick={goAddRelayStep}>
-            릴레이 참여하기
+            릴레이 이어하기
             <ArrowRight size={18} />
           </button>
 

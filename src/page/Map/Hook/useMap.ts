@@ -3,11 +3,13 @@ import { useDebouncedValue } from "../../../Hook/useDebounce";
 import { getRelayList, type RelayItem } from "../../Relay/List/api/relayApi";
 import { getRelayRoute, type RelayRoute } from "../api/mapApi";
 import { getAiSummary, type AiSummary } from "../../../api/aiApi";
+// import { useNavigate } from "react-router-dom";
 
 const SEARCH_DEBOUNCE_MS = 300;
 const MAP_PAGE_SIZE = 100;
 
 export const useMap = () => {
+  // const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
   const [category, setCategory] = useState<number | null>(null);
   const [relays, setRelays] = useState<RelayItem[]>([]);
@@ -40,12 +42,13 @@ export const useMap = () => {
     };
   }, [debouncedKeyword, category]);
 
-  const fetchSummary = async (relay: RelayItem) => {
+  const fetchSummary = async (locationName: string, category?: string) => {
+    if (!locationName) return;
     setSummary(null);
     setSummaryError("");
     setIsSummaryLoading(true);
     try {
-      const data = await getAiSummary(relay.title, relay.category);
+      const data = await getAiSummary(locationName, category);
       setSummary(data);
     } catch (error) {
       console.log(error);
@@ -59,12 +62,15 @@ export const useMap = () => {
     setSelectedId(relayId);
 
     const relay = relays.find((item) => item.id === relayId);
-    if (relay) fetchSummary(relay);
 
     setIsRouteLoading(true);
     try {
       const data = await getRelayRoute(relayId);
       setRoute(data);
+
+      // 마지막(최신) 스텝의 locationName으로 AI 요약 호출
+      const latestStep = [...data.steps].sort((a, b) => a.stepOrder - b.stepOrder).at(-1);
+      fetchSummary(latestStep?.locationName ?? "", relay?.category);
     } catch (error) {
       console.log(error);
       setRoute(null);
@@ -80,6 +86,10 @@ export const useMap = () => {
     setSummaryError("");
     setIsSummaryLoading(false);
   };
+
+  // const goAddRelayStep = () => {
+  //   navigate("/")
+  // }
 
   return {
     keyword,
