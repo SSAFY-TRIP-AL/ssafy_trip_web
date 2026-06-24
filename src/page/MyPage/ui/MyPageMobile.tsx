@@ -225,20 +225,22 @@ export default function MyPageMobile() {
       )}
 
       <div className={myPageStyle.accountPanel}>
-        <span className="trip-h3">계정</span>
-        <button type="button" className={myPageStyle.logoutBtn} onClick={handleLogout}>
-          <LogOut size={16} />
-          로그아웃
-        </button>
-        <button
-          type="button"
-          className={myPageStyle.withdrawBtn}
-          onClick={handleWithdraw}
-          disabled={isWithdrawing}
-        >
-          <Trash2 size={16} />
-          {isWithdrawing ? "처리 중..." : "회원 탈퇴"}
-        </button>
+        <span className={myPageStyle.accountTitle}>계정</span>
+        <div className={myPageStyle.accountActions}>
+          <button type="button" className={myPageStyle.logoutBtn} onClick={handleLogout}>
+            <LogOut size={18} />
+            로그아웃
+          </button>
+          <button
+            type="button"
+            className={myPageStyle.withdrawBtn}
+            onClick={handleWithdraw}
+            disabled={isWithdrawing}
+          >
+            <Trash2 size={18} />
+            {isWithdrawing ? "처리 중..." : "회원 탈퇴"}
+          </button>
+        </div>
       </div>
 
       {isEditOpen && (
