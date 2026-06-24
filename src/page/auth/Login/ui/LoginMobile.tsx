@@ -1,6 +1,9 @@
 import "../../../../style.css";
 import "../../auth.css";
+import { User, Lock, Eye, EyeOff } from "lucide-react";
 import useLogin from "../../Hook/useLogin";
+import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
+import logo from "../../../../assets/logo_lf.svg";
 import mobileStyle from "../css/LoginMobile.module.css";
 
 function GoogleIcon() {
@@ -62,33 +65,56 @@ const fields: {
   },
 ];
 
+const fieldIcons: Record<keyof LoginForm, typeof User> = {
+  loginId: User,
+  password: Lock,
+};
+
 export default function LoginMobile() {
   const { values, handleChange, handleSubmit } = useLogin();
+  const { passwordVisible, toggleVisible } = usePasswordVisibility();
 
   return (
     <div className={mobileStyle.container}>
       <div className={mobileStyle.authContainer}>
-        <span className="trip-h2">로그인</span>
+        <img src={logo} alt="Trip Baton" className={mobileStyle.logo} />
+        <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span>
+        <span className={`trip-h2 ${mobileStyle.title}`}>로그인</span>
         <span className={`trip-body1 ${mobileStyle.loginText}`}>
-          Trip Baton에 로그인하세요.
+          AI 여행 릴레이 서비스에 로그인하세요.
         </span>
         <form
           onSubmit={handleSubmit}
           className={`authForm ${mobileStyle.loginForm}`}
         >
           {fields.map(({ id, label, type, placeholder }) => {
+            const isPassword = type === "password";
+            const inputType = isPassword && passwordVisible[id] ? "text" : type;
+            const Icon = fieldIcons[id];
+
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className="authInputBox">
+                <div className={`authInputBox ${mobileStyle.loginInputBox}`}>
+                  <Icon size={16} className={mobileStyle.loginInputIcon} />
                   <input
                     id={id}
-                    type={type}
+                    type={inputType}
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
                     required
                   />
+                  {isPassword && (
+                    <button
+                      type="button"
+                      className={mobileStyle.loginEyeBtn}
+                      onClick={() => toggleVisible(id)}
+                      aria-label={passwordVisible[id] ? "비밀번호 숨기기" : "비밀번호 표시"}
+                    >
+                      {passwordVisible[id] ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  )}
                 </div>
               </div>
             );

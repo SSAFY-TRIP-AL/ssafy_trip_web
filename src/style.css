@@ -46,8 +46,8 @@ a {
 
   /* 폰트 패밀리 */
   --font-base:
-    "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
-    system-ui, "Segoe UI", sans-serif;
+    "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI",
+    sans-serif;
 
   /* weight (Pretendard 매핑) */
   --fw-regular: 400;

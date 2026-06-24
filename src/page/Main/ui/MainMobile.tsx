@@ -1,6 +1,6 @@
 import mobileStyle from "../css/MainMobile.module.css";
 import "../../../style.css";
-import mainImg from "../../../assets/main/main_img3.svg";
+import mainImg from "../../../assets/main/main_img.png";
 import infoMapImg from "../../../assets/main/info_map.svg";
 import {
   ArrowRight,
@@ -12,31 +12,60 @@ import {
   Globe,
   Trophy,
   Crown,
+  Sparkles,
 } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
 import { useMain } from "../Hook/useMain";
 import RelayCard from "../../../components/RelayCard/RelayCard";
 import { useCategories } from "../../../hooks/useCategories";
 import { getCategoryStyle } from "../../../constants/categoryPalette";
+// import { useAuthStore } from "../../../store/authStore";
 
 export default function MainMobile() {
   const { mainInfo, goMap, goRelayList } = useMain();
   const { categories } = useCategories();
+  // const navigate = useNavigate();
+  // const { accessToken, profileImage } = useAuthStore();
   const [first, second, third] = mainInfo.ranking;
+
+  // const goProfile = () => navigate(accessToken ? "/mypage" : "/auth/login");
 
   return (
     <>
       <section className={mobileStyle.hero}>
         <img src={mainImg} alt="메인 이미지" />
+        <div className={mobileStyle.heroOverlay} />
+        {/* <button
+          type="button"
+          className={mobileStyle.heroAvatar}
+          onClick={goProfile}
+          aria-label="마이페이지로 이동"
+        >
+          {profileImage ? (
+            <img src={profileImage} alt="프로필" />
+          ) : (
+            <UserIcon size={20} />
+          )}
+        </button> */}
         <div className={mobileStyle.heroText}>
+          <div className={mobileStyle.heroBadge}>
+            <Sparkles size={14} strokeWidth={2} />
+            <span>AI 여행 릴레이</span>
+          </div>
           <div className={mobileStyle.heroTitle}>
             <span>여행 경험을</span>
             <span className={mobileStyle.gradientText}>다음 사람에게</span>
             <span>이어보세요</span>
           </div>
           <span className="trip-body1">AI가 설계하는 당신만의 릴레이 여행</span>
-          <div className={mobileStyle.heroBtn} onClick={goMap}>
-            <span className="trip-body1">릴레이 참여하기</span>
-            <ArrowRight size={18} strokeWidth={2.5} />
+          <div className={mobileStyle.heroBtnRow}>
+            <div className={mobileStyle.heroBtn} onClick={goMap}>
+              <span className="trip-body1">릴레이 참여하기</span>
+              <ArrowRight size={18} strokeWidth={2.5} />
+            </div>
+            <div className={mobileStyle.heroBtnOutline} onClick={goRelayList}>
+              <span className="trip-body1">릴레이 둘러보기</span>
+            </div>
           </div>
           <span className={mobileStyle.memberCount}>
             현재 {mainInfo.userCount}명이 함께하고 있어요
@@ -62,18 +91,6 @@ export default function MainMobile() {
             <Map size={16} strokeWidth={1.75} />
             <span className="trip-body1">지도에서 보기</span>
           </div>
-          <div className={mobileStyle.infoSummary}>
-            <div className={mobileStyle.infoSummaryItem}>
-              <Users size={18} strokeWidth={1.75} className={mobileStyle.summaryIcon} />
-              <span className="trip-body2">총 참여 인원</span>
-              <span className="trip-h3">{mainInfo.userCount}명</span>
-            </div>
-            <div className={mobileStyle.infoSummaryItem}>
-              <Route size={18} strokeWidth={1.75} className={mobileStyle.summaryIcon} />
-              <span className="trip-body2">총 릴레이 수</span>
-              <span className="trip-h3">{mainInfo.relayCount}개</span>
-            </div>
-          </div>
         </div>
 
         <div className={mobileStyle.relayContainer}>
@@ -87,20 +104,38 @@ export default function MainMobile() {
               <ChevronRight size={14} strokeWidth={2} />
             </span>
           </div>
-          <div className={mobileStyle.relayList}>
+          <div className={mobileStyle.relayScroll}>
             {mainInfo.relays.relays.map((relay) => (
-              <RelayCard
-                key={relay.id}
-                id={relay.id}
-                title={relay.title}
-                description={`${relay.participantCount}명 참여중`}
-                imageUrl={relay.photoUrl}
-                categoryName={relay.category}
-                categoryStyle={getCategoryStyle(
-                  categories.findIndex((c) => c.name === relay.category),
-                )}
-              />
+              <div key={relay.id} className={mobileStyle.relayScrollItem}>
+                <RelayCard
+                  id={relay.id}
+                  title={relay.title}
+                  description={`${relay.participantCount}명 참여중`}
+                  imageUrl={relay.photoUrl}
+                  categoryName={relay.category}
+                  categoryStyle={getCategoryStyle(
+                    categories.findIndex((c) => c.name === relay.category),
+                  )}
+                />
+              </div>
             ))}
+          </div>
+        </div>
+
+        <div className={mobileStyle.statsRow}>
+          <div className={mobileStyle.statCard}>
+            <div className={mobileStyle.statIcon}>
+              <Users size={18} strokeWidth={1.75} />
+            </div>
+            <span className="trip-body2">총 참여 인원</span>
+            <span className="trip-h3">{mainInfo.userCount}명</span>
+          </div>
+          <div className={mobileStyle.statCard}>
+            <div className={mobileStyle.statIcon}>
+              <Route size={18} strokeWidth={1.75} />
+            </div>
+            <span className="trip-body2">총 릴레이 수</span>
+            <span className="trip-h3">{mainInfo.relayCount}개</span>
           </div>
         </div>
 

@@ -6,8 +6,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 6px;
+  margin-top: 40px;
+}
+.logo {
+  height: 70px;
+  margin-bottom: 4px;
+}
+.tagline {
+  color: var(--color-gray-500);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.title {
+  margin-top: 4px;
 }
 .loginForm {
   width: 100%;
@@ -16,6 +30,33 @@
 }
 .loginText {
   color: var(--color-gray-500);
+  margin-bottom: 4px;
+}
+.loginInputBox {
+  position: relative;
+}
+.loginInputIcon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-gray-500);
+  pointer-events: none;
+}
+.loginInputBox input {
+  padding-left: 36px;
+}
+.loginInputBox:has(.loginEyeBtn) input {
+  padding-right: 36px;
+}
+.loginEyeBtn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray-500);
+  display: flex;
+  align-items: center;
+  padding: 0;
 }
 .divider {
   display: flex;

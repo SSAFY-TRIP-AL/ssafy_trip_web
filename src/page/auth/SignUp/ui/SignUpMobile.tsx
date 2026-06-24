@@ -3,6 +3,7 @@ import { Camera, Eye, EyeOff } from "lucide-react";
 import mobileStyle from "../css/SignUpMobile.module.css";
 import "../../../../style.css";
 import "../../auth.css";
+import logo from "../../../../assets/logo_lf.svg";
 import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
 import { useSignUp } from "../../Hook/useSignUp";
 
@@ -69,7 +70,9 @@ export default function SignUpMobile() {
   return (
     <div className={mobileStyle.container}>
       <div className={mobileStyle.authContainer}>
-        <span className="trip-h2">회원가입</span>
+        <img src={logo} alt="Trip Baton" className={mobileStyle.logo} />
+        <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span>
+        <span className={`trip-h2 ${mobileStyle.title}`}>회원가입</span>
         <div className={mobileStyle.signupText}>
           <span className="trip-body2">Trip Baton에 가입하고 </span>
           <span className="trip-body2">나만의 여행을 시작해보세요. </span>
