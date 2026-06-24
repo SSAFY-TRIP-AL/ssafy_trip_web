@@ -39,11 +39,7 @@ api.interceptors.response.use(
 
       try {
         // 액세스 토큰 갱신 요청
-        const res = await axios.post<string>(
-          "/auth/reissue",
-          {},
-          { withCredentials: true },
-        );
+        const res = await axios.post<string>("/auth/reissue", {}, { withCredentials: true });
         if (res.status === 200) {
           const newAccessToken = res.data;
           const { setAccessToken } = useAuthStore.getState();
@@ -58,9 +54,9 @@ api.interceptors.response.use(
           alert(reissueData.message);
         }
       } catch {
-        const { logout } = useAuthStore.getState();
-        logout();
-        window.location.href = "/auth/login";
+        // const { logout } = useAuthStore.getState();
+        // logout();
+        // window.location.href = "/auth/login";
       }
     }
 
