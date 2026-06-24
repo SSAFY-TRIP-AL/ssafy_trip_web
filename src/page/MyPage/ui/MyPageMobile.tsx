@@ -16,6 +16,7 @@ import "../../auth/auth.css";
 import myPageStyle from "../css/MyPageMobile.module.css";
 import { useMyPage } from "../Hook/useMyPage";
 import type { RelayTabType } from "../api/myPageApi";
+import { resolveProfileImage } from "../../../utils/profileImage";
 
 const TABS: { id: RelayTabType; label: string; description: string }[] = [
   {
@@ -94,15 +95,11 @@ export default function MyPageMobile() {
 
       <div className={myPageStyle.profileCard}>
         <div className={myPageStyle.profileLeft}>
-          {profile.profileImage ? (
-            <img
-              src={profile.profileImage}
-              alt={profile.name}
-              className={myPageStyle.profileImg}
-            />
-          ) : (
-            <div className={myPageStyle.profileImg} />
-          )}
+          <img
+            src={resolveProfileImage(profile.profileImage)}
+            alt={profile.name}
+            className={myPageStyle.profileImg}
+          />
           <div className={myPageStyle.profileInfo}>
             <span className="trip-h3">{profile.name}</span>
             {profile.createdAt && (
@@ -256,15 +253,11 @@ export default function MyPageMobile() {
                 className={myPageStyle.modalAvatarUpload}
                 onClick={() => fileInputRef.current?.click()}
               >
-                {editImagePreview ? (
-                  <img
-                    src={editImagePreview}
-                    alt="프로필 이미지"
-                    className={myPageStyle.modalAvatarPreview}
-                  />
-                ) : (
-                  <div className={myPageStyle.modalAvatarPlaceholder} />
-                )}
+                <img
+                  src={resolveProfileImage(editImagePreview)}
+                  alt="프로필 이미지"
+                  className={myPageStyle.modalAvatarPreview}
+                />
                 <span className={myPageStyle.modalAvatarEditBtn}>
                   <Camera size={14} />
                 </span>

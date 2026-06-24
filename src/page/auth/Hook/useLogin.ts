@@ -10,6 +10,8 @@ type LoginForm = {
   password: string;
 };
 
+type LoginErrors = Partial<Record<keyof LoginForm, string>>;
+
 export default function useLogin() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,10 +21,25 @@ export default function useLogin() {
   });
   const { login: storeLogin } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<LoginErrors>({});
+
+  const handleFieldChange = (key: keyof LoginForm, value: string) => {
+    setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));
+    handleChange(key, value);
+  };
+
+  const validate = () => {
+    const next: LoginErrors = {};
+    if (!values.loginId.trim()) next.loginId = "아이디를 입력해주세요.";
+    if (!values.password.trim()) next.password = "비밀번호를 입력해주세요.";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+    if (!validate()) return;
     setIsSubmitting(true);
 
     try {
@@ -44,8 +61,9 @@ export default function useLogin() {
 
   return {
     values,
-    handleChange,
+    handleChange: handleFieldChange,
     handleSubmit,
     isSubmitting,
+    errors,
   };
 }

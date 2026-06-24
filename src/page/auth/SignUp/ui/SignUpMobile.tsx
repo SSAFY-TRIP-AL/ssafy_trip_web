@@ -6,6 +6,7 @@ import "../../auth.css";
 import logo from "../../../../assets/logo_lf.svg";
 import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
 import { useSignUp } from "../../Hook/useSignUp";
+import { defaultProfile } from "../../../../utils/profileImage";
 
 type SignUpForm = {
   loginId: string;
@@ -64,6 +65,7 @@ export default function SignUpMobile() {
     handleProfileImageChange,
     handleSubmit,
     isSubmitting,
+    errors,
   } = useSignUp();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -78,18 +80,18 @@ export default function SignUpMobile() {
           <span className="trip-body2">Trip Baton에 가입하고 </span>
           <span className="trip-body2">나만의 여행을 시작해보세요. </span>
         </div> */}
-        <form onSubmit={handleSubmit} className={`authForm ${mobileStyle.signupForm}`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`authForm ${mobileStyle.signupForm}`}
+          noValidate
+        >
           <div className={mobileStyle.avatarField}>
             <div className={mobileStyle.avatarUpload} onClick={() => fileInputRef.current?.click()}>
-              {profileImagePreview ? (
-                <img
-                  src={profileImagePreview}
-                  alt="프로필 이미지"
-                  className={mobileStyle.avatarPreview}
-                />
-              ) : (
-                <div className={mobileStyle.avatarPlaceholder} />
-              )}
+              <img
+                src={profileImagePreview ?? defaultProfile}
+                alt="프로필 이미지"
+                className={mobileStyle.avatarPreview}
+              />
               <span className={mobileStyle.avatarEditBtn}>
                 <Camera size={14} />
               </span>
@@ -106,17 +108,23 @@ export default function SignUpMobile() {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
 
+            const liveMismatch = id === "passwordConfirm" && passwordMismatch;
+            const errorMessage = errors[id] ?? (liveMismatch ? "비밀번호가 일치하지 않습니다." : undefined);
+
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className={`authInputBox ${mobileStyle.signupInputBox}`}>
+                <div
+                  className={`authInputBox ${mobileStyle.signupInputBox} ${
+                    errorMessage ? "inputError" : ""
+                  }`}
+                >
                   <input
                     id={id}
                     type={inputType}
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
-                    required
                   />
                   {isPassword && (
                     <button
@@ -128,11 +136,7 @@ export default function SignUpMobile() {
                     </button>
                   )}
                 </div>
-                {id === "passwordConfirm" && passwordMismatch && (
-                  <span className={mobileStyle.signupFieldError}>
-                    비밀번호가 일치하지 않습니다.
-                  </span>
-                )}
+                {errorMessage && <span className="authError">{errorMessage}</span>}
               </div>
             );
           })}

@@ -71,7 +71,7 @@ const fieldIcons: Record<keyof LoginForm, typeof User> = {
 };
 
 export default function LoginMobile() {
-  const { values, handleChange, handleSubmit, isSubmitting } = useLogin();
+  const { values, handleChange, handleSubmit, isSubmitting, errors } = useLogin();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
 
   return (
@@ -83,7 +83,11 @@ export default function LoginMobile() {
         {/* <span className={`trip-body1 ${mobileStyle.loginText}`}>
           AI 여행 릴레이 서비스에 로그인하세요.
         </span> */}
-        <form onSubmit={handleSubmit} className={`authForm ${mobileStyle.loginForm}`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`authForm ${mobileStyle.loginForm}`}
+          noValidate
+        >
           {fields.map(({ id, label, type, placeholder }) => {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
@@ -92,7 +96,11 @@ export default function LoginMobile() {
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className={`authInputBox ${mobileStyle.loginInputBox}`}>
+                <div
+                  className={`authInputBox ${mobileStyle.loginInputBox} ${
+                    errors[id] ? "inputError" : ""
+                  }`}
+                >
                   <Icon size={16} className={mobileStyle.loginInputIcon} />
                   <input
                     id={id}
@@ -100,7 +108,6 @@ export default function LoginMobile() {
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
-                    required
                   />
                   {isPassword && (
                     <button
@@ -113,6 +120,7 @@ export default function LoginMobile() {
                     </button>
                   )}
                 </div>
+                {errors[id] && <span className="authError">{errors[id]}</span>}
               </div>
             );
           })}

@@ -4,6 +4,7 @@ import "../../../style.css";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
 import MobileQrButton from "../../MobileQrButton/MobileQrButton";
+import { resolveProfileImage } from "../../../utils/profileImage";
 
 export default function HeaderDesktop() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export default function HeaderDesktop() {
             <>
               <img
                 className={headerStyle.profileImg}
-                src={profileImage}
+                src={resolveProfileImage(profileImage)}
                 onClick={() => navigate("/mypage")}
               />
               <span onClick={() => navigate("/mypage")}>{userName}</span>

@@ -42,6 +42,16 @@
   outline: none;
   border-color: var(--color-electric-blue);
 }
+.authInputBox.inputError input,
+.inputError > input,
+.inputError {
+  border-color: #ef4444;
+}
+.authError {
+  font-size: 0.75rem;
+  color: #ef4444;
+  line-height: 1.4;
+}
 .authBtn {
   background-color: var(--color-electric-blue);
   border: none;
