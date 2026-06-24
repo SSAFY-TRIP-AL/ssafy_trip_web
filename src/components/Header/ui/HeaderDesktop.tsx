@@ -3,6 +3,7 @@ import headerStyle from "../css/header.module.css";
 import "../../../style.css";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
+import MobileQrButton from "../../MobileQrButton/MobileQrButton";
 
 export default function HeaderDesktop() {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ export default function HeaderDesktop() {
           </li>
         </ul>
         <div className={headerStyle.myPage}>
+          <MobileQrButton />
           {isLogin ? (
             <>
               <img

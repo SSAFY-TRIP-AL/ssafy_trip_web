@@ -89,22 +89,28 @@ export default function MainMobile() {
               <ChevronRight size={14} strokeWidth={2} />
             </span>
           </div>
-          <div className={mobileStyle.relayScroll}>
-            {mainInfo.relays.relays.map((relay) => (
-              <div key={relay.id} className={mobileStyle.relayScrollItem}>
-                <RelayCard
-                  id={relay.id}
-                  title={relay.title}
-                  description={`${relay.participantCount}명 참여중`}
-                  imageUrl={relay.photoUrl}
-                  categoryName={relay.category}
-                  categoryStyle={getCategoryStyle(
-                    categories.findIndex((c) => c.name === relay.category),
-                  )}
-                />
-              </div>
-            ))}
-          </div>
+          {mainInfo.relays.relays.length === 0 ? (
+            <div className={mobileStyle.emptyState}>
+              아직 진행 중인 릴레이가 없어요.
+            </div>
+          ) : (
+            <div className={mobileStyle.relayScroll}>
+              {mainInfo.relays.relays.map((relay) => (
+                <div key={relay.id} className={mobileStyle.relayScrollItem}>
+                  <RelayCard
+                    id={relay.id}
+                    title={relay.title}
+                    description={`${relay.participantCount}명 참여중`}
+                    imageUrl={relay.photoUrl}
+                    categoryName={relay.category}
+                    categoryStyle={getCategoryStyle(
+                      categories.findIndex((c) => c.name === relay.category),
+                    )}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className={mobileStyle.statsRow}>
@@ -134,6 +140,11 @@ export default function MainMobile() {
               릴레이를 가장 활발하게 이어가고 있는 Top3 유저입니다.
             </span>
           </div>
+          {mainInfo.ranking.length === 0 ? (
+            <div className={mobileStyle.emptyState}>
+              아직 랭킹에 오른 유저가 없어요.
+            </div>
+          ) : (
           <div className={mobileStyle.rankingList}>
             {first && (
               <div className={`${mobileStyle.rankingItem} ${mobileStyle.rankingFirst}`}>
@@ -181,6 +192,7 @@ export default function MainMobile() {
               </div>
             )}
           </div>
+          )}
         </div>
       </div>
     </>
