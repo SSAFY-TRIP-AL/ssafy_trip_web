@@ -71,21 +71,15 @@ export default function SignUpMobile() {
     <div className={mobileStyle.container}>
       <div className={mobileStyle.authContainer}>
         <img src={logo} alt="Trip Baton" className={mobileStyle.logo} />
-        <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span>
-        <span className={`trip-h2 ${mobileStyle.title}`}>회원가입</span>
-        <div className={mobileStyle.signupText}>
+        {/* <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span>
+        <span className={`trip-h2 ${mobileStyle.title}`}>회원가입</span> */}
+        {/* <div className={mobileStyle.signupText}>
           <span className="trip-body2">Trip Baton에 가입하고 </span>
           <span className="trip-body2">나만의 여행을 시작해보세요. </span>
-        </div>
-        <form
-          onSubmit={handleSubmit}
-          className={`authForm ${mobileStyle.signupForm}`}
-        >
+        </div> */}
+        <form onSubmit={handleSubmit} className={`authForm ${mobileStyle.signupForm}`}>
           <div className={mobileStyle.avatarField}>
-            <div
-              className={mobileStyle.avatarUpload}
-              onClick={() => fileInputRef.current?.click()}
-            >
+            <div className={mobileStyle.avatarUpload} onClick={() => fileInputRef.current?.click()}>
               {profileImagePreview ? (
                 <img
                   src={profileImagePreview}
@@ -103,9 +97,7 @@ export default function SignUpMobile() {
                 type="file"
                 accept="image/*"
                 className={mobileStyle.avatarInput}
-                onChange={(event) =>
-                  handleProfileImageChange(event.target.files?.[0] ?? null)
-                }
+                onChange={(event) => handleProfileImageChange(event.target.files?.[0] ?? null)}
               />
             </div>
           </div>
@@ -131,11 +123,7 @@ export default function SignUpMobile() {
                       className={mobileStyle.signupEyeBtn}
                       onClick={() => toggleVisible(id)}
                     >
-                      {passwordVisible[id] ? (
-                        <EyeOff size={16} />
-                      ) : (
-                        <Eye size={16} />
-                      )}
+                      {passwordVisible[id] ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   )}
                 </div>

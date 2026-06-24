@@ -12,6 +12,7 @@
 .logo {
   height: 70px;
   margin-bottom: 4px;
+  margin-top: 5px;
 }
 .tagline {
   color: var(--color-gray-500);
@@ -27,6 +28,7 @@
   width: 100%;
   padding: 24px 20px;
   box-sizing: border-box;
+  margin-top: 40px;
 }
 .loginText {
   color: var(--color-gray-500);

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "./useForm";
 import type { SubmitEventHandler } from "react";
 import { login } from "../api/authApi";
@@ -11,6 +11,7 @@ type LoginForm = {
 
 export default function useLogin() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { values, handleChange } = useForm<LoginForm>({
     loginId: "",
     password: "",
@@ -28,7 +29,9 @@ export default function useLogin() {
 
       alert(data.message);
       storeLogin(data.accessToken, data.name, data.profileImage);
-      navigate("/");
+      const from = (location.state as { from?: { pathname?: string } } | null)?.from
+        ?.pathname;
+      navigate(from ?? "/", { replace: true });
     } catch (error) {
       alert(error instanceof Error ? error.message : "로그인에 실패했습니다.");
     }

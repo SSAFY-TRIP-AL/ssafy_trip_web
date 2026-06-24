@@ -272,10 +272,9 @@
 /* 회원 정보 수정 모달 */
 .modalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -283,19 +282,21 @@
   z-index: 100;
 }
 .modalBox {
-  position: relative;
+  position: absolute;
   display: flex;
   flex-direction: column;
   gap: 18px;
   width: 100%;
   max-height: 88vh;
+  max-height: 88dvh;
   overflow-y: auto;
-  padding: 28px 20px;
-  padding-bottom: calc(28px + env(safe-area-inset-bottom));
+  padding: max(28px, env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
   box-sizing: border-box;
   background-color: var(--color-pure-white);
   border-radius: var(--border-radius-20) var(--border-radius-20) 0 0;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  bottom: 60px;
+  padding-bottom: 50px;
 }
 .modalCloseBtn {
   position: absolute;

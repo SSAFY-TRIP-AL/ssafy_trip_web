@@ -78,15 +78,12 @@ export default function LoginMobile() {
     <div className={mobileStyle.container}>
       <div className={mobileStyle.authContainer}>
         <img src={logo} alt="Trip Baton" className={mobileStyle.logo} />
-        <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span>
-        <span className={`trip-h2 ${mobileStyle.title}`}>로그인</span>
-        <span className={`trip-body1 ${mobileStyle.loginText}`}>
+        {/* <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span> */}
+        {/* <span className={`trip-h2 ${mobileStyle.title}`}>로그인</span> */}
+        {/* <span className={`trip-body1 ${mobileStyle.loginText}`}>
           AI 여행 릴레이 서비스에 로그인하세요.
-        </span>
-        <form
-          onSubmit={handleSubmit}
-          className={`authForm ${mobileStyle.loginForm}`}
-        >
+        </span> */}
+        <form onSubmit={handleSubmit} className={`authForm ${mobileStyle.loginForm}`}>
           {fields.map(({ id, label, type, placeholder }) => {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
@@ -126,17 +123,11 @@ export default function LoginMobile() {
             <span>또는</span>
           </div>
           <div className={mobileStyle.socialContainer}>
-            <button
-              type="button"
-              className={`${mobileStyle.socialBtn} ${mobileStyle.googleBtn}`}
-            >
+            <button type="button" className={`${mobileStyle.socialBtn} ${mobileStyle.googleBtn}`}>
               <GoogleIcon />
               Google로 로그인
             </button>
-            <button
-              type="button"
-              className={`${mobileStyle.socialBtn} ${mobileStyle.kakaoBtn}`}
-            >
+            <button type="button" className={`${mobileStyle.socialBtn} ${mobileStyle.kakaoBtn}`}>
               <KakaoIcon />
               Kakao로 로그인
             </button>

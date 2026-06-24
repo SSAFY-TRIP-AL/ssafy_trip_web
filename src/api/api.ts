@@ -40,7 +40,7 @@ api.interceptors.response.use(
       try {
         // 액세스 토큰 갱신 요청
         const res = await axios.post<string>(
-          "/auth/reissue",
+          `${BASE_URL}/auth/reissue`,
           {},
           { withCredentials: true },
         );
