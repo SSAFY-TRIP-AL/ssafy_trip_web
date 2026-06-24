@@ -125,6 +125,9 @@ export default function MapMobile() {
     relays,
     selectedId,
     route,
+    summary,
+    isSummaryLoading,
+    summaryError,
     selectRelay,
     closeRelay,
   } = useMap();
@@ -545,7 +548,26 @@ export default function MapMobile() {
 
               <div className={mobileStyle.aiSummaryBox}>
                 <span className={mobileStyle.aiSummaryLabel}>AI 요약</span>
-                <p className={mobileStyle.aiSummaryPlaceholder}>AI 요약 기능은 준비 중입니다.</p>
+                {isSummaryLoading ? (
+                  <p className={mobileStyle.aiSummaryPlaceholder}>AI 요약을 불러오는 중...</p>
+                ) : summaryError ? (
+                  <p className={mobileStyle.aiSummaryPlaceholder}>{summaryError}</p>
+                ) : summary ? (
+                  <>
+                    <p className={mobileStyle.aiSummaryText}>{summary.summary}</p>
+                    {summary.highlights.length > 0 && (
+                      <ul className={mobileStyle.aiHighlightList}>
+                        {summary.highlights.map((highlight, index) => (
+                          <li key={index} className={mobileStyle.aiHighlightItem}>
+                            {highlight}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <p className={mobileStyle.aiSummaryPlaceholder}>AI 요약 기능은 준비 중입니다.</p>
+                )}
               </div>
 
               <div className={mobileStyle.detailActions}>

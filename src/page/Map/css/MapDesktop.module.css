@@ -205,6 +205,36 @@
   font-size: 0.8125rem;
   color: var(--color-gray-500);
 }
+.aiSummaryText {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-gray-700);
+}
+.aiHighlightList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 0;
+}
+.aiHighlightItem {
+  position: relative;
+  padding-left: 16px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-gray-700);
+}
+.aiHighlightItem::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.5em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--color-electric-blue);
+}
 
 .detailActions {
   display: flex;
