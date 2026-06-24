@@ -39,6 +39,7 @@ export default function RegisterMobile() {
     imagePreview,
     handleImageChange,
     handleSubmit,
+    isSubmitting,
   } = useRegisterRelay({ address, latitude, longitude, isStepAdd, relayId });
   const navigate = useNavigate();
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -279,8 +280,12 @@ export default function RegisterMobile() {
           <button type="button" className={registerStyle.cancelBtn} onClick={() => navigate(-1)}>
             취소
           </button>
-          <button type="submit" className={registerStyle.submitBtn}>
-            등록하기
+          <button
+            type="submit"
+            className={registerStyle.submitBtn}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "처리 중..." : "등록하기"}
           </button>
         </div>
       </form>

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "./useForm";
-import type { SubmitEventHandler } from "react";
+import { type SubmitEventHandler, useState } from "react";
 import { login } from "../api/authApi";
 import { useAuthStore } from "../../../store/authStore";
 
@@ -17,9 +17,12 @@ export default function useLogin() {
     password: "",
   });
   const { login: storeLogin } = useAuthStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
       const data = await login({
@@ -34,6 +37,7 @@ export default function useLogin() {
       navigate(from ?? "/", { replace: true });
     } catch (error) {
       alert(error instanceof Error ? error.message : "로그인에 실패했습니다.");
+      setIsSubmitting(false);
     }
   };
 
@@ -41,5 +45,6 @@ export default function useLogin() {
     values,
     handleChange,
     handleSubmit,
+    isSubmitting,
   };
 }

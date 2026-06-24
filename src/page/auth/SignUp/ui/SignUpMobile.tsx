@@ -63,6 +63,7 @@ export default function SignUpMobile() {
     profileImagePreview,
     handleProfileImageChange,
     handleSubmit,
+    isSubmitting,
   } = useSignUp();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -135,8 +136,8 @@ export default function SignUpMobile() {
               </div>
             );
           })}
-          <button type="submit" className="authBtn">
-            회원가입
+          <button type="submit" className="authBtn" disabled={isSubmitting}>
+            {isSubmitting ? "회원가입 중..." : "회원가입"}
           </button>
           <span>
             이미 계정이 있으신가요?<a href="/auth/login">로그인</a>

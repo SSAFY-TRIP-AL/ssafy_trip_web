@@ -71,7 +71,7 @@ const fieldIcons: Record<keyof LoginForm, typeof User> = {
 };
 
 export default function LoginMobile() {
-  const { values, handleChange, handleSubmit } = useLogin();
+  const { values, handleChange, handleSubmit, isSubmitting } = useLogin();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
 
   return (
@@ -116,8 +116,8 @@ export default function LoginMobile() {
               </div>
             );
           })}
-          <button type="submit" className="authBtn">
-            로그인
+          <button type="submit" className="authBtn" disabled={isSubmitting}>
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
           <div className={mobileStyle.divider}>
             <span>또는</span>

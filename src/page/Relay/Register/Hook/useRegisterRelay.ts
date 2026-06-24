@@ -24,6 +24,7 @@ export const useRegisterRelay = ({
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (file: File | null) => {
     setImage(file);
@@ -32,14 +33,18 @@ export const useRegisterRelay = ({
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     if (!isStepAdd && categoryId == null) {
       alert("카테고리를 선택해주세요.");
       return;
     }
-    const photoUrl = image ? await uploadImageToS3(image, "RELAY") : undefined;
-    if (!isStepAdd && categoryId) {
-      try {
+
+    setIsSubmitting(true);
+    try {
+      const photoUrl = image ? await uploadImageToS3(image, "RELAY") : undefined;
+
+      if (!isStepAdd && categoryId) {
         await createRelay({
           title,
           categoryId,
@@ -52,13 +57,10 @@ export const useRegisterRelay = ({
         });
         alert("릴레이가 등록되었습니다.");
         navigate("/relay/list");
-      } catch (error) {
-        alert(error instanceof Error ? error.message : "릴레이 등록에 실패했습니다.");
+        return;
       }
-    }
 
-    if (isStepAdd) {
-      try {
+      if (isStepAdd) {
         await joinRelay(relayId, {
           locationName: address,
           address,
@@ -70,9 +72,17 @@ export const useRegisterRelay = ({
 
         alert("릴레이에 참여했습니다.");
         navigate(`/relay/detail/${relayId}`);
-      } catch (error) {
-        alert(error instanceof Error ? error.message : "참여에 실패했습니다.");
+        return;
       }
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : isStepAdd
+            ? "참여에 실패했습니다."
+            : "릴레이 등록에 실패했습니다.",
+      );
+      setIsSubmitting(false);
     }
   };
 
@@ -86,5 +96,6 @@ export const useRegisterRelay = ({
     imagePreview,
     handleImageChange,
     handleSubmit,
+    isSubmitting,
   };
 };

@@ -51,6 +51,8 @@ export const useMyPage = () => {
   const [editName, setEditName] = useState("");
   const [editImageFile, setEditImageFile] = useState<File | null>(null);
   const [editImagePreview, setEditImagePreview] = useState<string | null>(null);
+  const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -101,6 +103,8 @@ export const useMyPage = () => {
   };
 
   const submitEdit = async () => {
+    if (isSubmittingEdit) return;
+    setIsSubmittingEdit(true);
     try {
       const profileImage = editImageFile
         ? await uploadImageToS3(editImageFile, "PROFILE")
@@ -112,6 +116,8 @@ export const useMyPage = () => {
       fetchProfile();
     } catch (error) {
       alert(error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.");
+    } finally {
+      setIsSubmittingEdit(false);
     }
   };
 
@@ -121,10 +127,12 @@ export const useMyPage = () => {
   };
 
   const handleWithdraw = async () => {
+    if (isWithdrawing) return;
     if (!window.confirm("정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
       return;
     }
 
+    setIsWithdrawing(true);
     try {
       const response = await withdrawMyAccount();
       alert(response.message);
@@ -132,6 +140,7 @@ export const useMyPage = () => {
       navigate("/");
     } catch (error) {
       alert(error instanceof Error ? error.message : "회원 탈퇴에 실패했습니다.");
+      setIsWithdrawing(false);
     }
   };
 
@@ -153,5 +162,7 @@ export const useMyPage = () => {
     submitEdit,
     handleLogout,
     handleWithdraw,
+    isSubmittingEdit,
+    isWithdrawing,
   };
 };

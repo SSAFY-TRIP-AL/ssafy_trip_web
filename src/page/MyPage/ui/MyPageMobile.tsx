@@ -74,6 +74,8 @@ export default function MyPageMobile() {
     submitEdit,
     handleLogout,
     handleWithdraw,
+    isSubmittingEdit,
+    isWithdrawing,
   } = useMyPage();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -228,9 +230,14 @@ export default function MyPageMobile() {
           <LogOut size={16} />
           로그아웃
         </button>
-        <button type="button" className={myPageStyle.withdrawBtn} onClick={handleWithdraw}>
+        <button
+          type="button"
+          className={myPageStyle.withdrawBtn}
+          onClick={handleWithdraw}
+          disabled={isWithdrawing}
+        >
           <Trash2 size={16} />
-          회원 탈퇴
+          {isWithdrawing ? "처리 중..." : "회원 탈퇴"}
         </button>
       </div>
 
@@ -286,8 +293,13 @@ export default function MyPageMobile() {
               <button type="button" className={myPageStyle.modalCancelBtn} onClick={closeEdit}>
                 취소
               </button>
-              <button type="button" className={myPageStyle.modalSubmitBtn} onClick={submitEdit}>
-                저장
+              <button
+                type="button"
+                className={myPageStyle.modalSubmitBtn}
+                onClick={submitEdit}
+                disabled={isSubmittingEdit}
+              >
+                {isSubmittingEdit ? "저장 중..." : "저장"}
               </button>
             </div>
           </div>

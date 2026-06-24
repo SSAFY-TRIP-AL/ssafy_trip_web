@@ -63,7 +63,7 @@ const fields: {
 ];
 
 export default function LoginDesktop() {
-  const { values, handleChange, handleSubmit } = useLogin();
+  const { values, handleChange, handleSubmit, isSubmitting } = useLogin();
 
   return (
     <div className="container">
@@ -93,8 +93,8 @@ export default function LoginDesktop() {
               </div>
             );
           })}
-          <button type="submit" className="authBtn">
-            로그인
+          <button type="submit" className="authBtn" disabled={isSubmitting}>
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
           <div className={desktopStyle.divider}>
             <span>또는</span>

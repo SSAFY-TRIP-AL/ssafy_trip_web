@@ -27,6 +27,7 @@ export const useSignUp = () => {
   const [profileImagePreview, setProfileImagePreview] = useState<
     string | null
   >(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const passwordMismatch =
     Boolean(values.passwordConfirm) &&
@@ -39,6 +40,8 @@ export const useSignUp = () => {
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
       const profileImageUrl = profileImage
@@ -61,6 +64,7 @@ export const useSignUp = () => {
       alert(
         error instanceof Error ? error.message : "회원가입에 실패했습니다.",
       );
+      setIsSubmitting(false);
     }
   };
 
@@ -71,5 +75,6 @@ export const useSignUp = () => {
     profileImagePreview,
     handleProfileImageChange,
     handleSubmit,
+    isSubmitting,
   };
 };
