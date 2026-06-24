@@ -13,6 +13,7 @@ import Register from "./page/Relay/Register/Register";
 import MyPage from "./page/MyPage/MyPage";
 import RequireAuth from "./components/RequireAuth/RequireAuth";
 import ToastViewport from "./components/Toast/ToastViewport";
+import ConfirmDialog from "./components/ConfirmDialog/ConfirmDialog";
 
 function App() {
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
   return (
     <>
       <ToastViewport />
+      <ConfirmDialog />
       <Routes>
         <Route path="/" element={isMobile ? <MobileLayout /> : <DesktopLayout />}>
           <Route index element={<Main />} />

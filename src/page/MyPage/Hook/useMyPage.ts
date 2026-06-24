@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
 import { uploadImageToS3 } from "../../../api/s3Api";
 import { toast } from "../../../store/toastStore";
+import { confirm } from "../../../store/confirmStore";
 import {
   getMyBookmarks,
   getMyCreatedRelays,
@@ -123,16 +124,30 @@ export const useMyPage = () => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const ok = await confirm({
+      title: "로그아웃 하시겠어요?",
+      message: "다시 이용하려면 로그인이 필요합니다.",
+      confirmText: "로그아웃",
+      cancelText: "취소",
+    });
+    if (!ok) return;
+
     logout();
     navigate("/");
   };
 
   const handleWithdraw = async () => {
     if (isWithdrawing) return;
-    if (!window.confirm("정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-      return;
-    }
+
+    const ok = await confirm({
+      title: "정말 탈퇴하시겠어요?",
+      message: "탈퇴 시 모든 활동 정보가 삭제되며 이 작업은 되돌릴 수 없습니다.",
+      confirmText: "탈퇴하기",
+      cancelText: "취소",
+      tone: "danger",
+    });
+    if (!ok) return;
 
     setIsWithdrawing(true);
     try {
