@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
 import { uploadImageToS3 } from "../../../api/s3Api";
+import { toast } from "../../../store/toastStore";
 import {
   getMyBookmarks,
   getMyCreatedRelays,
@@ -113,9 +114,10 @@ export const useMyPage = () => {
       const updated = await updateMyProfile({ name: editName, profileImage });
       setProfile(updated);
       setIsEditOpen(false);
+      toast.success("회원 정보가 수정되었습니다.");
       fetchProfile();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.");
+      toast.error(error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.");
     } finally {
       setIsSubmittingEdit(false);
     }
@@ -135,11 +137,11 @@ export const useMyPage = () => {
     setIsWithdrawing(true);
     try {
       const response = await withdrawMyAccount();
-      alert(response.message);
+      toast.success(response.message ?? "회원 탈퇴가 완료되었습니다.");
       logout();
       navigate("/");
     } catch (error) {
-      alert(error instanceof Error ? error.message : "회원 탈퇴에 실패했습니다.");
+      toast.error(error instanceof Error ? error.message : "회원 탈퇴에 실패했습니다.");
       setIsWithdrawing(false);
     }
   };

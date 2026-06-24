@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
+import { toast } from "../../store/toastStore";
 
 export default function RequireAuth() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -8,7 +9,7 @@ export default function RequireAuth() {
 
   useEffect(() => {
     if (!accessToken) {
-      alert("로그인이 필요한 페이지입니다.");
+      toast.warning("로그인이 필요한 페이지입니다.");
     }
   }, [accessToken]);
 

@@ -2,6 +2,7 @@ import { type SubmitEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createRelay, joinRelay } from "../api/registerApi";
 import { uploadImageToS3 } from "../../../../api/s3Api";
+import { toast } from "../../../../store/toastStore";
 
 interface UseRegisterRelayParams {
   address: string;
@@ -36,7 +37,7 @@ export const useRegisterRelay = ({
     if (isSubmitting) return;
 
     if (!isStepAdd && categoryId == null) {
-      alert("카테고리를 선택해주세요.");
+      toast.warning("카테고리를 선택해주세요.");
       return;
     }
 
@@ -55,7 +56,7 @@ export const useRegisterRelay = ({
           photoUrl: photoUrl,
           content,
         });
-        alert("릴레이가 등록되었습니다.");
+        toast.success("릴레이가 등록되었습니다.");
         navigate("/relay/list");
         return;
       }
@@ -70,12 +71,12 @@ export const useRegisterRelay = ({
           content,
         });
 
-        alert("릴레이에 참여했습니다.");
+        toast.success("릴레이에 참여했습니다.");
         navigate(`/relay/detail/${relayId}`);
         return;
       }
     } catch (error) {
-      alert(
+      toast.error(
         error instanceof Error
           ? error.message
           : isStepAdd

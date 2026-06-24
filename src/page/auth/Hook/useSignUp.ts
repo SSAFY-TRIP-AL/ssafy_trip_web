@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signUp } from "../api/authApi";
 import { uploadImageToS3 } from "../../../api/s3Api";
 import { useForm } from "./useForm";
+import { toast } from "../../../store/toastStore";
 
 type SignUpForm = {
   loginId: string;
@@ -58,12 +59,10 @@ export const useSignUp = () => {
         profileImage: profileImageUrl,
       });
 
-      alert("회원가입이 완료되었습니다.");
+      toast.success("회원가입이 완료되었습니다.");
       navigate("/auth/login");
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "회원가입에 실패했습니다.",
-      );
+      toast.error(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
       setIsSubmitting(false);
     }
   };

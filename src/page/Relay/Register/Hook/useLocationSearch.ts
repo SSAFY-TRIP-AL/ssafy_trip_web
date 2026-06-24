@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDebouncedValue } from "../../../../Hook/useDebounce";
+import { toast } from "../../../../store/toastStore";
 
 const KAKAO_REST_API_KEY = import.meta.env.VITE_KKAKO_REST_API_KEY;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -104,7 +105,7 @@ export const useLocationSearch = () => {
 
   function findCurrentLocation() {
     if (!navigator.geolocation) {
-      alert("이 브라우저에서는 위치 정보를 사용할 수 없습니다.");
+      toast.warning("이 브라우저에서는 위치 정보를 사용할 수 없습니다.");
       return;
     }
 
@@ -130,7 +131,7 @@ export const useLocationSearch = () => {
       },
       () => {
         setIsLocating(false);
-        alert("현재 위치를 가져오지 못했습니다.");
+        toast.error("현재 위치를 가져오지 못했습니다.");
       },
     );
   }

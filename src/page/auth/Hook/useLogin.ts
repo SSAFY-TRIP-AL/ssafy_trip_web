@@ -3,6 +3,7 @@ import { useForm } from "./useForm";
 import { type SubmitEventHandler, useState } from "react";
 import { login } from "../api/authApi";
 import { useAuthStore } from "../../../store/authStore";
+import { toast } from "../../../store/toastStore";
 
 type LoginForm = {
   loginId: string;
@@ -30,13 +31,13 @@ export default function useLogin() {
         password: values.password,
       });
 
-      alert(data.message);
+      toast.success(data.message ?? "로그인되었습니다.");
       storeLogin(data.accessToken, data.name, data.profileImage);
       const from = (location.state as { from?: { pathname?: string } } | null)?.from
         ?.pathname;
       navigate(from ?? "/", { replace: true });
     } catch (error) {
-      alert(error instanceof Error ? error.message : "로그인에 실패했습니다.");
+      toast.error(error instanceof Error ? error.message : "로그인에 실패했습니다.");
       setIsSubmitting(false);
     }
   };
