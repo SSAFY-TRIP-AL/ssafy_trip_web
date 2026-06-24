@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
 import { uploadImageToS3 } from "../../../api/s3Api";
+import { toast } from "../../../store/toastStore";
+import { confirm } from "../../../store/confirmStore";
 import {
   getMyBookmarks,
   getMyCreatedRelays,
@@ -51,6 +53,8 @@ export const useMyPage = () => {
   const [editName, setEditName] = useState("");
   const [editImageFile, setEditImageFile] = useState<File | null>(null);
   const [editImagePreview, setEditImagePreview] = useState<string | null>(null);
+  const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -101,6 +105,8 @@ export const useMyPage = () => {
   };
 
   const submitEdit = async () => {
+    if (isSubmittingEdit) return;
+    setIsSubmittingEdit(true);
     try {
       const profileImage = editImageFile
         ? await uploadImageToS3(editImageFile, "PROFILE")
@@ -109,29 +115,49 @@ export const useMyPage = () => {
       const updated = await updateMyProfile({ name: editName, profileImage });
       setProfile(updated);
       setIsEditOpen(false);
+      toast.success("회원 정보가 수정되었습니다.");
       fetchProfile();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.");
+      toast.error(error instanceof Error ? error.message : "회원 정보 수정에 실패했습니다.");
+    } finally {
+      setIsSubmittingEdit(false);
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const ok = await confirm({
+      title: "로그아웃 하시겠어요?",
+      message: "다시 이용하려면 로그인이 필요합니다.",
+      confirmText: "로그아웃",
+      cancelText: "취소",
+    });
+    if (!ok) return;
+
     logout();
     navigate("/");
   };
 
   const handleWithdraw = async () => {
-    if (!window.confirm("정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-      return;
-    }
+    if (isWithdrawing) return;
 
+    const ok = await confirm({
+      title: "정말 탈퇴하시겠어요?",
+      message: "탈퇴 시 모든 활동 정보가 삭제되며 이 작업은 되돌릴 수 없습니다.",
+      confirmText: "탈퇴하기",
+      cancelText: "취소",
+      tone: "danger",
+    });
+    if (!ok) return;
+
+    setIsWithdrawing(true);
     try {
       const response = await withdrawMyAccount();
-      alert(response.message);
+      toast.success(response.message ?? "회원 탈퇴가 완료되었습니다.");
       logout();
       navigate("/");
     } catch (error) {
-      alert(error instanceof Error ? error.message : "회원 탈퇴에 실패했습니다.");
+      toast.error(error instanceof Error ? error.message : "회원 탈퇴에 실패했습니다.");
+      setIsWithdrawing(false);
     }
   };
 
@@ -153,5 +179,7 @@ export const useMyPage = () => {
     submitEdit,
     handleLogout,
     handleWithdraw,
+    isSubmittingEdit,
+    isWithdrawing,
   };
 };

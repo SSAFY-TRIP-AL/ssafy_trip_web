@@ -63,7 +63,7 @@ const fields: {
 ];
 
 export default function LoginDesktop() {
-  const { values, handleChange, handleSubmit } = useLogin();
+  const { values, handleChange, handleSubmit, isSubmitting, errors } = useLogin();
 
   return (
     <div className="container">
@@ -75,26 +75,27 @@ export default function LoginDesktop() {
         <form
           onSubmit={handleSubmit}
           className={`authForm ${desktopStyle.loginForm}`}
+          noValidate
         >
           {fields.map(({ id, label, type, placeholder }) => {
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className="authInputBox">
+                <div className={`authInputBox ${errors[id] ? "inputError" : ""}`}>
                   <input
                     id={id}
                     type={type}
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
-                    required
                   />
                 </div>
+                {errors[id] && <span className="authError">{errors[id]}</span>}
               </div>
             );
           })}
-          <button type="submit" className="authBtn">
-            로그인
+          <button type="submit" className="authBtn" disabled={isSubmitting}>
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
           <div className={desktopStyle.divider}>
             <span>또는</span>

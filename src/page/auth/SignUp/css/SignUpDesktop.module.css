@@ -65,7 +65,7 @@
   padding: 0;
 }
 .signupFieldError {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #ef4444;
 }
 .signupForm > span {

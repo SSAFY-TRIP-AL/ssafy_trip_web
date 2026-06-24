@@ -25,7 +25,7 @@ export const useRelayDetail = () => {
   }, [id]);
 
   const fetchRecommendations = async () => {
-    if (!detail) return;
+    if (!detail || isRecommendLoading) return;
 
     setIsRecommendLoading(true);
     setRecommendError("");

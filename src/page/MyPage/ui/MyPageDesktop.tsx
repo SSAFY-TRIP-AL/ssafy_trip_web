@@ -16,6 +16,7 @@ import "../../auth/auth.css";
 import myPageStyle from "../css/MyPageDesktop.module.css";
 import { useMyPage } from "../Hook/useMyPage";
 import type { RelayTabType } from "../api/myPageApi";
+import { resolveProfileImage } from "../../../utils/profileImage";
 
 const TABS: { id: RelayTabType; label: string; description: string }[] = [
   {
@@ -74,6 +75,8 @@ export default function MyPageDesktop() {
     submitEdit,
     handleLogout,
     handleWithdraw,
+    isSubmittingEdit,
+    isWithdrawing,
   } = useMyPage();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -92,15 +95,11 @@ export default function MyPageDesktop() {
 
       <div className={myPageStyle.profileCard}>
         <div className={myPageStyle.profileLeft}>
-          {profile.profileImage ? (
-            <img
-              src={profile.profileImage}
-              alt={profile.name}
-              className={myPageStyle.profileImg}
-            />
-          ) : (
-            <div className={myPageStyle.profileImg} />
-          )}
+          <img
+            src={resolveProfileImage(profile.profileImage)}
+            alt={profile.name}
+            className={myPageStyle.profileImg}
+          />
           <div className={myPageStyle.profileInfo}>
             <span className="trip-h3">{profile.name}</span>
             {profile.createdAt && (
@@ -273,9 +272,10 @@ export default function MyPageDesktop() {
             type="button"
             className={myPageStyle.withdrawBtn}
             onClick={handleWithdraw}
+            disabled={isWithdrawing}
           >
             <Trash2 size={16} />
-            회원 탈퇴
+            {isWithdrawing ? "처리 중..." : "회원 탈퇴"}
           </button>
         </div>
       </div>
@@ -300,15 +300,11 @@ export default function MyPageDesktop() {
                 className={myPageStyle.modalAvatarUpload}
                 onClick={() => fileInputRef.current?.click()}
               >
-                {editImagePreview ? (
-                  <img
-                    src={editImagePreview}
-                    alt="프로필 이미지"
-                    className={myPageStyle.modalAvatarPreview}
-                  />
-                ) : (
-                  <div className={myPageStyle.modalAvatarPlaceholder} />
-                )}
+                <img
+                  src={resolveProfileImage(editImagePreview)}
+                  alt="프로필 이미지"
+                  className={myPageStyle.modalAvatarPreview}
+                />
                 <span className={myPageStyle.modalAvatarEditBtn}>
                   <Camera size={14} />
                 </span>
@@ -349,8 +345,9 @@ export default function MyPageDesktop() {
                 type="button"
                 className={myPageStyle.modalSubmitBtn}
                 onClick={submitEdit}
+                disabled={isSubmittingEdit}
               >
-                저장
+                {isSubmittingEdit ? "저장 중..." : "저장"}
               </button>
             </div>
           </div>

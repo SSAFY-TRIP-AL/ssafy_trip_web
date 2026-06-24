@@ -6,13 +6,30 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 6px;
+  margin-top: 40px;
+}
+.logo {
+  height: 70px;
+  margin-bottom: 4px;
+  margin-top: 5px;
+}
+.tagline {
+  color: var(--color-gray-500);
+  font-size: 0.6875rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.title {
+  margin-top: 4px;
+  margin-bottom: 10px;
 }
 .signupForm {
   width: 100%;
   padding: 24px 20px;
   box-sizing: border-box;
+  margin-top: 40px;
 }
 
 .avatarField {
@@ -82,7 +99,7 @@
   padding: 0;
 }
 .signupFieldError {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #ef4444;
 }
 .signupForm > span {

@@ -1,6 +1,9 @@
 import "../../../../style.css";
 import "../../auth.css";
+import { User, Lock, Eye, EyeOff } from "lucide-react";
 import useLogin from "../../Hook/useLogin";
+import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
+import logo from "../../../../assets/logo_lf.svg";
 import mobileStyle from "../css/LoginMobile.module.css";
 
 function GoogleIcon() {
@@ -62,55 +65,77 @@ const fields: {
   },
 ];
 
+const fieldIcons: Record<keyof LoginForm, typeof User> = {
+  loginId: User,
+  password: Lock,
+};
+
 export default function LoginMobile() {
-  const { values, handleChange, handleSubmit } = useLogin();
+  const { values, handleChange, handleSubmit, isSubmitting, errors } = useLogin();
+  const { passwordVisible, toggleVisible } = usePasswordVisibility();
 
   return (
     <div className={mobileStyle.container}>
       <div className={mobileStyle.authContainer}>
-        <span className="trip-h2">로그인</span>
-        <span className={`trip-body1 ${mobileStyle.loginText}`}>
-          Trip Baton에 로그인하세요.
-        </span>
+        <img src={logo} alt="Trip Baton" className={mobileStyle.logo} />
+        {/* <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span> */}
+        {/* <span className={`trip-h2 ${mobileStyle.title}`}>로그인</span> */}
+        {/* <span className={`trip-body1 ${mobileStyle.loginText}`}>
+          AI 여행 릴레이 서비스에 로그인하세요.
+        </span> */}
         <form
           onSubmit={handleSubmit}
           className={`authForm ${mobileStyle.loginForm}`}
+          noValidate
         >
           {fields.map(({ id, label, type, placeholder }) => {
+            const isPassword = type === "password";
+            const inputType = isPassword && passwordVisible[id] ? "text" : type;
+            const Icon = fieldIcons[id];
+
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className="authInputBox">
+                <div
+                  className={`authInputBox ${mobileStyle.loginInputBox} ${
+                    errors[id] ? "inputError" : ""
+                  }`}
+                >
+                  <Icon size={16} className={mobileStyle.loginInputIcon} />
                   <input
                     id={id}
-                    type={type}
+                    type={inputType}
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
-                    required
                   />
+                  {isPassword && (
+                    <button
+                      type="button"
+                      className={mobileStyle.loginEyeBtn}
+                      onClick={() => toggleVisible(id)}
+                      aria-label={passwordVisible[id] ? "비밀번호 숨기기" : "비밀번호 표시"}
+                    >
+                      {passwordVisible[id] ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  )}
                 </div>
+                {errors[id] && <span className="authError">{errors[id]}</span>}
               </div>
             );
           })}
-          <button type="submit" className="authBtn">
-            로그인
+          <button type="submit" className="authBtn" disabled={isSubmitting}>
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
           <div className={mobileStyle.divider}>
             <span>또는</span>
           </div>
           <div className={mobileStyle.socialContainer}>
-            <button
-              type="button"
-              className={`${mobileStyle.socialBtn} ${mobileStyle.googleBtn}`}
-            >
+            <button type="button" className={`${mobileStyle.socialBtn} ${mobileStyle.googleBtn}`}>
               <GoogleIcon />
               Google로 로그인
             </button>
-            <button
-              type="button"
-              className={`${mobileStyle.socialBtn} ${mobileStyle.kakaoBtn}`}
-            >
+            <button type="button" className={`${mobileStyle.socialBtn} ${mobileStyle.kakaoBtn}`}>
               <KakaoIcon />
               Kakao로 로그인
             </button>

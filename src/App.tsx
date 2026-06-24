@@ -11,6 +11,9 @@ import RelayList from "./page/Relay/List/RelayList";
 import RelayDetail from "./page/Relay/Detail/RelayDetail";
 import Register from "./page/Relay/Register/Register";
 import MyPage from "./page/MyPage/MyPage";
+import RequireAuth from "./components/RequireAuth/RequireAuth";
+import ToastViewport from "./components/Toast/ToastViewport";
+import ConfirmDialog from "./components/ConfirmDialog/ConfirmDialog";
 
 function App() {
   useEffect(() => {
@@ -24,19 +27,25 @@ function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={isMobile ? <MobileLayout /> : <DesktopLayout />}>
-        <Route index element={<Main />} />
-        <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/map" element={<Map />} />
-        <Route path="/relay/list" element={<RelayList />} />
-        <Route path="/relay/detail/:id" element={<RelayDetail />} />
-        <Route path="/relay/register" element={<Register />} />
-        <Route path="/relay/:id/step" element={<Register />} />
-        <Route path="/mypage" element={<MyPage />} />
-      </Route>
-    </Routes>
+    <>
+      <ToastViewport />
+      <ConfirmDialog />
+      <Routes>
+        <Route path="/" element={isMobile ? <MobileLayout /> : <DesktopLayout />}>
+          <Route index element={<Main />} />
+          <Route path="/auth/signup" element={<SignUp />} />
+          <Route path="/auth/login" element={<Login />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/map" element={<Map />} />
+            <Route path="/relay/list" element={<RelayList />} />
+            <Route path="/relay/detail/:id" element={<RelayDetail />} />
+            <Route path="/relay/register" element={<Register />} />
+            <Route path="/relay/:id/step" element={<Register />} />
+            <Route path="/mypage" element={<MyPage />} />
+          </Route>
+        </Route>
+      </Routes>
+    </>
   );
 }
 

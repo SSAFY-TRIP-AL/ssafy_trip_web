@@ -48,7 +48,7 @@
   gap: 4px;
 }
 .joinedAt {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--color-gray-500);
 }
 .editBtn {
@@ -59,7 +59,7 @@
   border-radius: var(--border-radius-10);
   background-color: var(--color-pure-white);
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -89,7 +89,7 @@
 }
 .statItem span:nth-child(2) {
   color: var(--color-gray-500);
-  font-size: 12px;
+  font-size: 0.75rem;
   text-align: center;
 }
 
@@ -107,7 +107,7 @@
   border-bottom: 2px solid transparent;
   background-color: transparent;
   color: var(--color-gray-500);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 500;
   white-space: nowrap;
 }
@@ -119,7 +119,7 @@
 .tabDescription {
   display: block;
   margin: 12px 0;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--color-gray-500);
 }
 
@@ -171,20 +171,20 @@
   gap: 4px;
 }
 .relayTitle {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--color-gray-900);
 }
 .relayDescription {
   margin: 0;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--color-gray-500);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .relayDateValue {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--color-gray-700);
 }
 .relayChevron {
@@ -225,7 +225,7 @@
   border-radius: var(--border-radius-10);
   background-color: transparent;
   color: var(--color-gray-700);
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .pageBtnActive {
   background-color: var(--color-electric-blue);
@@ -247,35 +247,48 @@
   flex-direction: column;
   gap: 10px;
   margin-top: 24px;
-  padding: 18px;
-  background-color: #fde9e9;
-  border-radius: var(--border-radius-10);
+}
+.accountTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-gray-500);
+}
+.accountActions {
+  display: flex;
+  gap: 10px;
 }
 .logoutBtn,
 .withdrawBtn {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 42px;
+  gap: 6px;
+  height: 72px;
   padding: 0 14px;
-  border: none;
+  border: 1px solid var(--color-gray-100);
   border-radius: var(--border-radius-10);
   background-color: var(--color-pure-white);
+  box-shadow: var(--box-shadow-default);
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
 }
 .withdrawBtn {
   color: #ef4444;
+}
+.logoutBtn:active,
+.withdrawBtn:active {
+  background-color: var(--color-gray-50);
 }
 
 /* 회원 정보 수정 모달 */
 .modalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -283,19 +296,21 @@
   z-index: 100;
 }
 .modalBox {
-  position: relative;
+  position: absolute;
   display: flex;
   flex-direction: column;
   gap: 18px;
   width: 100%;
   max-height: 88vh;
+  max-height: 88dvh;
   overflow-y: auto;
-  padding: 28px 20px;
-  padding-bottom: calc(28px + env(safe-area-inset-bottom));
+  padding: max(28px, env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
   box-sizing: border-box;
   background-color: var(--color-pure-white);
   border-radius: var(--border-radius-20) var(--border-radius-20) 0 0;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  bottom: 60px;
+  padding-bottom: 50px;
 }
 .modalCloseBtn {
   position: absolute;
@@ -358,7 +373,7 @@
   border-radius: var(--border-radius-10);
   background-color: var(--color-pure-white);
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 .modalSubmitBtn {
@@ -368,6 +383,11 @@
   border-radius: var(--border-radius-10);
   background-color: var(--color-electric-blue);
   color: var(--color-pure-white);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
+}
+.modalSubmitBtn:disabled,
+.withdrawBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
