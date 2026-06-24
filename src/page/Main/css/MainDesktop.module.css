@@ -209,6 +209,19 @@
   gap: 20px;
   margin-top: 20px;
 }
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 60px 20px;
+  border: 1px dashed var(--color-gray-300);
+  border-radius: var(--border-radius-10);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-500);
+  font-size: 1rem;
+  text-align: center;
+}
 /* 현재 진행 중인 릴레이 끝 */
 
 /* 명예의 전당 시작 */

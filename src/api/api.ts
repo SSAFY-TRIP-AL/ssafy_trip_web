@@ -35,7 +35,11 @@ api.interceptors.response.use(
     const originalRequest = error.config as RetryableRequestConfig | undefined;
 
     // 액세스 토큰 만료
-    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true; // 무한 루프 방지
 
       try {
@@ -56,12 +60,15 @@ api.interceptors.response.use(
         } else {
           const reissueData = res.data as unknown as ReissueResponse;
           console.error("토큰 갱신 실패");
-          toast.error(reissueData.message ?? "세션이 만료되었습니다. 다시 로그인해주세요.");
+          toast.error(
+            reissueData.message ??
+              "세션이 만료되었습니다. 다시 로그인해주세요.",
+          );
         }
       } catch {
-        // const { logout } = useAuthStore.getState();
-        // logout();
-        // window.location.href = "/auth/login";
+        const { logout } = useAuthStore.getState();
+        logout();
+        window.location.href = "/auth/login";
       }
     }
 

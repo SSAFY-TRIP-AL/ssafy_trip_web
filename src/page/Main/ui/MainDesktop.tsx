@@ -89,21 +89,25 @@ export default function MainDesktop() {
               <ChevronRight size={16} strokeWidth={2} />
             </span>
           </div>
-          <div className={desktopStyle.relayList}>
-            {mainInfo.relays.relays.map((relay) => (
-              <RelayCard
-                key={relay.id}
-                id={relay.id}
-                title={relay.title}
-                description={`${relay.participantCount}명 참여중`}
-                imageUrl={relay.photoUrl}
-                categoryName={relay.category}
-                categoryStyle={getCategoryStyle(
-                  categories.findIndex((c) => c.name === relay.category),
-                )}
-              />
-            ))}
-          </div>
+          {mainInfo.relays.relays.length === 0 ? (
+            <div className={desktopStyle.emptyState}>아직 진행 중인 릴레이가 없어요.</div>
+          ) : (
+            <div className={desktopStyle.relayList}>
+              {mainInfo.relays.relays.map((relay) => (
+                <RelayCard
+                  key={relay.id}
+                  id={relay.id}
+                  title={relay.title}
+                  description={`${relay.participantCount}명 참여중`}
+                  imageUrl={relay.photoUrl}
+                  categoryName={relay.category}
+                  categoryStyle={getCategoryStyle(
+                    categories.findIndex((c) => c.name === relay.category),
+                  )}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className={desktopStyle.rankingContainer}>
@@ -116,60 +120,72 @@ export default function MainDesktop() {
               릴레이를 가장 활발하게 이어가고 있는 Top3 유저입니다.
             </span>
           </div>
-          <div className={desktopStyle.rankingList}>
-            {(() => {
-              const [first, second, third] = mainInfo.ranking;
-              return (
-                <>
-                  {second && (
-                    <div className={`${desktopStyle.rankingItem} ${desktopStyle.rankingSecond}`}>
-                      <div className={desktopStyle.rankBadge}>2</div>
+          {mainInfo.ranking.length === 0 ? (
+            <div className={desktopStyle.emptyState}>아직 랭킹에 오른 유저가 없어요.</div>
+          ) : (
+            <div className={desktopStyle.rankingList}>
+              {(() => {
+                const [first, second, third] = mainInfo.ranking;
+                return (
+                  <>
+                    {second && (
                       <div
-                        className={desktopStyle.profileImg}
-                        style={{
-                          backgroundImage: `url(${resolveProfileImage(second.profileImage)})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      ></div>
-                      <span className="trip-h3">{second.name}</span>
-                      <span className="trip-body1">릴레이 {second.participationCount}회 참여</span>
-                    </div>
-                  )}
-                  {first && (
-                    <div className={`${desktopStyle.rankingItem} ${desktopStyle.rankingFirst}`}>
-                      <Crown size={32} strokeWidth={1.5} className={desktopStyle.trophyIcon} />
-                      <div
-                        className={desktopStyle.profileImg}
-                        style={{
-                          backgroundImage: `url(${resolveProfileImage(first.profileImage)})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      ></div>
-                      <span className="trip-h3">{first.name}</span>
-                      <span className="trip-body1">릴레이 {first.participationCount}회 참여</span>
-                    </div>
-                  )}
-                  {third && (
-                    <div className={`${desktopStyle.rankingItem} ${desktopStyle.rankingThird}`}>
-                      <div className={desktopStyle.rankBadge}>3</div>
-                      <div
-                        className={desktopStyle.profileImg}
-                        style={{
-                          backgroundImage: `url(${resolveProfileImage(third.profileImage)})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      ></div>
-                      <span className="trip-h3">{third.name}</span>
-                      <span className="trip-body1">릴레이 {third.participationCount}회 참여</span>
-                    </div>
-                  )}
-                </>
-              );
-            })()}
-          </div>
+                        className={`${desktopStyle.rankingItem} ${desktopStyle.rankingSecond}`}
+                      >
+                        <div className={desktopStyle.rankBadge}>2</div>
+                        <div
+                          className={desktopStyle.profileImg}
+                          style={{
+                            backgroundImage: `url(${resolveProfileImage(second.profileImage)})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        ></div>
+                        <span className="trip-h3">{second.name}</span>
+                        <span className="trip-body1">
+                          릴레이 {second.participationCount}회 참여
+                        </span>
+                      </div>
+                    )}
+                    {first && (
+                      <div className={`${desktopStyle.rankingItem} ${desktopStyle.rankingFirst}`}>
+                        <Crown size={32} strokeWidth={1.5} className={desktopStyle.trophyIcon} />
+                        <div
+                          className={desktopStyle.profileImg}
+                          style={{
+                            backgroundImage: `url(${resolveProfileImage(first.profileImage)})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        ></div>
+                        <span className="trip-h3">{first.name}</span>
+                        <span className="trip-body1">
+                          릴레이 {first.participationCount}회 참여
+                        </span>
+                      </div>
+                    )}
+                    {third && (
+                      <div className={`${desktopStyle.rankingItem} ${desktopStyle.rankingThird}`}>
+                        <div className={desktopStyle.rankBadge}>3</div>
+                        <div
+                          className={desktopStyle.profileImg}
+                          style={{
+                            backgroundImage: `url(${resolveProfileImage(third.profileImage)})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        ></div>
+                        <span className="trip-h3">{third.name}</span>
+                        <span className="trip-body1">
+                          릴레이 {third.participationCount}회 참여
+                        </span>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
+          )}
         </div>
       </div>
     </>
