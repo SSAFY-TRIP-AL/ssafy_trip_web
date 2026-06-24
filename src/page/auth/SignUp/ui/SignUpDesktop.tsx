@@ -5,6 +5,7 @@ import "../../../../style.css";
 import "../../auth.css";
 import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
 import { useSignUp } from "../../Hook/useSignUp";
+import { defaultProfile } from "../../../../utils/profileImage";
 
 type SignUpForm = {
   loginId: string;
@@ -62,6 +63,8 @@ export default function SignUpDesktop() {
     profileImagePreview,
     handleProfileImageChange,
     handleSubmit,
+    isSubmitting,
+    errors,
   } = useSignUp();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,21 +80,18 @@ export default function SignUpDesktop() {
         <form
           onSubmit={handleSubmit}
           className={`authForm ${desktopStyle.signupForm}`}
+          noValidate
         >
           <div className={desktopStyle.avatarField}>
             <div
               className={desktopStyle.avatarUpload}
               onClick={() => fileInputRef.current?.click()}
             >
-              {profileImagePreview ? (
-                <img
-                  src={profileImagePreview}
-                  alt="프로필 이미지"
-                  className={desktopStyle.avatarPreview}
-                />
-              ) : (
-                <div className={desktopStyle.avatarPlaceholder} />
-              )}
+              <img
+                src={profileImagePreview ?? defaultProfile}
+                alt="프로필 이미지"
+                className={desktopStyle.avatarPreview}
+              />
               <span className={desktopStyle.avatarEditBtn}>
                 <Camera size={14} />
               </span>
@@ -110,17 +110,23 @@ export default function SignUpDesktop() {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
 
+            const liveMismatch = id === "passwordConfirm" && passwordMismatch;
+            const errorMessage = errors[id] ?? (liveMismatch ? "비밀번호가 일치하지 않습니다." : undefined);
+
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className={`authInputBox ${desktopStyle.signupInputBox}`}>
+                <div
+                  className={`authInputBox ${desktopStyle.signupInputBox} ${
+                    errorMessage ? "inputError" : ""
+                  }`}
+                >
                   <input
                     id={id}
                     type={inputType}
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
-                    required
                   />
                   {isPassword && (
                     <button
@@ -136,16 +142,12 @@ export default function SignUpDesktop() {
                     </button>
                   )}
                 </div>
-                {id === "passwordConfirm" && passwordMismatch && (
-                  <span className={desktopStyle.signupFieldError}>
-                    비밀번호가 일치하지 않습니다.
-                  </span>
-                )}
+                {errorMessage && <span className="authError">{errorMessage}</span>}
               </div>
             );
           })}
-          <button type="submit" className="authBtn">
-            회원가입
+          <button type="submit" className="authBtn" disabled={isSubmitting}>
+            {isSubmitting ? "회원가입 중..." : "회원가입"}
           </button>
           <span>
             이미 계정이 있으신가요?<a href="/auth/login">로그인</a>

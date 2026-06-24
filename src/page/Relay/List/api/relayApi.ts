@@ -5,6 +5,7 @@ export type RelaySortOption = "latest" | "popular";
 export interface RelayItem {
   id: number;
   title: string;
+  locationName: string;
   category: string;
   participantCount: number;
   status: string;
@@ -36,6 +37,7 @@ export const RELAY_SORT_OPTIONS: { id: RelaySortOption; label: string }[] = [
 interface RelayListItemDto {
   id: number;
   title: string;
+  locationName: string;
   category: string;
   participantCount: number;
   status: string;
@@ -75,6 +77,7 @@ export const getRelayList = async (
     items: response.data.relays.map((relay) => ({
       id: relay.id,
       title: relay.title,
+      locationName: relay.locationName,
       category: relay.category,
       participantCount: relay.participantCount,
       status: relay.status,

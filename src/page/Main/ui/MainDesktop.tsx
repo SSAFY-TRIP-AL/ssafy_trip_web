@@ -17,6 +17,7 @@ import { useMain } from "../Hook/useMain";
 import RelayCard from "../../../components/RelayCard/RelayCard";
 import { useCategories } from "../../../hooks/useCategories";
 import { getCategoryStyle } from "../../../constants/categoryPalette";
+import { resolveProfileImage } from "../../../utils/profileImage";
 
 export default function MainDesktop() {
   const { mainInfo, goMap, goRelayList } = useMain();
@@ -126,7 +127,7 @@ export default function MainDesktop() {
                       <div
                         className={desktopStyle.profileImg}
                         style={{
-                          backgroundImage: `url(${second.profileImage})`,
+                          backgroundImage: `url(${resolveProfileImage(second.profileImage)})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }}
@@ -141,7 +142,7 @@ export default function MainDesktop() {
                       <div
                         className={desktopStyle.profileImg}
                         style={{
-                          backgroundImage: `url(${first.profileImage})`,
+                          backgroundImage: `url(${resolveProfileImage(first.profileImage)})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }}
@@ -156,7 +157,7 @@ export default function MainDesktop() {
                       <div
                         className={desktopStyle.profileImg}
                         style={{
-                          backgroundImage: `url(${third.profileImage})`,
+                          backgroundImage: `url(${resolveProfileImage(third.profileImage)})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }}

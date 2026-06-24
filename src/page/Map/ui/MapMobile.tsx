@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Search,
-  ChevronDown,
-  X,
-  LocateFixed,
-  Plus,
-  Minus,
-  Users,
-} from "lucide-react";
+import { Search, ChevronDown, X, LocateFixed, Plus, Minus, Users } from "lucide-react";
 import mobileStyle from "../css/MapMobile.module.css";
 import "../../../style.css";
 import { useCategories } from "../../../hooks/useCategories";
@@ -49,10 +41,7 @@ interface KakaoMaps {
     container: HTMLElement,
     options: { center: KakaoLatLng; level: number },
   ) => KakaoMapInstance;
-  Marker: new (options: {
-    position: KakaoLatLng;
-    map?: KakaoMapInstance;
-  }) => KakaoOverlay;
+  Marker: new (options: { position: KakaoLatLng; map?: KakaoMapInstance }) => KakaoOverlay;
   Polyline: new (options: {
     path: KakaoLatLng[];
     strokeWeight: number;
@@ -83,9 +72,13 @@ declare global {
 const KAKAO_JAVASCRIPT_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_API_KEY;
 
 const KOREA_CENTER = { lat: 36.5, lng: 127.8 };
-const KOREA_ZOOM_LEVEL = 12;
+const KOREA_ZOOM_LEVEL = 13;
 const MY_LOCATION_ZOOM_LEVEL = 5;
 const FLOW_DOT_COUNT = 6;
+
+const SHEET_PEEK_HEIGHT = 80;
+const SHEET_FULL_RATIO = 0.72;
+// const SHEET_CLOSE_THRESHOLD = SHEET_PEEK_HEIGHT * 0.55;
 
 function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
   const segments: {
@@ -113,8 +106,7 @@ function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
         covered += current.length;
         return false;
       }) ?? segments[segments.length - 1];
-    const ratio =
-      segment.length === 0 ? 0 : (distance - covered) / segment.length;
+    const ratio = segment.length === 0 ? 0 : (distance - covered) / segment.length;
     points.push({
       lat: segment.from.lat + (segment.to.lat - segment.from.lat) * ratio,
       lng: segment.from.lng + (segment.to.lng - segment.from.lng) * ratio,
@@ -133,14 +125,24 @@ export default function MapMobile() {
     relays,
     selectedId,
     route,
+    summary,
+    isSummaryLoading,
+    summaryError,
     selectRelay,
     closeRelay,
   } = useMap();
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
+  const [sheetHeight, setSheetHeight] = useState(SHEET_PEEK_HEIGHT);
+  const [isDragging, setIsDragging] = useState(false);
+  const [fullHeight, setFullHeight] = useState(() =>
+    Math.round(window.innerHeight * SHEET_FULL_RATIO),
+  );
   const { categories } = useCategories();
   const categoryRef = useRef<HTMLDivElement>(null);
+  const dragStartYRef = useRef(0);
+  const dragStartHeightRef = useRef(SHEET_PEEK_HEIGHT);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<KakaoMapInstance | null>(null);
   const markerInstancesRef = useRef<
@@ -167,14 +169,62 @@ export default function MapMobile() {
   function handleClosePanel() {
     closeRelay();
     clearRelayPath();
+    setSheetHeight(SHEET_PEEK_HEIGHT);
+  }
+
+  useEffect(() => {
+    if (selectedId == null) return;
+    setFullHeight(Math.round(window.innerHeight * SHEET_FULL_RATIO));
+    setSheetHeight(SHEET_PEEK_HEIGHT);
+  }, [selectedId]);
+
+  useEffect(() => {
+    function handleResize() {
+      setFullHeight(Math.round(window.innerHeight * SHEET_FULL_RATIO));
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  function handleSheetDragStart(event: React.PointerEvent<HTMLDivElement>) {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragStartYRef.current = event.clientY;
+    dragStartHeightRef.current = sheetHeight;
+    setIsDragging(true);
+  }
+
+  function handleSheetDragMove(event: React.PointerEvent<HTMLDivElement>) {
+    if (!isDragging) return;
+    const delta = dragStartYRef.current - event.clientY;
+    const next = Math.min(
+      fullHeight,
+      Math.max(SHEET_PEEK_HEIGHT * 0.4, dragStartHeightRef.current + delta),
+    );
+    setSheetHeight(next);
+  }
+
+  function handleSheetDragEnd() {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const dragDistance = Math.abs(sheetHeight - dragStartHeightRef.current);
+
+    if (dragDistance < 6) {
+      setSheetHeight(sheetHeight >= fullHeight * 0.9 ? SHEET_PEEK_HEIGHT : fullHeight);
+      return;
+    }
+
+    // if (sheetHeight < SHEET_CLOSE_THRESHOLD) {
+    //   handleClosePanel();
+    //   return;
+    // }
+
+    const midPoint = (SHEET_PEEK_HEIGHT + fullHeight) / 2;
+    setSheetHeight(sheetHeight >= midPoint ? fullHeight : SHEET_PEEK_HEIGHT);
   }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        categoryRef.current &&
-        !categoryRef.current.contains(event.target as Node)
-      ) {
+      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
         setIsCategoryOpen(false);
       }
     }
@@ -193,10 +243,7 @@ export default function MapMobile() {
         if (!mapContainerRef.current) return;
 
         const map = new window.kakao.maps.Map(mapContainerRef.current, {
-          center: new window.kakao.maps.LatLng(
-            KOREA_CENTER.lat,
-            KOREA_CENTER.lng,
-          ),
+          center: new window.kakao.maps.LatLng(KOREA_CENTER.lat, KOREA_CENTER.lng),
           level: KOREA_ZOOM_LEVEL,
         });
         mapInstanceRef.current = map;
@@ -244,9 +291,7 @@ export default function MapMobile() {
 
     const stops = [...route.steps].sort((a, b) => a.stepOrder - b.stepOrder);
 
-    const path = stops.map(
-      (stop) => new window.kakao.maps.LatLng(stop.latitude, stop.longitude),
-    );
+    const path = stops.map((stop) => new window.kakao.maps.LatLng(stop.latitude, stop.longitude));
 
     const bounds = new window.kakao.maps.LatLngBounds();
     path.forEach((latlng) => bounds.extend(latlng));
@@ -284,8 +329,7 @@ export default function MapMobile() {
       const midLat = (stop.latitude + next.latitude) / 2;
       const midLng = (stop.longitude + next.longitude) / 2;
       const bearing =
-        (Math.atan2(next.longitude - stop.longitude, next.latitude - stop.latitude) *
-          180) /
+        (Math.atan2(next.longitude - stop.longitude, next.latitude - stop.latitude) * 180) /
         Math.PI;
 
       const arrow = document.createElement("div");
@@ -346,10 +390,7 @@ export default function MapMobile() {
     if (!map || !navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(({ coords }) => {
-      const location = new window.kakao.maps.LatLng(
-        coords.latitude,
-        coords.longitude,
-      );
+      const location = new window.kakao.maps.LatLng(coords.latitude, coords.longitude);
       map.setCenter(location);
       map.setLevel(MY_LOCATION_ZOOM_LEVEL);
     });
@@ -376,9 +417,7 @@ export default function MapMobile() {
             onClick={() => setIsCategoryOpen((prev) => !prev)}
           >
             <span>
-              {category != null
-                ? categories.find((c) => c.id === category)?.name
-                : "카테고리"}
+              {category != null ? categories.find((c) => c.id === category)?.name : "카테고리"}
             </span>
             <ChevronDown size={16} />
           </button>
@@ -400,9 +439,7 @@ export default function MapMobile() {
                   <button
                     type="button"
                     className={`${mobileStyle.categoryOption} ${
-                      category === item.id
-                        ? mobileStyle.categoryOptionActive
-                        : ""
+                      category === item.id ? mobileStyle.categoryOptionActive : ""
                     }`}
                     onClick={() => selectCategory(item.id)}
                   >
@@ -451,74 +488,108 @@ export default function MapMobile() {
       </div>
 
       {selected && (
-        <>
-          <div className={mobileStyle.sheetBackdrop} onClick={handleClosePanel} />
-          <aside className={mobileStyle.detailSheet}>
+        <aside
+          className={mobileStyle.detailSheet}
+          style={{
+            height: sheetHeight,
+            transition: isDragging ? "none" : "height 0.25s ease",
+          }}
+        >
+          <div
+            className={mobileStyle.sheetDragZone}
+            onPointerDown={handleSheetDragStart}
+            onPointerMove={handleSheetDragMove}
+            onPointerUp={handleSheetDragEnd}
+            onPointerCancel={handleSheetDragEnd}
+          >
             <div className={mobileStyle.sheetHandle} />
-            <button
-              type="button"
-              className={mobileStyle.detailCloseBtn}
-              onClick={handleClosePanel}
-            >
-              <X size={18} />
-            </button>
-            <div className={mobileStyle.sheetScroll}>
+          </div>
+          <button type="button" className={mobileStyle.detailCloseBtn} onClick={handleClosePanel}>
+            <X size={18} />
+          </button>
+          <div
+            className={mobileStyle.sheetScroll}
+            style={{
+              overflowY: !isDragging && sheetHeight >= fullHeight - 1 ? "auto" : "hidden",
+            }}
+          >
+            <div className={mobileStyle.detailBody}>
+              {(() => {
+                const index = Math.max(
+                  0,
+                  categories.findIndex((c) => c.name === selected.category),
+                );
+                const style = getCategoryStyle(index);
+                return (
+                  <span
+                    className={mobileStyle.detailTag}
+                    style={{
+                      backgroundColor: style.tint,
+                      color: style.color,
+                    }}
+                  >
+                    {selected.category}
+                  </span>
+                );
+              })()}
+              <span className={mobileStyle.detailTitle}>{selected.title}</span>
+
+              <div className={mobileStyle.detailMetaRow}>
+                <span className={mobileStyle.detailMetaItem}>
+                  <Users size={14} />
+                  참여자 {selected.participantCount}명
+                </span>
+              </div>
+
               <img
                 src={selected.photoUrl}
                 alt={selected.title}
                 className={mobileStyle.detailImage}
               />
-              <div className={mobileStyle.detailBody}>
-                {(() => {
-                  const index = Math.max(
-                    0,
-                    categories.findIndex((c) => c.name === selected.category),
-                  );
-                  const style = getCategoryStyle(index);
-                  return (
-                    <span
-                      className={mobileStyle.detailTag}
-                      style={{
-                        backgroundColor: style.tint,
-                        color: style.color,
-                      }}
-                    >
-                      {selected.category}
-                    </span>
-                  );
-                })()}
-                <span className={mobileStyle.detailTitle}>{selected.title}</span>
 
-                <div className={mobileStyle.detailMetaRow}>
-                  <span className={mobileStyle.detailMetaItem}>
-                    <Users size={14} />
-                    참여자 {selected.participantCount}명
-                  </span>
-                </div>
+              <div className={mobileStyle.aiSummaryBox}>
+                <span className={mobileStyle.aiSummaryLabel}>AI 요약</span>
+                {isSummaryLoading ? (
+                  <p className={mobileStyle.aiSummaryPlaceholder}>AI 요약을 불러오는 중...</p>
+                ) : summaryError ? (
+                  <p className={mobileStyle.aiSummaryPlaceholder}>{summaryError}</p>
+                ) : summary ? (
+                  <>
+                    <p className={mobileStyle.aiSummaryText}>{summary.summary}</p>
+                    {summary.highlights.length > 0 && (
+                      <ul className={mobileStyle.aiHighlightList}>
+                        {summary.highlights.map((highlight, index) => (
+                          <li key={index} className={mobileStyle.aiHighlightItem}>
+                            {highlight}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <p className={mobileStyle.aiSummaryPlaceholder}>AI 요약 기능은 준비 중입니다.</p>
+                )}
+              </div>
 
-                <div className={mobileStyle.aiSummaryBox}>
-                  <span className={mobileStyle.aiSummaryLabel}>AI 요약</span>
-                  <p className={mobileStyle.aiSummaryPlaceholder}>
-                    AI 요약 기능은 준비 중입니다.
-                  </p>
-                </div>
-
-                <div className={mobileStyle.detailActions}>
-                  <button type="button" className={mobileStyle.relayStartBtn}>
-                    릴레이 시작하기
-                  </button>
-                  <button
-                    type="button"
-                    className={mobileStyle.relayDetailBtn}
-                    onClick={() => navigate(`/relay/detail/${selected.id}`)}
-                  >
-                    릴레이 상세보기
-                  </button>
-                </div>
+              <div className={mobileStyle.detailActions}>
+                <button
+                  type="button"
+                  className={mobileStyle.relayStartBtn}
+                  onClick={() => navigate(`/relay/${selected.id}/step`)}
+                >
+                  릴레이 이어하기
+                </button>
+                <button
+                  type="button"
+                  className={mobileStyle.relayDetailBtn}
+                  onClick={() => navigate(`/relay/detail/${selected.id}`)}
+                >
+                  릴레이 상세보기
+                </button>
               </div>
             </div>
-          </aside>
-        </>
+          </div>
+        </aside>
       )}
     </div>
   );

@@ -22,7 +22,7 @@
   gap: 8px;
 }
 .authField > label {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .authInputBox {
   position: relative;
@@ -42,12 +42,26 @@
   outline: none;
   border-color: var(--color-electric-blue);
 }
+.authInputBox.inputError input,
+.inputError > input,
+.inputError {
+  border-color: #ef4444;
+}
+.authError {
+  font-size: 0.75rem;
+  color: #ef4444;
+  line-height: 1.4;
+}
 .authBtn {
   background-color: var(--color-electric-blue);
   border: none;
   color: var(--color-pure-white);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 300;
   border-radius: var(--border-radius-10);
   height: 40px;
+}
+.authBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

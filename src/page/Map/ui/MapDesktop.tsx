@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Search,
-  ChevronDown,
-  X,
-  LocateFixed,
-  Plus,
-  Minus,
-  Users,
-} from "lucide-react";
+import { Search, ChevronDown, X, LocateFixed, Plus, Minus, Users } from "lucide-react";
 import desktopStyle from "../css/MapDesktop.module.css";
 import "../../../style.css";
 import { useCategories } from "../../../hooks/useCategories";
@@ -49,10 +41,7 @@ interface KakaoMaps {
     container: HTMLElement,
     options: { center: KakaoLatLng; level: number },
   ) => KakaoMapInstance;
-  Marker: new (options: {
-    position: KakaoLatLng;
-    map?: KakaoMapInstance;
-  }) => KakaoOverlay;
+  Marker: new (options: { position: KakaoLatLng; map?: KakaoMapInstance }) => KakaoOverlay;
   Polyline: new (options: {
     path: KakaoLatLng[];
     strokeWeight: number;
@@ -113,8 +102,7 @@ function buildFlowPoints(path: { lat: number; lng: number }[], count: number) {
         covered += current.length;
         return false;
       }) ?? segments[segments.length - 1];
-    const ratio =
-      segment.length === 0 ? 0 : (distance - covered) / segment.length;
+    const ratio = segment.length === 0 ? 0 : (distance - covered) / segment.length;
     points.push({
       lat: segment.from.lat + (segment.to.lat - segment.from.lat) * ratio,
       lng: segment.from.lng + (segment.to.lng - segment.from.lng) * ratio,
@@ -133,6 +121,9 @@ export default function MapDesktop() {
     relays,
     selectedId,
     route,
+    summary,
+    isSummaryLoading,
+    summaryError,
     selectRelay,
     closeRelay,
   } = useMap();
@@ -171,10 +162,7 @@ export default function MapDesktop() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        categoryRef.current &&
-        !categoryRef.current.contains(event.target as Node)
-      ) {
+      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
         setIsCategoryOpen(false);
       }
     }
@@ -193,10 +181,7 @@ export default function MapDesktop() {
         if (!mapContainerRef.current) return;
 
         const map = new window.kakao.maps.Map(mapContainerRef.current, {
-          center: new window.kakao.maps.LatLng(
-            KOREA_CENTER.lat,
-            KOREA_CENTER.lng,
-          ),
+          center: new window.kakao.maps.LatLng(KOREA_CENTER.lat, KOREA_CENTER.lng),
           level: KOREA_ZOOM_LEVEL,
         });
         mapInstanceRef.current = map;
@@ -244,9 +229,7 @@ export default function MapDesktop() {
 
     const stops = [...route.steps].sort((a, b) => a.stepOrder - b.stepOrder);
 
-    const path = stops.map(
-      (stop) => new window.kakao.maps.LatLng(stop.latitude, stop.longitude),
-    );
+    const path = stops.map((stop) => new window.kakao.maps.LatLng(stop.latitude, stop.longitude));
 
     const bounds = new window.kakao.maps.LatLngBounds();
     path.forEach((latlng) => bounds.extend(latlng));
@@ -284,8 +267,7 @@ export default function MapDesktop() {
       const midLat = (stop.latitude + next.latitude) / 2;
       const midLng = (stop.longitude + next.longitude) / 2;
       const bearing =
-        (Math.atan2(next.longitude - stop.longitude, next.latitude - stop.latitude) *
-          180) /
+        (Math.atan2(next.longitude - stop.longitude, next.latitude - stop.latitude) * 180) /
         Math.PI;
 
       const arrow = document.createElement("div");
@@ -346,10 +328,7 @@ export default function MapDesktop() {
     if (!map || !navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(({ coords }) => {
-      const location = new window.kakao.maps.LatLng(
-        coords.latitude,
-        coords.longitude,
-      );
+      const location = new window.kakao.maps.LatLng(coords.latitude, coords.longitude);
       map.setCenter(location);
       map.setLevel(MY_LOCATION_ZOOM_LEVEL);
     });
@@ -376,9 +355,7 @@ export default function MapDesktop() {
             onClick={() => setIsCategoryOpen((prev) => !prev)}
           >
             <span>
-              {category != null
-                ? categories.find((c) => c.id === category)?.name
-                : "카테고리"}
+              {category != null ? categories.find((c) => c.id === category)?.name : "카테고리"}
             </span>
             <ChevronDown size={16} />
           </button>
@@ -400,9 +377,7 @@ export default function MapDesktop() {
                   <button
                     type="button"
                     className={`${desktopStyle.categoryOption} ${
-                      category === item.id
-                        ? desktopStyle.categoryOptionActive
-                        : ""
+                      category === item.id ? desktopStyle.categoryOptionActive : ""
                     }`}
                     onClick={() => selectCategory(item.id)}
                   >
@@ -423,18 +398,10 @@ export default function MapDesktop() {
 
       {selected && (
         <aside className={desktopStyle.detailPanel}>
-          <button
-            type="button"
-            className={desktopStyle.detailCloseBtn}
-            onClick={handleClosePanel}
-          >
+          <button type="button" className={desktopStyle.detailCloseBtn} onClick={handleClosePanel}>
             <X size={18} />
           </button>
-          <img
-            src={selected.photoUrl}
-            alt={selected.title}
-            className={desktopStyle.detailImage}
-          />
+          <img src={selected.photoUrl} alt={selected.title} className={desktopStyle.detailImage} />
           <div className={desktopStyle.detailBody}>
             {(() => {
               const index = Math.max(
@@ -465,14 +432,35 @@ export default function MapDesktop() {
 
             <div className={desktopStyle.aiSummaryBox}>
               <span className={desktopStyle.aiSummaryLabel}>AI 요약</span>
-              <p className={desktopStyle.aiSummaryPlaceholder}>
-                AI 요약 기능은 준비 중입니다.
-              </p>
+              {isSummaryLoading ? (
+                <p className={desktopStyle.aiSummaryPlaceholder}>AI 요약을 불러오는 중...</p>
+              ) : summaryError ? (
+                <p className={desktopStyle.aiSummaryPlaceholder}>{summaryError}</p>
+              ) : summary ? (
+                <>
+                  <p className={desktopStyle.aiSummaryText}>{summary.summary}</p>
+                  {summary.highlights.length > 0 && (
+                    <ul className={desktopStyle.aiHighlightList}>
+                      {summary.highlights.map((highlight, index) => (
+                        <li key={index} className={desktopStyle.aiHighlightItem}>
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ) : (
+                <p className={desktopStyle.aiSummaryPlaceholder}>AI 요약 기능은 준비 중입니다.</p>
+              )}
             </div>
 
             <div className={desktopStyle.detailActions}>
-              <button type="button" className={desktopStyle.relayStartBtn}>
-                릴레이 시작하기
+              <button
+                type="button"
+                className={desktopStyle.relayStartBtn}
+                onClick={() => navigate(`/relay/${selected.id}/step`)}
+              >
+                릴레이 이어하기
               </button>
               <button
                 type="button"

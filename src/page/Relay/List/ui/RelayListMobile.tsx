@@ -116,7 +116,7 @@ export default function RelayListMobile() {
                   />
                 )}
                 {category === null
-                  ? "카테고리 전체"
+                  ? "카테고리"
                   : categories.find((item) => item.id === category)?.name}
               </span>
               <ChevronDown size={16} />
@@ -233,9 +233,7 @@ export default function RelayListMobile() {
             description={`참여자 ${relay.participantCount}명`}
             imageUrl={relay.photoUrl}
             categoryName={relay.category}
-            categoryStyle={getCategoryStyle(
-              categories.findIndex((c) => c.name === relay.category),
-            )}
+            categoryStyle={getCategoryStyle(categories.findIndex((c) => c.name === relay.category))}
             variant="grid"
             showBookmark
             initialBookmarked={relay.bookmarked}

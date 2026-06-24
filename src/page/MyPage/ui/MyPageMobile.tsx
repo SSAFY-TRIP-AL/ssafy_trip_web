@@ -16,6 +16,7 @@ import "../../auth/auth.css";
 import myPageStyle from "../css/MyPageMobile.module.css";
 import { useMyPage } from "../Hook/useMyPage";
 import type { RelayTabType } from "../api/myPageApi";
+import { resolveProfileImage } from "../../../utils/profileImage";
 
 const TABS: { id: RelayTabType; label: string; description: string }[] = [
   {
@@ -74,6 +75,8 @@ export default function MyPageMobile() {
     submitEdit,
     handleLogout,
     handleWithdraw,
+    isSubmittingEdit,
+    isWithdrawing,
   } = useMyPage();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -92,15 +95,11 @@ export default function MyPageMobile() {
 
       <div className={myPageStyle.profileCard}>
         <div className={myPageStyle.profileLeft}>
-          {profile.profileImage ? (
-            <img
-              src={profile.profileImage}
-              alt={profile.name}
-              className={myPageStyle.profileImg}
-            />
-          ) : (
-            <div className={myPageStyle.profileImg} />
-          )}
+          <img
+            src={resolveProfileImage(profile.profileImage)}
+            alt={profile.name}
+            className={myPageStyle.profileImg}
+          />
           <div className={myPageStyle.profileInfo}>
             <span className="trip-h3">{profile.name}</span>
             {profile.createdAt && (
@@ -223,15 +222,22 @@ export default function MyPageMobile() {
       )}
 
       <div className={myPageStyle.accountPanel}>
-        <span className="trip-h3">계정</span>
-        <button type="button" className={myPageStyle.logoutBtn} onClick={handleLogout}>
-          <LogOut size={16} />
-          로그아웃
-        </button>
-        <button type="button" className={myPageStyle.withdrawBtn} onClick={handleWithdraw}>
-          <Trash2 size={16} />
-          회원 탈퇴
-        </button>
+        <span className={myPageStyle.accountTitle}>계정</span>
+        <div className={myPageStyle.accountActions}>
+          <button type="button" className={myPageStyle.logoutBtn} onClick={handleLogout}>
+            <LogOut size={18} />
+            로그아웃
+          </button>
+          <button
+            type="button"
+            className={myPageStyle.withdrawBtn}
+            onClick={handleWithdraw}
+            disabled={isWithdrawing}
+          >
+            <Trash2 size={18} />
+            {isWithdrawing ? "처리 중..." : "회원 탈퇴"}
+          </button>
+        </div>
       </div>
 
       {isEditOpen && (
@@ -247,15 +253,11 @@ export default function MyPageMobile() {
                 className={myPageStyle.modalAvatarUpload}
                 onClick={() => fileInputRef.current?.click()}
               >
-                {editImagePreview ? (
-                  <img
-                    src={editImagePreview}
-                    alt="프로필 이미지"
-                    className={myPageStyle.modalAvatarPreview}
-                  />
-                ) : (
-                  <div className={myPageStyle.modalAvatarPlaceholder} />
-                )}
+                <img
+                  src={resolveProfileImage(editImagePreview)}
+                  alt="프로필 이미지"
+                  className={myPageStyle.modalAvatarPreview}
+                />
                 <span className={myPageStyle.modalAvatarEditBtn}>
                   <Camera size={14} />
                 </span>
@@ -286,8 +288,13 @@ export default function MyPageMobile() {
               <button type="button" className={myPageStyle.modalCancelBtn} onClick={closeEdit}>
                 취소
               </button>
-              <button type="button" className={myPageStyle.modalSubmitBtn} onClick={submitEdit}>
-                저장
+              <button
+                type="button"
+                className={myPageStyle.modalSubmitBtn}
+                onClick={submitEdit}
+                disabled={isSubmittingEdit}
+              >
+                {isSubmittingEdit ? "저장 중..." : "저장"}
               </button>
             </div>
           </div>

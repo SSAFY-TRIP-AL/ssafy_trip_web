@@ -3,8 +3,10 @@ import { Camera, Eye, EyeOff } from "lucide-react";
 import mobileStyle from "../css/SignUpMobile.module.css";
 import "../../../../style.css";
 import "../../auth.css";
+import logo from "../../../../assets/logo_lf.svg";
 import { usePasswordVisibility } from "../../Hook/usePasswordVisibility";
 import { useSignUp } from "../../Hook/useSignUp";
+import { defaultProfile } from "../../../../utils/profileImage";
 
 type SignUpForm = {
   loginId: string;
@@ -62,6 +64,8 @@ export default function SignUpMobile() {
     profileImagePreview,
     handleProfileImageChange,
     handleSubmit,
+    isSubmitting,
+    errors,
   } = useSignUp();
   const { passwordVisible, toggleVisible } = usePasswordVisibility();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -69,29 +73,25 @@ export default function SignUpMobile() {
   return (
     <div className={mobileStyle.container}>
       <div className={mobileStyle.authContainer}>
-        <span className="trip-h2">회원가입</span>
-        <div className={mobileStyle.signupText}>
+        <img src={logo} alt="Trip Baton" className={mobileStyle.logo} />
+        {/* <span className={mobileStyle.tagline}>AI TRAVEL RELAY PLATFORM</span>
+        <span className={`trip-h2 ${mobileStyle.title}`}>회원가입</span> */}
+        {/* <div className={mobileStyle.signupText}>
           <span className="trip-body2">Trip Baton에 가입하고 </span>
           <span className="trip-body2">나만의 여행을 시작해보세요. </span>
-        </div>
+        </div> */}
         <form
           onSubmit={handleSubmit}
           className={`authForm ${mobileStyle.signupForm}`}
+          noValidate
         >
           <div className={mobileStyle.avatarField}>
-            <div
-              className={mobileStyle.avatarUpload}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              {profileImagePreview ? (
-                <img
-                  src={profileImagePreview}
-                  alt="프로필 이미지"
-                  className={mobileStyle.avatarPreview}
-                />
-              ) : (
-                <div className={mobileStyle.avatarPlaceholder} />
-              )}
+            <div className={mobileStyle.avatarUpload} onClick={() => fileInputRef.current?.click()}>
+              <img
+                src={profileImagePreview ?? defaultProfile}
+                alt="프로필 이미지"
+                className={mobileStyle.avatarPreview}
+              />
               <span className={mobileStyle.avatarEditBtn}>
                 <Camera size={14} />
               </span>
@@ -100,9 +100,7 @@ export default function SignUpMobile() {
                 type="file"
                 accept="image/*"
                 className={mobileStyle.avatarInput}
-                onChange={(event) =>
-                  handleProfileImageChange(event.target.files?.[0] ?? null)
-                }
+                onChange={(event) => handleProfileImageChange(event.target.files?.[0] ?? null)}
               />
             </div>
           </div>
@@ -110,17 +108,23 @@ export default function SignUpMobile() {
             const isPassword = type === "password";
             const inputType = isPassword && passwordVisible[id] ? "text" : type;
 
+            const liveMismatch = id === "passwordConfirm" && passwordMismatch;
+            const errorMessage = errors[id] ?? (liveMismatch ? "비밀번호가 일치하지 않습니다." : undefined);
+
             return (
               <div key={id} className="authField">
                 <label htmlFor={id}>{label}</label>
-                <div className={`authInputBox ${mobileStyle.signupInputBox}`}>
+                <div
+                  className={`authInputBox ${mobileStyle.signupInputBox} ${
+                    errorMessage ? "inputError" : ""
+                  }`}
+                >
                   <input
                     id={id}
                     type={inputType}
                     placeholder={placeholder}
                     value={values[id] ?? ""}
                     onChange={(event) => handleChange(id, event.target.value)}
-                    required
                   />
                   {isPassword && (
                     <button
@@ -128,24 +132,16 @@ export default function SignUpMobile() {
                       className={mobileStyle.signupEyeBtn}
                       onClick={() => toggleVisible(id)}
                     >
-                      {passwordVisible[id] ? (
-                        <EyeOff size={16} />
-                      ) : (
-                        <Eye size={16} />
-                      )}
+                      {passwordVisible[id] ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   )}
                 </div>
-                {id === "passwordConfirm" && passwordMismatch && (
-                  <span className={mobileStyle.signupFieldError}>
-                    비밀번호가 일치하지 않습니다.
-                  </span>
-                )}
+                {errorMessage && <span className="authError">{errorMessage}</span>}
               </div>
             );
           })}
-          <button type="submit" className="authBtn">
-            회원가입
+          <button type="submit" className="authBtn" disabled={isSubmitting}>
+            {isSubmitting ? "회원가입 중..." : "회원가입"}
           </button>
           <span>
             이미 계정이 있으신가요?<a href="/auth/login">로그인</a>

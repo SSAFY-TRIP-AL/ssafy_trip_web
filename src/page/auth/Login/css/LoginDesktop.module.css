@@ -16,7 +16,7 @@
   background-color: var(--color-gray-300);
 }
 .divider span {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .socialContainer {
   display: flex;
@@ -31,7 +31,7 @@
   width: 100%;
   height: 40px;
   border-radius: var(--border-radius-10);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
 }

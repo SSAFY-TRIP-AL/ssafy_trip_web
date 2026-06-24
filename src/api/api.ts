@@ -1,5 +1,6 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "../store/authStore";
+import { toast } from "../store/toastStore";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
@@ -40,7 +41,7 @@ api.interceptors.response.use(
       try {
         // 액세스 토큰 갱신 요청
         const res = await axios.post<string>(
-          "/auth/reissue",
+          `${BASE_URL}/auth/reissue`,
           {},
           { withCredentials: true },
         );
@@ -55,7 +56,7 @@ api.interceptors.response.use(
         } else {
           const reissueData = res.data as unknown as ReissueResponse;
           console.error("토큰 갱신 실패");
-          alert(reissueData.message);
+          toast.error(reissueData.message ?? "세션이 만료되었습니다. 다시 로그인해주세요.");
         }
       } catch {
         const { logout } = useAuthStore.getState();

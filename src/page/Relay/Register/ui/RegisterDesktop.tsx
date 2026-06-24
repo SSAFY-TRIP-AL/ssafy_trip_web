@@ -39,6 +39,9 @@ export default function RegisterDesktop() {
     imagePreview,
     handleImageChange,
     handleSubmit,
+    isSubmitting,
+    errors,
+    clearError,
   } = useRegisterRelay({ address, latitude, longitude, isStepAdd, relayId });
   const navigate = useNavigate();
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -84,7 +87,7 @@ export default function RegisterDesktop() {
             </span>
           </>
         )}
-        <form onSubmit={handleSubmit} className={registerStyle.formContainer}>
+        <form onSubmit={handleSubmit} className={registerStyle.formContainer} noValidate>
           {!isStepAdd && (
             <>
               <div className="authField">
@@ -94,17 +97,20 @@ export default function RegisterDesktop() {
                     {title.length}/{TITLE_MAX_LENGTH}
                   </span>
                 </div>
-                <div className="authInputBox">
+                <div className={`authInputBox ${errors.title ? "inputError" : ""}`}>
                   <input
                     id="title"
                     type="text"
                     placeholder="릴레이 제목을 입력하세요"
                     value={title}
                     maxLength={TITLE_MAX_LENGTH}
-                    onChange={(event) => setTitle(event.target.value)}
-                    required
+                    onChange={(event) => {
+                      clearError("title");
+                      setTitle(event.target.value);
+                    }}
                   />
                 </div>
+                {errors.title && <span className="authError">{errors.title}</span>}
               </div>
               <div className="authField">
                 <label>카테고리 선택</label>
@@ -143,6 +149,7 @@ export default function RegisterDesktop() {
                               categoryId === category.id ? registerStyle.categoryOptionActive : ""
                             }`}
                             onClick={() => {
+                              clearError("category");
                               setCategoryId(category.id);
                               setIsCategoryOpen(false);
                             }}
@@ -160,6 +167,7 @@ export default function RegisterDesktop() {
                     </ul>
                   )}
                 </div>
+                {errors.category && <span className="authError">{errors.category}</span>}
               </div>
             </>
           )}
@@ -167,7 +175,7 @@ export default function RegisterDesktop() {
           <div className="authField">
             <label>사진 업로드</label>
             <div
-              className={registerStyle.uploadArea}
+              className={`${registerStyle.uploadArea} ${errors.image ? "inputError" : ""}`}
               onClick={() => fileInputRef.current?.click()}
               onDragOver={(event) => event.preventDefault()}
               onDrop={handleDrop}
@@ -207,22 +215,30 @@ export default function RegisterDesktop() {
                 onChange={(event) => handleImageChange(event.target.files?.[0] ?? null)}
               />
             </div>
+            {errors.image && <span className="authError">{errors.image}</span>}
           </div>
 
           <div className="authField">
             <label htmlFor="location">위치 정보</label>
 
             <div className={registerStyle.locationRow}>
-              <div className={`authInputBox ${registerStyle.locationInputBox}`} ref={locationRef}>
+              <div
+                className={`authInputBox ${registerStyle.locationInputBox} ${
+                  errors.address ? "inputError" : ""
+                }`}
+                ref={locationRef}
+              >
                 <input
                   id="location"
                   type="text"
                   placeholder="여행 위치를 입력하세요"
                   value={address}
                   autoComplete="off"
-                  onChange={(event) => setAddress(event.target.value)}
+                  onChange={(event) => {
+                    clearError("address");
+                    setAddress(event.target.value);
+                  }}
                   onFocus={() => suggestions.length > 0 && setIsSuggestionsOpen(true)}
-                  required
                 />
                 {isSuggestionsOpen && suggestions.length > 0 && (
                   <ul className={registerStyle.locationSuggestions}>
@@ -231,7 +247,10 @@ export default function RegisterDesktop() {
                         <button
                           type="button"
                           className={registerStyle.locationSuggestionItem}
-                          onClick={() => selectSuggestion(suggestion)}
+                          onClick={() => {
+                            clearError("address");
+                            selectSuggestion(suggestion);
+                          }}
                         >
                           <span className={registerStyle.locationSuggestionName}>
                             {suggestion.placeName}
@@ -256,6 +275,7 @@ export default function RegisterDesktop() {
                 {isLocating ? "찾는 중..." : "위치 찾기"}
               </button>
             </div>
+            {errors.address && <span className="authError">{errors.address}</span>}
           </div>
 
           <div className="authField">
@@ -267,21 +287,28 @@ export default function RegisterDesktop() {
             </div>
             <textarea
               id="description"
-              className={registerStyle.textarea}
+              className={`${registerStyle.textarea} ${errors.content ? "inputError" : ""}`}
               placeholder="릴레이에 대한 설명을 입력하세요"
               value={content}
               maxLength={DESCRIPTION_MAX_LENGTH}
-              onChange={(event) => setContent(event.target.value)}
-              required
+              onChange={(event) => {
+                clearError("content");
+                setContent(event.target.value);
+              }}
             />
+            {errors.content && <span className="authError">{errors.content}</span>}
           </div>
 
           <div className={registerStyle.actions}>
             <button type="button" className={registerStyle.cancelBtn} onClick={() => navigate(-1)}>
               취소
             </button>
-            <button type="submit" className={registerStyle.submitBtn}>
-              등록하기
+            <button
+              type="submit"
+              className={registerStyle.submitBtn}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "처리 중..." : "등록하기"}
             </button>
           </div>
         </form>

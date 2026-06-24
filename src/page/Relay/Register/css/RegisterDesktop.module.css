@@ -28,7 +28,7 @@
   justify-content: space-between;
 }
 .charCount {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--color-gray-500);
 }
 
@@ -47,7 +47,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: inherit;
   color: var(--color-gray-700);
   cursor: pointer;
@@ -100,7 +100,7 @@
   border-radius: var(--border-radius-10);
   background-color: transparent;
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: inherit;
   text-align: left;
   cursor: pointer;
@@ -136,11 +136,11 @@
   color: var(--color-gray-500);
 }
 .uploadText {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--color-gray-700);
 }
 .uploadHint {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--color-gray-500);
 }
 .uploadInput {
@@ -190,7 +190,7 @@
   border-radius: var(--border-radius-10);
   background-color: var(--color-pure-white);
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 .locationBtn:disabled {
@@ -233,11 +233,11 @@
   background-color: var(--color-gray-100);
 }
 .locationSuggestionName {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--color-gray-900);
 }
 .locationSuggestionAddress {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--color-gray-500);
 }
 
@@ -250,7 +250,7 @@
   border: 1px solid var(--color-gray-300);
   border-radius: var(--border-radius-10);
   color: var(--color-gray-500);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: inherit;
   resize: vertical;
 }
@@ -271,7 +271,7 @@
   border-radius: var(--border-radius-10);
   background-color: var(--color-pure-white);
   color: var(--color-gray-700);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -282,7 +282,11 @@
   border-radius: var(--border-radius-10);
   background-color: var(--color-electric-blue);
   color: var(--color-pure-white);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+}
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
