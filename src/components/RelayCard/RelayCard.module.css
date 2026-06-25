@@ -93,10 +93,9 @@
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--color-gray-900);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .cardDescription {
   margin: 0;
