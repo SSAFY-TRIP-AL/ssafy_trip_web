@@ -12,5 +12,8 @@ export const CATEGORY_PALETTE: CategoryStyle[] = [
 ];
 
 export function getCategoryStyle(index: number): CategoryStyle {
+  if (!Number.isFinite(index) || index < 0) {
+    return CATEGORY_PALETTE[0];
+  }
   return CATEGORY_PALETTE[index % CATEGORY_PALETTE.length];
 }
