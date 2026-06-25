@@ -5,9 +5,18 @@ import Footer from "../components/Footer/Footer";
 
 export default function DesktopLayout() {
   return (
-    <div style={{ minWidth: 1530 }}>
+    <div
+      style={{
+        minWidth: 1530,
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
       <Header />
-      <Outlet />
+      <main style={{ flex: 1 }}>
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );
