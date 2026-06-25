@@ -122,3 +122,14 @@
     -webkit-line-clamp: 1;
   }
 }
+
+/* 웹(데스크톱)에서는 카드를 세로로 더 길게 */
+@media (min-width: 769px) {
+  .card .cardImageWrap {
+    height: 260px;
+  }
+  .card .cardBody {
+    gap: 12px;
+    padding: 20px;
+  }
+}
