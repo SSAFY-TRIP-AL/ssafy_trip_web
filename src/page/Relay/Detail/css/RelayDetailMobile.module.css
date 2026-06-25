@@ -49,7 +49,7 @@
 /* 대표 이미지 */
 .heroImageWrap {
   width: 100%;
-  height: 200px;
+  height: 280px;
   border-radius: var(--border-radius-10);
   overflow: hidden;
   margin-bottom: 16px;

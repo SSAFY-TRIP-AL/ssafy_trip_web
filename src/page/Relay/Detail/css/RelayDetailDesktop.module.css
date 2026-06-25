@@ -59,7 +59,7 @@
 /* 대표 이미지 */
 .heroImageWrap {
   width: 100%;
-  height: 380px;
+  height: 700px;
   border-radius: var(--border-radius-10);
   overflow: hidden;
   margin-bottom: 32px;
@@ -155,6 +155,7 @@
   color: var(--color-gray-500);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
