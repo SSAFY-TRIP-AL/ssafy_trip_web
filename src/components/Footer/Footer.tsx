@@ -23,13 +23,13 @@ export default function Footer() {
                   <a href="/">홈</a>
                 </li>
                 <li>
-                  <a href="/">지도</a>
+                  <a href="/map">지도</a>
                 </li>
                 <li>
-                  <a href="/">릴레이 리스트</a>
+                  <a href="/relay/list">릴레이 리스트</a>
                 </li>
                 <li>
-                  <a href="/">릴레이 등록</a>
+                  <a href="/relay/register">릴레이 등록</a>
                 </li>
                 <li>
                   <a href="/">명예의 전당</a>
@@ -72,9 +72,7 @@ export default function Footer() {
         <div className={footerStyle.divider} />
 
         <div className={footerStyle.bottom}>
-          <span className={footerStyle.copyright}>
-            © 2026 SSAFY TRIP. All rights reserved.
-          </span>
+          <span className={footerStyle.copyright}>© 2026 SSAFY TRIP. All rights reserved.</span>
           <div className={footerStyle.legal}>
             <a href="/">이용약관</a>
             <a href="/">개인정보처리방침</a>
